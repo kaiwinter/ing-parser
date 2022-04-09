@@ -1,0 +1,12 @@
+[
+	{
+		"name": "Lebensmittel",
+		"auftraggeber": ["Supermarkt", "Restaurant"],
+		"verwendungszweck": ["Brötchen"]
+	},
+	{
+		"name": "Handwerker",
+		"auftraggeber": ["Bäckermann"],
+		"verwendungszweck": []
+	}
+]

@@ -1,0 +1,22 @@
+Umsatzanzeige;Datei erstellt am: 04.04.2022 20:07
+
+IBAN;DExx xxxx xxxx xxxx xxxx xx
+Kontoname;Girokonto
+Bank;ING
+Kunde;Beispielkunde ING
+Zeitraum;04.04.2021 - 04.04.2022
+Saldo;1000;EUR
+
+Sortierung;Datum absteigend
+
+In der CSV-Datei finden Sie alle bereits gebuchten Umsätze. Die vorgemerkten Umsätze werden nicht aufgenommen, auch wenn sie in Ihrem Internetbanking angezeigt werden.
+
+Buchung;Valuta;Auftraggeber/Empfänger;Buchungstext;Notiz;Verwendungszweck;Saldo;Währung;Betrag;Währung
+18.02.2022;05.02.2022;Supermarkt;Lastschrift;;Vielen Dank für Ihren Einkauf;1000;EUR;-50;EUR
+18.03.2022;18.02.2022;Supermarkt;Lastschrift;;Vielen Dank für Ihren Einkauf;1050;EUR;-40;EUR
+22.06.2021;21.10.2021;Restaurant;Lastschrift;;Vegan;1090;EUR;-30;EUR
+06.08.2021;07.10.2021;Restaurant;Lastschrift;;"Pizzaria";1120;EUR;-20;EUR
+22.10.2021;26.01.2022;Bäcker Backhaus;Lastschrift;;Brötchen;1140;EUR;-5;EUR
+02.08.2021;21.07.2021;Bäcker Backmann;Lastschrift;;"Brötchen";1145;EUR;-4;EUR
+12.10.2021;22.09.2021;Bäckermann Gasvertrieb;Lastschrift;;Rechnung Nr 10213;1149;EUR;-100;EUR
+12.11.2021;03.11.2021;Gehalt;Gutschrift;;Monat März;1249;EUR;1000;EUR
