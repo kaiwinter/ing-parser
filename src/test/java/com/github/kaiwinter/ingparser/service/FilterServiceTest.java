@@ -63,7 +63,7 @@ public class FilterServiceTest {
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byAuftraggeber("Markets", filterPattern);
 
-      filterService.moveToMapByCriteria(moveDesciption, bookings);
+      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(1, booking.matchedCriteria.size());
    }
 
@@ -82,7 +82,7 @@ public class FilterServiceTest {
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byVerwendungszweck("Markets", filterPattern);
 
-      filterService.moveToMapByCriteria(moveDesciption, bookings);
+      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(1, booking.matchedCriteria.size());
    }
 
@@ -100,7 +100,7 @@ public class FilterServiceTest {
       List<FilterCriterion> moveDesciption = FilterCriterion.byAuftraggeber("Quicks", "quick");
       moveDesciption.addAll(FilterCriterion.byAuftraggeber("Markets", "mart"));
 
-      filterService.moveToMapByCriteria(moveDesciption, bookings);
+      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(2, booking.matchedCriteria.size());
    }
 
@@ -118,7 +118,7 @@ public class FilterServiceTest {
       List<FilterCriterion> moveDesciption = FilterCriterion.byVerwendungszweck("Quicks", "quick");
       moveDesciption.addAll(FilterCriterion.byVerwendungszweck("Markets", "mart"));
 
-      filterService.moveToMapByCriteria(moveDesciption, bookings);
+      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(2, booking.matchedCriteria.size());
    }
 }

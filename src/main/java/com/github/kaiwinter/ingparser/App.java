@@ -58,7 +58,7 @@ public class App extends Application {
       List<FilterCriterion> category2FilterCriteria = configurationService.readConfiguration(CONFIG_FILE);
       bookings.sort(Comparator.comparingDouble(booking -> booking.betrag.doubleValue()));
 
-      filterService.moveToMapByCriteria(category2FilterCriteria, bookings);
+      filterService.matchBookingsAgainstFilterCriteria(bookings, category2FilterCriteria);
       // bookings.removeIf(booking -> !(booking.date.getYear() == 2021 && booking.date.getMonth() == Month.DECEMBER));
 
       // --
