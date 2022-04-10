@@ -1,13 +1,7 @@
 package com.github.kaiwinter.ingparser;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +11,7 @@ import com.github.kaiwinter.ingparser.model.FilterCriterion;
 import com.github.kaiwinter.ingparser.service.ConfigurationService;
 import com.github.kaiwinter.ingparser.service.FilterService;
 import com.github.kaiwinter.ingparser.service.ImportService;
+import com.github.kaiwinter.ingparser.service.StatisticService;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -55,26 +50,14 @@ public class App extends Application {
 
       LOGGER.info("SIZE initial (negative only): {}", bookings.size());
 
-      List<FilterCriterion> category2FilterCriteria = configurationService.readConfiguration(CONFIG_FILE);
-      bookings.sort(Comparator.comparingDouble(booking -> booking.betrag.doubleValue()));
+      List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
+      // bookings.sort(Comparator.comparingDouble(booking -> booking.betrag.doubleValue()));
 
-      filterService.matchBookingsAgainstFilterCriteria(bookings, category2FilterCriteria);
+      filterService.matchBookingsAgainstFilterCriteria(bookings, filterCriteria);
       // bookings.removeIf(booking -> !(booking.date.getYear() == 2021 && booking.date.getMonth() == Month.DECEMBER));
 
-      // --
-      Map<String, List<Booking>> category2Bookings = bookings.stream()
-            .filter(booking -> !booking.matchedCriteria.isEmpty())
-            .collect(Collectors.groupingBy(booking -> booking.matchedCriteria.get(0).getCategory()));
-
-      category2Bookings.remove("ignore");
-      List<Booking> values = category2Bookings.values().stream().flatMap(Collection::stream)
-            .collect(Collectors.toList());
-      values.sort(Comparator.comparingDouble(booking -> booking.betrag.doubleValue()));
-
-      for (Entry<String, List<Booking>> entry : category2Bookings.entrySet()) {
-         System.out.println(entry.getKey() + ", " + entry.getValue().size() + " Buchungen, Summe: "
-               + entry.getValue().stream().map(booking -> booking.betrag).reduce(BigDecimal.ZERO, BigDecimal::add));
-      }
+      new StatisticService().groupByCategoryAndMonth(bookings);
+      new StatisticService().groupByMonthAndCategory(bookings);
 
       System.exit(0);
 //      launch();
