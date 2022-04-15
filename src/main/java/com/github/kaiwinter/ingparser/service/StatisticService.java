@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -62,18 +63,18 @@ public class StatisticService {
       List<String[]> datas = new ArrayList<>();
       for (Entry<LocalDate, List<Booking>> entry : new TreeMap<>(byMonth).entrySet()) {
 
-         BigDecimal freizeitSum = entry.getValue().stream()
-               .filter(booking -> booking.matchedCriteria.get(0).getCategory().equals("Freizeit"))
+         BigDecimal freizeitSum = entry.getValue().stream() //
+               .filter(booking -> filterByCategory(booking, "Freizeit")) //
                .map(Booking::getBetrag) //
                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-         BigDecimal einkaufeSum = entry.getValue().stream()
-               .filter(booking -> booking.matchedCriteria.get(0).getCategory().equals("Einkäufe"))
+         BigDecimal einkaufeSum = entry.getValue().stream() //
+               .filter(booking -> filterByCategory(booking, "Einkäufe")) //
                .map(Booking::getBetrag) //
                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-         BigDecimal lebensmittelSum = entry.getValue().stream()
-               .filter(booking -> booking.matchedCriteria.get(0).getCategory().equals("Lebensmittel"))
+         BigDecimal lebensmittelSum = entry.getValue().stream() //
+               .filter(booking -> filterByCategory(booking, "Lebensmittel")) //
                .map(Booking::getBetrag) //
                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -87,4 +88,11 @@ public class StatisticService {
 
       ASCIITable.getInstance().printTable(header, data);
    }
+
+   private boolean filterByCategory(Booking booking, String category) {
+      return booking.matchedCriteria.stream().findFirst()
+            .orElseThrow(() -> new NoSuchElementException("No matched filter criteria: " + booking)).getCategory()
+            .equals(category);
+   }
+
 }
