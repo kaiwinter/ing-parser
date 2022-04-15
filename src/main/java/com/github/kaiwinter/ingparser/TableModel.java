@@ -9,6 +9,7 @@ public final class TableModel {
    private BigDecimal betrag;
    private String auftraggeber;
    private String verwendungszweck;
+   private int matchedCriteria;
 
    public LocalDate getDate() {
       return date;
@@ -40,6 +41,14 @@ public final class TableModel {
 
    public void setVerwendungszweck(String verwendungszweck) {
       this.verwendungszweck = verwendungszweck;
+   }
+
+   public int getMatchedCriteria() {
+      return matchedCriteria;
+   }
+
+   public void setMatchedCriteria(int matchedCriteria) {
+      this.matchedCriteria = matchedCriteria;
    }
 
 }

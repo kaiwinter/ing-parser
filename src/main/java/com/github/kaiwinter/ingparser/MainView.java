@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
@@ -49,6 +50,19 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       auftraggeberColumn.setCellValueFactory(column -> getValue(column.getValue().getAuftraggeber()));
       verwendungszweckColumn.setCellValueFactory(column -> getValue(column.getValue().getVerwendungszweck()));
 
+      bookingsTable.setRowFactory(__ -> {
+         return new TableRow<TableModel>() {
+            @Override
+            protected void updateItem(TableModel item, boolean empty) {
+               super.updateItem(item, empty);
+               if (item != null && item.getMatchedCriteria() > 1) {
+                  setStyle("-fx-background-color: #ffcccb;");
+               } else {
+                  setStyle("");
+               }
+            }
+         };
+      });
       viewModel.init();
    }
 

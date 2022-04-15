@@ -80,6 +80,7 @@ public class MainViewModel implements ViewModel {
          tableModel.setBetrag(booking.betrag);
          tableModel.setAuftraggeber(booking.auftraggeber);
          tableModel.setVerwendungszweck(booking.verwendungszweck);
+         tableModel.setMatchedCriteria(booking.matchedCriteria.size());
          bookings.add(tableModel);
       }
    }
