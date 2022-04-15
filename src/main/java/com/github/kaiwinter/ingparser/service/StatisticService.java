@@ -55,35 +55,40 @@ public class StatisticService {
       }
    }
 
-   public void groupByMonthAndCategory(List<Booking> bookings) {
+   public void groupByMonthAndCategory(List<Booking> bookings, List<String> categories) {
+
+      // Group by month
       Map<LocalDate, List<Booking>> byMonth = bookings.stream()
             .collect(Collectors.groupingBy(date -> date.date.withDayOfMonth(1)));
 
-      // Group 1. by date, 2. by category
-      List<String[]> datas = new ArrayList<>();
+      List<String> headerRow = new ArrayList<>();
+      headerRow.add("Monat");
+      headerRow.addAll(categories);
+      headerRow.add("Summe");
+
+      List<String[]> dataRows = new ArrayList<>();
       for (Entry<LocalDate, List<Booking>> entry : new TreeMap<>(byMonth).entrySet()) {
 
-         BigDecimal freizeitSum = entry.getValue().stream() //
-               .filter(booking -> filterByCategory(booking, "Freizeit")) //
-               .map(Booking::getBetrag) //
-               .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-         BigDecimal einkaufeSum = entry.getValue().stream() //
-               .filter(booking -> filterByCategory(booking, "Einkäufe")) //
-               .map(Booking::getBetrag) //
-               .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-         BigDecimal lebensmittelSum = entry.getValue().stream() //
-               .filter(booking -> filterByCategory(booking, "Lebensmittel")) //
-               .map(Booking::getBetrag) //
-               .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-         datas.add(new String[] { entry.getKey().toString(), freizeitSum.toString(), einkaufeSum.toString(),
-               lebensmittelSum.toString(), freizeitSum.add(einkaufeSum).add(lebensmittelSum).toString() });
+         List<String> dataRow = new ArrayList<>();
+         dataRow.add(entry.getKey().toString());
+         BigDecimal grandTotal = BigDecimal.ZERO;
+         for (String category : categories) {
+            BigDecimal total = entry.getValue().stream() //
+                  .filter(booking -> filterByCategory(booking, category)) //
+                  .map(Booking::getBetrag) //
+                  .reduce(BigDecimal.ZERO, BigDecimal::add);
+            dataRow.add(total.toString());
+            grandTotal = grandTotal.add(total);
+         }
+         dataRow.add(grandTotal.toString());
+         dataRows.add(dataRow.toArray(new String[0]));
       }
 
-      String[] header = { "Monat", "Freizeit", "Einkäufe", "Lebensmittel", "Summe" };
+      printTable(headerRow, dataRows);
+   }
 
+   private void printTable(List<String> headerList, List<String[]> datas) {
+      String[] header = headerList.toArray(new String[0]);
       String[][] data = datas.toArray(new String[0][0]);
 
       ASCIITable.getInstance().printTable(header, data);
