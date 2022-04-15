@@ -38,11 +38,11 @@ public class Booking {
    @CsvNumber(value = "#0.00")
    public BigDecimal betrag;
 
+   public List<FilterCriterion> matchedCriteria = new ArrayList<>();
+
    public BigDecimal getBetrag() {
       return betrag;
    }
-
-   public List<FilterCriterion> matchedCriteria = new ArrayList<>();
 
    @Override
    public String toString() {

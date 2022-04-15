@@ -2,13 +2,13 @@ package com.github.kaiwinter.ingparser.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NoSuchElementException;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
@@ -16,6 +16,23 @@ import com.bethecoder.ascii_table.ASCIITable;
 import com.github.kaiwinter.ingparser.model.Booking;
 
 public class StatisticService {
+
+   /**
+    * Creates a Map with the category as key and a List of Bookings as value. If a Booking matches two categories it is
+    * listed two times.
+    * 
+    * @param bookings
+    * @return
+    */
+   public Map<String, List<Booking>> groupByCategory(List<Booking> bookings) {
+      Map<String, List<Booking>> groupToProductMapping = bookings.stream()
+            .flatMap(booking -> booking.matchedCriteria.stream()
+                  .map(filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory(), booking)))
+            .collect(Collectors.groupingBy(Map.Entry::getKey,
+                  Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
+
+      return groupToProductMapping;
+   }
 
    /**
     * Groups the bookings in the following order by category and month:
@@ -95,9 +112,7 @@ public class StatisticService {
    }
 
    private boolean filterByCategory(Booking booking, String category) {
-      return booking.matchedCriteria.stream().findFirst()
-            .orElseThrow(() -> new NoSuchElementException("No matched filter criteria: " + booking)).getCategory()
-            .equals(category);
+      return booking.matchedCriteria.stream().anyMatch(booking2 -> booking2.getCategory().equals(category));
    }
 
 }

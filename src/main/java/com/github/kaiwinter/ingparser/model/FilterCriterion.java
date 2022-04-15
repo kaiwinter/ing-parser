@@ -10,6 +10,8 @@ public class FilterCriterion {
    private final Type type;
    private final String pattern;
 
+   public static final FilterCriterion NULL_CRITERION = new FilterCriterion("unmatched", null, null);
+
    public static enum Type {
       BY_AUFTRAGGEBER, BY_VERWENDUNGSZWECK
    }

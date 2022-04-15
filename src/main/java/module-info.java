@@ -6,6 +6,10 @@ open module com.github.kaiwinter.ingparser {
    requires com.google.gson;
    requires org.slf4j;
    requires java.ascii.table.master;
+   requires de.saxsys.mvvmfx;
+   requires javafx.fxml;
+   requires javafx.graphics;
+   requires java.base;
 
    exports com.github.kaiwinter.ingparser;
 }

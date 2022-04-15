@@ -2,6 +2,7 @@ package com.github.kaiwinter.ingparser;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +14,11 @@ import com.github.kaiwinter.ingparser.service.FilterService;
 import com.github.kaiwinter.ingparser.service.ImportService;
 import com.github.kaiwinter.ingparser.service.StatisticService;
 
+import de.saxsys.mvvmfx.FluentViewLoader;
+import de.saxsys.mvvmfx.ViewTuple;
 import javafx.application.Application;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -30,10 +32,12 @@ public class App extends Application {
 
    @Override
    public void start(Stage stage) {
+      stage.setTitle("Hello World Application");
 
-      var label = new Label("Hello, JavaFX");
-      var scene = new Scene(new StackPane(label), 640, 480);
-      stage.setScene(scene);
+      ViewTuple<MainView, MainViewModel> viewTuple = FluentViewLoader.fxmlView(MainView.class).load();
+
+      Parent root = viewTuple.getView();
+      stage.setScene(new Scene(root));
       stage.show();
    }
 
@@ -66,8 +70,8 @@ public class App extends Application {
       new StatisticService().groupByCategoryAndMonth(bookings);
       new StatisticService().groupByMonthAndCategory(bookings, categories);
 
-      System.exit(0);
-//      launch();
+//      System.exit(0);
+      launch();
    }
 
 }
