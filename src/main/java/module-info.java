@@ -12,4 +12,5 @@ open module com.github.kaiwinter.ingparser {
    requires java.base;
 
    exports com.github.kaiwinter.ingparser;
+   exports com.github.kaiwinter.ingparser.model;
 }

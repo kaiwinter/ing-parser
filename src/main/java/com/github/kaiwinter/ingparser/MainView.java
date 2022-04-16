@@ -5,6 +5,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+import com.github.kaiwinter.ingparser.model.CategoryName;
+
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.beans.value.ObservableValueBase;
@@ -21,7 +23,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    private MainViewModel viewModel;
 
    @FXML
-   ListView<String> categoryList;
+   ListView<CategoryName> categoryList;
 
    @FXML
    private TableView<TableModel> bookingsTable;

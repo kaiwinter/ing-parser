@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import com.bethecoder.ascii_table.ASCIITable;
 import com.github.kaiwinter.ingparser.model.Booking;
+import com.github.kaiwinter.ingparser.model.CategoryName;
 
 public class StatisticService {
 
@@ -24,10 +25,10 @@ public class StatisticService {
     * @param bookings
     * @return
     */
-   public Map<String, List<Booking>> groupByCategory(List<Booking> bookings) {
-      Map<String, List<Booking>> groupToProductMapping = bookings.stream()
-            .flatMap(booking -> booking.getMatchedCriteria().stream().map(
-                  filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory().getName(), booking)))
+   public Map<CategoryName, List<Booking>> groupByCategory(List<Booking> bookings) {
+      Map<CategoryName, List<Booking>> groupToProductMapping = bookings.stream()
+            .flatMap(booking -> booking.getMatchedCriteria().stream()
+                  .map(filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory(), booking)))
             .collect(Collectors.groupingBy(Map.Entry::getKey,
                   Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
 

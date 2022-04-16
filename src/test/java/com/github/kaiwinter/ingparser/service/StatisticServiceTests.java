@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import com.github.kaiwinter.ingparser.model.Booking;
+import com.github.kaiwinter.ingparser.model.CategoryName;
 import com.github.kaiwinter.ingparser.model.FilterCriterion;
 
 /**
@@ -22,9 +23,10 @@ class StatisticServiceTests {
 
    @Test
    void groupByCategory() {
-      List<FilterCriterion> byAuftraggeber = FilterCriterion.byAuftraggeber("Autraggeber-Criterion", "shop");
-      List<FilterCriterion> byVerwendungszweck = FilterCriterion.byVerwendungszweck("Verwendungszweck-Criterion",
-            "stuff");
+      CategoryName categoryName1 = new CategoryName("Autraggeber-Criterion");
+      CategoryName categoryName2 = new CategoryName("Verwendungszweck-Criterion");
+      List<FilterCriterion> byAuftraggeber = FilterCriterion.byAuftraggeber(categoryName1, "shop");
+      List<FilterCriterion> byVerwendungszweck = FilterCriterion.byVerwendungszweck(categoryName2, "stuff");
 
       Booking booking1 = new Booking();
       booking1.setAuftraggeber("shop");
@@ -35,12 +37,12 @@ class StatisticServiceTests {
       booking2.setMatchedCriteria(byVerwendungszweck);
       List<Booking> bookings = List.of(booking1, booking2);
 
-      Map<String, List<Booking>> groupByCategory = statisticService.groupByCategory(bookings);
+      Map<CategoryName, List<Booking>> groupByCategory = statisticService.groupByCategory(bookings);
 
       assertThat(groupByCategory) //
             .hasSize(2) //
-            .containsEntry("Autraggeber-Criterion", List.of(booking1)) //
-            .containsEntry("Verwendungszweck-Criterion", List.of(booking2));
+            .containsEntry(categoryName1, List.of(booking1)) //
+            .containsEntry(categoryName2, List.of(booking2));
    }
 
    @Test

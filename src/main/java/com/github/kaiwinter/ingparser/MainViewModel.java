@@ -1,6 +1,7 @@
 package com.github.kaiwinter.ingparser;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,12 +27,12 @@ public class MainViewModel implements ViewModel {
    private static final String CSV_FILE = "/ING_sample.csv";
    private static final String CONFIG_FILE = "/parser_sample.json";
 
-   private final ListProperty<String> categories = new SimpleListProperty<>();
+   private final ListProperty<CategoryName> categories = new SimpleListProperty<>();
    private final ListProperty<TableModel> bookings = new SimpleListProperty<>();
 
-   private Map<String, List<Booking>> category2Booking;
+   private Map<CategoryName, List<Booking>> category2Booking;
 
-   public ListProperty<String> categoriesProperty() {
+   public ListProperty<CategoryName> categoriesProperty() {
       return this.categories;
    }
 
@@ -55,38 +56,33 @@ public class MainViewModel implements ViewModel {
 
       filterService.matchBookingsAgainstFilterCriteria(bookings, filterCriteria);
 
-      List<String> categories = filterCriteria.stream() //
-            .filter(crit -> crit.getCategory().getParentCategoryName() == null) //
+      List<CategoryName> categories = filterCriteria.stream() //
+            .filter(crit -> crit.getCategory().getParentCategoryName() == null) // Don't list sub-categories separately
             .map(FilterCriterion::getCategory) //
             .distinct() //
-            .map(CategoryName::getName).sorted().collect(Collectors.toList());
+            .sorted(Comparator.comparing(CategoryName::getName)) //
+            .collect(Collectors.toList());
 
       bookings.stream() //
             .filter(booking -> booking.getMatchedCriteria().isEmpty())
             .forEach(booking -> booking.getMatchedCriteria().add(FilterCriterion.NULL_CRITERION));
 
-      categories.add(FilterCriterion.NULL_CRITERION.getCategory().getName());
+      categories.add(FilterCriterion.NULL_CRITERION.getCategory());
 
       this.categories.addAll(categories);
       this.category2Booking = new StatisticService().groupByCategory(bookings);
    }
 
-   public void refreshBookingTable(String selectedValue) {
+   public void refreshBookingTable(CategoryName selectedValue) {
       if (selectedValue == null) {
          return;
       }
       bookings.clear();
       System.out.println("SELECTED: " + selectedValue);
-//      List<Booking> bookingsA = category2Booking.getOrDefault(selectedValue, List.of());
-      List<Booking> bookingsA = new ArrayList<>();
-      for (List<Booking> bookings : category2Booking.values()) {
-         for (Booking booking : bookings) {
-            if (booking.getMatchedCriteria().stream()
-                  .anyMatch(crit -> selectedValue.equals(crit.getCategory().getName())
-                        || selectedValue.equals(crit.getCategory().getParentCategoryName()))) {
-               bookingsA.add(booking);
-            }
-         }
+      List<Booking> bookingsA = new ArrayList<>(category2Booking.getOrDefault(selectedValue, List.of()));
+
+      for (CategoryName sub : selectedValue.getSubCategories()) {
+         bookingsA.addAll(category2Booking.getOrDefault(sub, List.of()));
       }
 
       for (Booking booking : bookingsA) {
