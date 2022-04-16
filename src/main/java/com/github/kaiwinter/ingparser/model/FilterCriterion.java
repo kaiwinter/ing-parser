@@ -14,7 +14,7 @@ public class FilterCriterion {
 
    public static final FilterCriterion NULL_CRITERION = new FilterCriterion("unmatched", null, null);
 
-   public static enum Type {
+   public enum Type {
       BY_AUFTRAGGEBER, BY_VERWENDUNGSZWECK
    }
 

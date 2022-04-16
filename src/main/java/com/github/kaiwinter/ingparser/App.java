@@ -1,6 +1,5 @@
 package com.github.kaiwinter.ingparser;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,7 @@ public class App extends Application {
       stage.show();
    }
 
-   public static void main(String[] args) throws IOException {
+   public static void main(String[] args) {
 
       ImportService importService = new ImportService();
       FilterService filterService = new FilterService();
