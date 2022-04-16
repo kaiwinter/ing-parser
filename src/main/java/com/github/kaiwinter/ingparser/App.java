@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kaiwinter.ingparser.model.Booking;
+import com.github.kaiwinter.ingparser.model.CategoryName;
 import com.github.kaiwinter.ingparser.model.FilterCriterion;
 import com.github.kaiwinter.ingparser.service.ConfigurationService;
 import com.github.kaiwinter.ingparser.service.FilterService;
@@ -64,6 +65,8 @@ public class App extends Application {
       List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
             .distinct() //
             .filter(category -> !"ignore".equals(category)) //
+            .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
+            .map(CategoryName::getName) //
             .sorted().collect(Collectors.toList());
 
       new StatisticService().groupByCategoryAndMonth(bookings);

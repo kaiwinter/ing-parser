@@ -1,5 +1,6 @@
 package com.github.kaiwinter.ingparser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kaiwinter.ingparser.model.Booking;
+import com.github.kaiwinter.ingparser.model.CategoryName;
 import com.github.kaiwinter.ingparser.model.FilterCriterion;
 import com.github.kaiwinter.ingparser.service.ConfigurationService;
 import com.github.kaiwinter.ingparser.service.FilterService;
@@ -53,14 +55,17 @@ public class MainViewModel implements ViewModel {
 
       filterService.matchBookingsAgainstFilterCriteria(bookings, filterCriteria);
 
-      List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
+      List<String> categories = filterCriteria.stream() //
+            .filter(crit -> crit.getCategory().getParentCategoryName() == null) //
+            .map(FilterCriterion::getCategory) //
             .distinct() //
-            .sorted().collect(Collectors.toList());
+            .map(CategoryName::getName).sorted().collect(Collectors.toList());
 
-      bookings.stream().filter(booking -> booking.getMatchedCriteria().isEmpty())
+      bookings.stream() //
+            .filter(booking -> booking.getMatchedCriteria().isEmpty())
             .forEach(booking -> booking.getMatchedCriteria().add(FilterCriterion.NULL_CRITERION));
 
-      categories.add(FilterCriterion.NULL_CRITERION.getCategory());
+      categories.add(FilterCriterion.NULL_CRITERION.getCategory().getName());
 
       this.categories.addAll(categories);
       this.category2Booking = new StatisticService().groupByCategory(bookings);
@@ -72,7 +77,18 @@ public class MainViewModel implements ViewModel {
       }
       bookings.clear();
       System.out.println("SELECTED: " + selectedValue);
-      List<Booking> bookingsA = category2Booking.getOrDefault(selectedValue, List.of());
+//      List<Booking> bookingsA = category2Booking.getOrDefault(selectedValue, List.of());
+      List<Booking> bookingsA = new ArrayList<>();
+      for (List<Booking> bookings : category2Booking.values()) {
+         for (Booking booking : bookings) {
+            if (booking.getMatchedCriteria().stream()
+                  .anyMatch(crit -> selectedValue.equals(crit.getCategory().getName())
+                        || selectedValue.equals(crit.getCategory().getParentCategoryName()))) {
+               bookingsA.add(booking);
+            }
+         }
+      }
+
       for (Booking booking : bookingsA) {
 
          TableModel tableModel = new TableModel();

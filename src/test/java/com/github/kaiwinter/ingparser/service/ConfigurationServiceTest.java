@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.github.kaiwinter.ingparser.model.CategoryName;
 import com.github.kaiwinter.ingparser.model.FilterCriterion;
 
 /**
@@ -25,18 +26,22 @@ class ConfigurationServiceTest {
 
       assertThat(filterCriteria) //
             .extracting(FilterCriterion::getCategory) //
+            .extracting(CategoryName::getName) //
             .containsOnly("Lebensmittel", "Supermarkt", "Restaurant", "Handwerker");
 
       // Should have "Lebensmittel" as parent category
       assertThat(filterCriteria)//
-            .filteredOn(crit -> crit.getCategory().equals("Supermarkt") || crit.getCategory().equals("Restaurant")) //
-            .extracting(FilterCriterion::getParentCategory) //
+            .extracting(FilterCriterion::getCategory) //
+            .filteredOn(category -> category.getName().equals("Supermarkt") || category.getName().equals("Restaurant")) //
+            .extracting(CategoryName::getParentCategoryName) //
             .containsOnly("Lebensmittel");
 
       // Shouldn't have a parent category
       assertThat(filterCriteria)//
-            .filteredOn(crit -> crit.getCategory().equals("Lebensmittel") || crit.getCategory().equals("Handwerker")) //
-            .extracting(FilterCriterion::getParentCategory) //
+            .extracting(FilterCriterion::getCategory) //
+            .filteredOn(
+                  category -> category.getName().equals("Lebensmittel") || category.getName().equals("Handwerker")) //
+            .extracting(CategoryName::getParentCategoryName) //
             .containsOnlyNulls();
    }
 }

@@ -26,8 +26,8 @@ public class StatisticService {
     */
    public Map<String, List<Booking>> groupByCategory(List<Booking> bookings) {
       Map<String, List<Booking>> groupToProductMapping = bookings.stream()
-            .flatMap(booking -> booking.getMatchedCriteria().stream()
-                  .map(filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory(), booking)))
+            .flatMap(booking -> booking.getMatchedCriteria().stream().map(
+                  filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory().getName(), booking)))
             .collect(Collectors.groupingBy(Map.Entry::getKey,
                   Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
 
@@ -46,7 +46,7 @@ public class StatisticService {
    public void groupByCategoryAndMonth(List<Booking> bookings) {
       Map<String, List<Booking>> category2Bookings = bookings.stream()
             .filter(booking -> !booking.getMatchedCriteria().isEmpty())
-            .collect(Collectors.groupingBy(booking -> booking.getMatchedCriteria().get(0).getCategory()));
+            .collect(Collectors.groupingBy(booking -> booking.getMatchedCriteria().get(0).getCategory().getName()));
 
       category2Bookings.remove("ignore");
       List<Booking> values = category2Bookings.values().stream().flatMap(Collection::stream)
@@ -111,7 +111,16 @@ public class StatisticService {
    }
 
    private boolean filterByCategory(Booking booking, String category) {
-      return booking.getMatchedCriteria().stream().anyMatch(booking2 -> booking2.getCategory().equals(category));
+      boolean includeSubCategories = false;
+      if (includeSubCategories) {
+         return booking.getMatchedCriteria().stream()
+               .anyMatch(booking2 -> category.equals(booking2.getCategory().getName()));
+      } else {
+         return booking.getMatchedCriteria().stream()
+               .anyMatch(booking2 -> (category.equals(booking2.getCategory().getName()))
+                     || category.equals(booking2.getCategory().getParentCategoryName()));
+      }
+
    }
 
 }

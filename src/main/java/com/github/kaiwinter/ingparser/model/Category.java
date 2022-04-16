@@ -38,7 +38,7 @@ public class Category {
 
       for (Category subCategory : sub) {
          List<FilterCriterion> combinedSubFilterCriteria = subCategory.getCombinedFilterCriteria();
-         combinedSubFilterCriteria.forEach(crit -> crit.setParentCategory(name));
+         combinedSubFilterCriteria.forEach(crit -> crit.getCategory().setParentCategoryName(name));
          filterCriteria.addAll(combinedSubFilterCriteria);
       }
 
