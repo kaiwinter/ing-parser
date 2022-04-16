@@ -11,17 +11,14 @@ import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.csv.ImportService;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
-import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import com.github.kaiwinter.ingparser.ui.model.BookingModel;
+import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 
 public class MainViewModel implements ViewModel {
-
-   private static final String CSV_FILE = "/ING_sample.csv";
-   private static final String CONFIG_FILE = "/parser_sample.json";
 
    private final ListProperty<CategoryModel> categories = new SimpleListProperty<>();
    private final ListProperty<BookingModel> bookings = new SimpleListProperty<>();
@@ -36,13 +33,13 @@ public class MainViewModel implements ViewModel {
       return this.bookings;
    }
 
-   public void init() {
+   public void loadData(String csvFile, String configFile) {
       ImportService importService = new ImportService();
       ConfigurationService configurationService = new ConfigurationService();
 
       List<Booking> importedBookings = importService.importFromFile(csvFile);
 
-      List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
+      List<FilterCriterion> filterCriteria = configurationService.readConfiguration(configFile);
 
       importService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteria);
 

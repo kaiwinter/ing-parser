@@ -31,6 +31,7 @@ public class App extends Application {
       stage.setTitle("Hello World Application");
 
       ViewTuple<MainView, MainViewModel> viewTuple = FluentViewLoader.fxmlView(MainView.class).load();
+      viewTuple.getViewModel().loadData(CSV_FILE, CONFIG_FILE);
 
       Parent root = viewTuple.getView();
       stage.setScene(new Scene(root));

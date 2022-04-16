@@ -5,8 +5,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import com.github.kaiwinter.ingparser.ui.model.BookingModel;
+import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -78,7 +78,6 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             }
          }
       });
-      viewModel.init();
    }
 
    private <T> ObservableValueBase<T> getValue(T localDate) {
