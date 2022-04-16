@@ -12,6 +12,7 @@ import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.beans.value.ObservableValueBase;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -23,7 +24,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    private MainViewModel viewModel;
 
    @FXML
-   ListView<CategoryName> categoryList;
+   private ListView<CategoryName> categoryList;
 
    @FXML
    private TableView<TableModel> bookingsTable;
@@ -46,24 +47,35 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       viewModel.categoriesProperty().bind(categoryList.itemsProperty());
       viewModel.bookingsProperty().bind(bookingsTable.itemsProperty());
 
+      // List
+      categoryList.setCellFactory(param -> new ListCell<CategoryName>() {
+         @Override
+         public void updateItem(CategoryName category, boolean empty) {
+            super.updateItem(category, empty);
+            if (empty || category == null) {
+               setText(null);
+            } else {
+               setText(category.getName());
+            }
+         }
+      });
+
       // Table cells
       betragColumn.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));
       dateColumn.setCellValueFactory(column -> getValue(column.getValue().getDate()));
       auftraggeberColumn.setCellValueFactory(column -> getValue(column.getValue().getAuftraggeber()));
       verwendungszweckColumn.setCellValueFactory(column -> getValue(column.getValue().getVerwendungszweck()));
 
-      bookingsTable.setRowFactory(__ -> {
-         return new TableRow<TableModel>() {
-            @Override
-            protected void updateItem(TableModel item, boolean empty) {
-               super.updateItem(item, empty);
-               if (item != null && item.getMatchedCriteria() > 1) {
-                  setStyle("-fx-background-color: #ffcccb;");
-               } else {
-                  setStyle("");
-               }
+      bookingsTable.setRowFactory(__ -> new TableRow<TableModel>() {
+         @Override
+         protected void updateItem(TableModel item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item != null && item.getMatchedCriteria() > 1) {
+               setStyle("-fx-background-color: #ffcccb;");
+            } else {
+               setStyle("");
             }
-         };
+         }
       });
       viewModel.init();
    }
