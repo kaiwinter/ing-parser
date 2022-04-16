@@ -45,32 +45,32 @@ public class MainViewModel implements ViewModel {
       FilterService filterService = new FilterService();
       ConfigurationService configurationService = new ConfigurationService();
 
-      List<Booking> bookings = importService.importFromFile(CSV_FILE);
+      List<Booking> importedBookings = importService.importFromFile(CSV_FILE);
 
-      LOGGER.info("SIZE initial: {}", bookings.size());
-      filterService.filterNegativeInplace(bookings);
+      LOGGER.info("SIZE initial: {}", importedBookings.size());
+      filterService.filterNegativeInplace(importedBookings);
 
-      LOGGER.info("SIZE initial (negative only): {}", bookings.size());
+      LOGGER.info("SIZE initial (negative only): {}", importedBookings.size());
 
       List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
 
-      filterService.matchBookingsAgainstFilterCriteria(bookings, filterCriteria);
+      filterService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteria);
 
-      List<CategoryName> categories = filterCriteria.stream() //
+      List<CategoryName> configuredCategories = filterCriteria.stream() //
             .filter(crit -> crit.getCategory().getParentCategoryName() == null) // Don't list sub-categories separately
             .map(FilterCriterion::getCategory) //
             .distinct() //
             .sorted(Comparator.comparing(CategoryName::getName)) //
             .collect(Collectors.toList());
 
-      bookings.stream() //
+      importedBookings.stream() //
             .filter(booking -> booking.getMatchedCriteria().isEmpty())
             .forEach(booking -> booking.getMatchedCriteria().add(FilterCriterion.NULL_CRITERION));
 
-      categories.add(FilterCriterion.NULL_CRITERION.getCategory());
+      configuredCategories.add(FilterCriterion.NULL_CRITERION.getCategory());
 
-      this.categories.addAll(categories);
-      this.category2Booking = new StatisticService().groupByCategory(bookings);
+      this.categories.addAll(configuredCategories);
+      this.category2Booking = new StatisticService().groupByCategory(importedBookings);
    }
 
    public void refreshBookingTable(CategoryName selectedValue) {
@@ -78,15 +78,15 @@ public class MainViewModel implements ViewModel {
          return;
       }
       bookings.clear();
-      System.out.println("SELECTED: " + selectedValue);
-      List<Booking> bookingsA = new ArrayList<>(category2Booking.getOrDefault(selectedValue, List.of()));
 
+      List<Booking> bookingsToDisplay = new ArrayList<>(category2Booking.getOrDefault(selectedValue, List.of()));
+
+      // Add bookings of sub-categories
       for (CategoryName sub : selectedValue.getSubCategories()) {
-         bookingsA.addAll(category2Booking.getOrDefault(sub, List.of()));
+         bookingsToDisplay.addAll(category2Booking.getOrDefault(sub, List.of()));
       }
 
-      for (Booking booking : bookingsA) {
-
+      for (Booking booking : bookingsToDisplay) {
          TableModel tableModel = new TableModel();
          tableModel.setDate(booking.getDate());
          tableModel.setBetrag(booking.getBetrag());

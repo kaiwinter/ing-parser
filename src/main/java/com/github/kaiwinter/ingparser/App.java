@@ -1,7 +1,6 @@
 package com.github.kaiwinter.ingparser;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,24 +54,22 @@ public class App extends Application {
       LOGGER.info("SIZE initial (negative only): {}", bookings.size());
 
       List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
-      // bookings.sort(Comparator.comparingDouble(booking -> booking.betrag.doubleValue()));
 
       filterService.matchBookingsAgainstFilterCriteria(bookings, filterCriteria);
-      // bookings.removeIf(booking -> !(booking.date.getYear() == 2021 && booking.date.getMonth() == Month.DECEMBER));
-      bookings.removeIf(
-            booking -> booking.getMatchedCriteria().stream().anyMatch(crit -> crit.getCategory().equals("ignore")));
+      bookings.removeIf(booking -> booking.getMatchedCriteria().stream()
+            .anyMatch(crit -> crit.getCategory().getName().equals("ignore")));
 
       List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
             .distinct() //
-            .filter(category -> !"ignore".equals(category)) //
+            .filter(category -> !"ignore".equals(category.getName())) //
             .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
             .map(CategoryName::getName) //
-            .sorted().collect(Collectors.toList());
+            .sorted() //
+            .toList();
 
       new StatisticService().groupByCategoryAndMonth(bookings);
       new StatisticService().groupByMonthAndCategory(bookings, categories);
 
-//      System.exit(0);
       launch();
    }
 
