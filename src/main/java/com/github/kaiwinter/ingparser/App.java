@@ -67,7 +67,6 @@ public class App extends Application {
             .sorted() //
             .toList();
 
-      new StatisticService().groupByCategoryAndMonth(bookings);
       new StatisticService().groupByMonthAndCategory(bookings, categories);
 
       launch();

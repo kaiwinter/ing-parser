@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,43 +31,6 @@ public class StatisticService {
                   Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
 
       return groupToProductMapping;
-   }
-
-   /**
-    * Groups the bookings in the following order by category and month:
-    * <ol>
-    * <li>category</li>
-    * <li>month</li>
-    * </ol>
-    * 
-    * @param bookings
-    */
-   public void groupByCategoryAndMonth(List<Booking> bookings) {
-      Map<String, List<Booking>> category2Bookings = bookings.stream()
-            .filter(booking -> !booking.getMatchedCriteria().isEmpty())
-            .collect(Collectors.groupingBy(booking -> booking.getMatchedCriteria().get(0).getCategory().getName()));
-
-      category2Bookings.remove("ignore");
-      List<Booking> values = category2Bookings.values().stream().flatMap(Collection::stream)
-            .collect(Collectors.toList());
-      values.sort(Comparator.comparingDouble(booking -> booking.getBetrag().doubleValue()));
-
-      for (Entry<String, List<Booking>> entry : category2Bookings.entrySet()) {
-         System.out.println(entry.getKey() + ", " + entry.getValue().size() + " Buchungen, Summe: "
-               + entry.getValue().stream().map(Booking::getBetrag).reduce(BigDecimal.ZERO, BigDecimal::add));
-
-         Map<LocalDate, List<Booking>> byMonth = entry.getValue().stream()
-               .collect(Collectors.groupingBy(booking -> booking.getDate().withDayOfMonth(1)));
-
-         TreeMap<LocalDate, List<Booking>> sortedMap = new TreeMap<>(byMonth);
-         for (Entry<LocalDate, List<Booking>> monthEntry : sortedMap.entrySet()) {
-            System.out.println(monthEntry.getKey() + ", " + monthEntry.getValue().size() + " Buchungen, Summe: "
-                  + monthEntry.getValue().stream().map(Booking::getBetrag).reduce(BigDecimal.ZERO, BigDecimal::add));
-         }
-
-         System.out.println();
-         System.out.println();
-      }
    }
 
    public void groupByMonthAndCategory(List<Booking> bookings, List<String> categories) {
