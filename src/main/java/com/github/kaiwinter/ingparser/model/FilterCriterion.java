@@ -10,6 +10,8 @@ public class FilterCriterion {
    private final Type type;
    private final String pattern;
 
+   private String parentCategory;
+
    public static final FilterCriterion NULL_CRITERION = new FilterCriterion("unmatched", null, null);
 
    public static enum Type {
@@ -46,9 +48,18 @@ public class FilterCriterion {
       return pattern;
    }
 
+   public String getParentCategory() {
+      return parentCategory;
+   }
+
+   public void setParentCategory(String parentCategory) {
+      this.parentCategory = parentCategory;
+   }
+
    @Override
    public String toString() {
-      return "FilterCriterion [category=" + category + ", type=" + type + ", pattern=" + pattern + "]";
+      return "FilterCriterion [category=" + category + ", type=" + type + ", pattern=" + pattern + ", parentCategory="
+            + parentCategory + "]";
    }
 
 }

@@ -14,13 +14,13 @@ import com.github.kaiwinter.ingparser.model.Booking;
 import com.github.kaiwinter.ingparser.model.FilterCriterion;
 import com.github.kaiwinter.ingparser.model.FilterCriterion.Type;
 
-public class FilterServiceTest {
+class FilterServiceTest {
 
    /**
     * Tests if bookings with negative amounts remain in the list.
     */
    @Test
-   public void testFilterNegativeInplace_lessThanZero() {
+   void testFilterNegativeInplace_lessThanZero() {
       FilterService filterService = new FilterService();
 
       List<Booking> list = new ArrayList<>();
@@ -36,7 +36,7 @@ public class FilterServiceTest {
     * Tests if bookings with positive amounts are removed from the list.
     */
    @Test
-   public void testFilterNegativeInplace_moreThanZero() {
+   void testFilterNegativeInplace_moreThanZero() {
       FilterService filterService = new FilterService();
 
       List<Booking> list = new ArrayList<>();
@@ -55,7 +55,7 @@ public class FilterServiceTest {
     */
    @ParameterizedTest
    @ValueSource(strings = { "e-mart", "E-MART", "e-Mart" })
-   public void moveToMapByCriteriaAuftraggeber(String filterPattern) {
+   void moveToMapByCriteriaAuftraggeber(String filterPattern) {
       FilterService filterService = new FilterService();
       var booking = new Booking();
       booking.auftraggeber = "quick-e-mart";
@@ -74,7 +74,7 @@ public class FilterServiceTest {
     */
    @ParameterizedTest
    @ValueSource(strings = { "e-mart", "E-MART", "e-Mart" })
-   public void moveToMapByCriteriaVerwendungszweck(String filterPattern) {
+   void moveToMapByCriteriaVerwendungszweck(String filterPattern) {
       FilterService filterService = new FilterService();
       var booking = new Booking();
       booking.verwendungszweck = "quick-e-mart";
@@ -90,7 +90,7 @@ public class FilterServiceTest {
     * Tests if a booking which matches multiple FilterCriteria are recognized.
     */
    @Test
-   public void warnAboutMultipleMatches_Auftraggeber() {
+   void warnAboutMultipleMatches_Auftraggeber() {
       FilterService filterService = new FilterService();
 
       var booking = new Booking();
@@ -108,7 +108,7 @@ public class FilterServiceTest {
     * Tests if a booking which matches multiple FilterCriteria are recognized.
     */
    @Test
-   public void warnAboutMultipleMatches_Verwendungszweck() {
+   void warnAboutMultipleMatches_Verwendungszweck() {
       FilterService filterService = new FilterService();
 
       var booking = new Booking();

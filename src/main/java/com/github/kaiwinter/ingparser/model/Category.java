@@ -1,5 +1,6 @@
 package com.github.kaiwinter.ingparser.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,6 +14,7 @@ public class Category {
    private String name;
    private List<String> auftraggeber;
    private List<String> verwendungszweck;
+   private List<Category> sub = new ArrayList<>();
 
    public String getName() {
       return name;
@@ -31,8 +33,15 @@ public class Category {
     *         Verwendungszweck
     */
    public List<FilterCriterion> getCombinedFilterCriteria() {
-      List<FilterCriterion> filterCriterria = getAuftraggeberAsFilterCriteria();
-      filterCriterria.addAll(getVerwendungszweckAsFilterCriteria());
-      return filterCriterria;
+      List<FilterCriterion> filterCriteria = getAuftraggeberAsFilterCriteria();
+      filterCriteria.addAll(getVerwendungszweckAsFilterCriteria());
+
+      for (Category subCategory : sub) {
+         List<FilterCriterion> combinedSubFilterCriteria = subCategory.getCombinedFilterCriteria();
+         combinedSubFilterCriteria.forEach(crit -> crit.setParentCategory(name));
+         filterCriteria.addAll(combinedSubFilterCriteria);
+      }
+
+      return filterCriteria;
    }
 }
