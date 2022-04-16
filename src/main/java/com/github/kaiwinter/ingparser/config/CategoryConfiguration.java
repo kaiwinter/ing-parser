@@ -57,7 +57,8 @@ public class CategoryConfiguration {
          combinedSubFilterCriteria.forEach(crit -> crit.getCategory().setParentCategoryName(categoryName));
 
          // Add sub-categories to categories
-         for (FilterCriterion f : filterCriteria) {
+         for (FilterCriterion f : filterCriteria.stream().filter(f -> f.getCategory().getName().equals(categoryName))
+               .toList()) {
             f.getCategory().getSubCategories()
                   .addAll(combinedSubFilterCriteria.stream().map(FilterCriterion::getCategory).toList());
          }
