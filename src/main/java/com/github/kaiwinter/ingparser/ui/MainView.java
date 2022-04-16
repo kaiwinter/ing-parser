@@ -1,11 +1,11 @@
-package com.github.kaiwinter.ingparser;
+package com.github.kaiwinter.ingparser.ui;
 
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import com.github.kaiwinter.ingparser.model.CategoryName;
+import com.github.kaiwinter.ingparser.ui.model.CategoryName;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;

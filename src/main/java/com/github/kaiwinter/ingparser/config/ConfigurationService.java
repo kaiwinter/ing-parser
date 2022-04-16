@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser.service;
+package com.github.kaiwinter.ingparser.config;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.kaiwinter.ingparser.App;
-import com.github.kaiwinter.ingparser.model.Category;
-import com.github.kaiwinter.ingparser.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
 import com.google.gson.Gson;
 
 /**

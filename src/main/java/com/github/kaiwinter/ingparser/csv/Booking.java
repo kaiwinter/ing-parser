@@ -1,10 +1,11 @@
-package com.github.kaiwinter.ingparser.model;
+package com.github.kaiwinter.ingparser.csv;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 import com.opencsv.bean.CsvNumber;

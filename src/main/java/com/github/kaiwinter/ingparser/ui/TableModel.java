@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser;
+package com.github.kaiwinter.ingparser.ui;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

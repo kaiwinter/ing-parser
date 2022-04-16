@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser.service;
+package com.github.kaiwinter.ingparser.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.kaiwinter.ingparser.model.CategoryName;
-import com.github.kaiwinter.ingparser.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.config.ConfigurationService;
+import com.github.kaiwinter.ingparser.ui.model.CategoryName;
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
 
 /**
  * Tests for {@link ConfigurationService}.

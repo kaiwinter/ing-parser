@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser.service;
+package com.github.kaiwinter.ingparser.csv;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,24 +10,23 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.github.kaiwinter.ingparser.model.Booking;
-import com.github.kaiwinter.ingparser.model.FilterCriterion;
-import com.github.kaiwinter.ingparser.model.FilterCriterion.Type;
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion.Type;
 
-class FilterServiceTest {
+class ImportServiceTest {
+
+   ImportService importService = new ImportService();
 
    /**
     * Tests if bookings with negative amounts remain in the list.
     */
    @Test
    void testFilterNegativeInplace_lessThanZero() {
-      FilterService filterService = new FilterService();
-
       List<Booking> list = new ArrayList<>();
       Booking bookingLessThanZero = new Booking();
       bookingLessThanZero.setBetrag(BigDecimal.valueOf(-12.34));
       list.add(bookingLessThanZero);
-      filterService.filterNegativeInplace(list);
+      importService.filterNegativeInplace(list);
 
       assertEquals(1, list.size());
    }
@@ -37,13 +36,11 @@ class FilterServiceTest {
     */
    @Test
    void testFilterNegativeInplace_moreThanZero() {
-      FilterService filterService = new FilterService();
-
       List<Booking> list = new ArrayList<>();
       Booking bookingLessThanZero = new Booking();
       bookingLessThanZero.setBetrag(BigDecimal.valueOf(12.34));
       list.add(bookingLessThanZero);
-      filterService.filterNegativeInplace(list);
+      importService.filterNegativeInplace(list);
 
       assertEquals(0, list.size());
    }
@@ -56,14 +53,13 @@ class FilterServiceTest {
    @ParameterizedTest
    @ValueSource(strings = { "e-mart", "E-MART", "e-Mart" })
    void moveToMapByCriteriaAuftraggeber(String filterPattern) {
-      FilterService filterService = new FilterService();
       var booking = new Booking();
       booking.setAuftraggeber("quick-e-mart");
       List<Booking> bookings = List.of(booking);
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byAuftraggeber("Markets", filterPattern);
 
-      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
+      importService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(1, booking.getMatchedCriteria().size());
    }
 
@@ -75,14 +71,13 @@ class FilterServiceTest {
    @ParameterizedTest
    @ValueSource(strings = { "e-mart", "E-MART", "e-Mart" })
    void moveToMapByCriteriaVerwendungszweck(String filterPattern) {
-      FilterService filterService = new FilterService();
       var booking = new Booking();
       booking.setVerwendungszweck("quick-e-mart");
       List<Booking> bookings = List.of(booking);
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byVerwendungszweck("Markets", filterPattern);
 
-      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
+      importService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(1, booking.getMatchedCriteria().size());
    }
 
@@ -91,8 +86,6 @@ class FilterServiceTest {
     */
    @Test
    void warnAboutMultipleMatches_Auftraggeber() {
-      FilterService filterService = new FilterService();
-
       var booking = new Booking();
       booking.setAuftraggeber("quick-e-mart");
       List<Booking> bookings = List.of(booking);
@@ -100,7 +93,7 @@ class FilterServiceTest {
       List<FilterCriterion> moveDesciption = FilterCriterion.byAuftraggeber("Quicks", "quick");
       moveDesciption.addAll(FilterCriterion.byAuftraggeber("Markets", "mart"));
 
-      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
+      importService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(2, booking.getMatchedCriteria().size());
    }
 
@@ -109,8 +102,6 @@ class FilterServiceTest {
     */
    @Test
    void warnAboutMultipleMatches_Verwendungszweck() {
-      FilterService filterService = new FilterService();
-
       var booking = new Booking();
       booking.setVerwendungszweck("quick-e-mart");
       List<Booking> bookings = List.of(booking);
@@ -118,7 +109,7 @@ class FilterServiceTest {
       List<FilterCriterion> moveDesciption = FilterCriterion.byVerwendungszweck("Quicks", "quick");
       moveDesciption.addAll(FilterCriterion.byVerwendungszweck("Markets", "mart"));
 
-      filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
+      importService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
       assertEquals(2, booking.getMatchedCriteria().size());
    }
 }

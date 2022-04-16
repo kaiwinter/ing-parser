@@ -40,6 +40,8 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -52,7 +54,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="1326.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kaiwinter.ingparser.MainView">
+<VBox prefHeight="600.0" prefWidth="1326.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.kaiwinter.ingparser.ui.MainView">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -93,49 +95,62 @@
         </Menu>
       </menus>
     </MenuBar>
-    <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-      <items>
-        <AnchorPane maxWidth="200.0">
-          <children>
-                  <ListView fx:id="categoryList" prefHeight="550.5" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-          </children>
-        </AnchorPane>
-      <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0">
-        <children>
-                  <GridPane prefHeight="551.0" prefWidth="443.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <TableView fx:id="bookingsTable" prefHeight="400.0" prefWidth="326.0">
-                          <columns>
-                              <TableColumn fx:id="dateColumn" prefWidth="87.0" text="Datum" />
-                              <TableColumn fx:id="betragColumn" prefWidth="88.0" style="-fx-alignment: CENTER-RIGHT;" text="Betrag" />
-                            <TableColumn fx:id="auftraggeberColumn" prefWidth="268.0" text="Auftraggeber" />
-                            <TableColumn fx:id="verwendungszweckColumn" prefWidth="443.0" text="Verwendungszweck" />
-                          </columns>
-                        </TableView>
-                     </children>
-                  </GridPane>
-        </children>
-      </AnchorPane>
-        <AnchorPane maxWidth="300.0">
-          <children>
-            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">
-                     <font>
-                <Font size="18.0" fx:id="x1" />
-                     </font>
-                     <textFill>
-                <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
-                     </textFill>
-                  </Label>
-          </children>
-        </AnchorPane>
-      </items>
-    </SplitPane>
+      <TabPane VBox.vgrow="ALWAYS">
+         <tabs>
+            <Tab closable="false" text="Zuordnung">
+               <content>
+                <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0">
+                  <items>
+                    <AnchorPane maxWidth="200.0">
+                      <children>
+                              <ListView fx:id="categoryList" prefHeight="550.5" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                      </children>
+                    </AnchorPane>
+                  <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0">
+                    <children>
+                              <GridPane prefHeight="551.0" prefWidth="443.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <TableView fx:id="bookingsTable" prefHeight="400.0" prefWidth="326.0">
+                                      <columns>
+                                          <TableColumn fx:id="dateColumn" prefWidth="87.0" text="Datum" />
+                                          <TableColumn fx:id="betragColumn" prefWidth="88.0" style="-fx-alignment: CENTER-RIGHT;" text="Betrag" />
+                                        <TableColumn fx:id="auftraggeberColumn" prefWidth="268.0" text="Auftraggeber" />
+                                        <TableColumn fx:id="verwendungszweckColumn" prefWidth="443.0" text="Verwendungszweck" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                              </GridPane>
+                    </children>
+                  </AnchorPane>
+                    <AnchorPane maxWidth="300.0">
+                      <children>
+                        <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">
+                                 <font>
+                            <Font size="18.0" fx:id="x1" />
+                                 </font>
+                                 <textFill>
+                            <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
+                                 </textFill>
+                              </Label>
+                      </children>
+                    </AnchorPane>
+                  </items>
+                </SplitPane>
+               </content>
+            </Tab>
+            <Tab closable="false" text="Auswertung">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+         </tabs>
+      </TabPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
         <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">

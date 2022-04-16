@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser.service;
+package com.github.kaiwinter.ingparser.statistic;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,8 +11,8 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import com.bethecoder.ascii_table.ASCIITable;
-import com.github.kaiwinter.ingparser.model.Booking;
-import com.github.kaiwinter.ingparser.model.CategoryName;
+import com.github.kaiwinter.ingparser.csv.Booking;
+import com.github.kaiwinter.ingparser.ui.model.CategoryName;
 
 public class StatisticService {
 

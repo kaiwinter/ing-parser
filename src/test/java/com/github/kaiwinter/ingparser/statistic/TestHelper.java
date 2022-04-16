@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser.service;
+package com.github.kaiwinter.ingparser.statistic;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;

@@ -1,7 +1,9 @@
-package com.github.kaiwinter.ingparser.model;
+package com.github.kaiwinter.ingparser.config;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
 
 /**
  * One instance represents one object from the configuration file. This object contains one List of Strings which match

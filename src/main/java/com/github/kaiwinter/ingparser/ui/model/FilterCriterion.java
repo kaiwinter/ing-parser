@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser.model;
+package com.github.kaiwinter.ingparser.ui.model;
 
 import java.util.Arrays;
 import java.util.List;

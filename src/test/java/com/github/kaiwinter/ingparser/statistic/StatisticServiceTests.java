@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser.service;
+package com.github.kaiwinter.ingparser.statistic;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,9 +10,10 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.kaiwinter.ingparser.model.Booking;
-import com.github.kaiwinter.ingparser.model.CategoryName;
-import com.github.kaiwinter.ingparser.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.csv.Booking;
+import com.github.kaiwinter.ingparser.statistic.StatisticService;
+import com.github.kaiwinter.ingparser.ui.model.CategoryName;
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
 
 /**
  * Tests for {@link StatisticService}.

@@ -1,4 +1,4 @@
-package com.github.kaiwinter.ingparser;
+package com.github.kaiwinter.ingparser.ui;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,13 +9,12 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kaiwinter.ingparser.model.Booking;
-import com.github.kaiwinter.ingparser.model.CategoryName;
-import com.github.kaiwinter.ingparser.model.FilterCriterion;
-import com.github.kaiwinter.ingparser.service.ConfigurationService;
-import com.github.kaiwinter.ingparser.service.FilterService;
-import com.github.kaiwinter.ingparser.service.ImportService;
-import com.github.kaiwinter.ingparser.service.StatisticService;
+import com.github.kaiwinter.ingparser.config.ConfigurationService;
+import com.github.kaiwinter.ingparser.csv.Booking;
+import com.github.kaiwinter.ingparser.csv.ImportService;
+import com.github.kaiwinter.ingparser.statistic.StatisticService;
+import com.github.kaiwinter.ingparser.ui.model.CategoryName;
+import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
 
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.ListProperty;
@@ -42,19 +41,18 @@ public class MainViewModel implements ViewModel {
 
    public void init() {
       ImportService importService = new ImportService();
-      FilterService filterService = new FilterService();
       ConfigurationService configurationService = new ConfigurationService();
 
       List<Booking> importedBookings = importService.importFromFile(CSV_FILE);
 
       LOGGER.info("SIZE initial: {}", importedBookings.size());
-      filterService.filterNegativeInplace(importedBookings);
+      importService.filterNegativeInplace(importedBookings);
 
       LOGGER.info("SIZE initial (negative only): {}", importedBookings.size());
 
       List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
 
-      filterService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteria);
+      importService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteria);
 
       List<CategoryName> configuredCategories = filterCriteria.stream() //
             .filter(crit -> crit.getCategory().getParentCategoryName() == null) // Don't list sub-categories separately
