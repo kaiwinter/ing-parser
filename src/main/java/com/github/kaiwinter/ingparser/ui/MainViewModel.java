@@ -10,11 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kaiwinter.ingparser.config.ConfigurationService;
+import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.csv.ImportService;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
-import com.github.kaiwinter.ingparser.ui.model.CategoryName;
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.ui.model.Category;
 
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.ListProperty;
@@ -26,12 +26,12 @@ public class MainViewModel implements ViewModel {
    private static final String CSV_FILE = "/ING_sample.csv";
    private static final String CONFIG_FILE = "/parser_sample.json";
 
-   private final ListProperty<CategoryName> categories = new SimpleListProperty<>();
+   private final ListProperty<Category> categories = new SimpleListProperty<>();
    private final ListProperty<TableModel> bookings = new SimpleListProperty<>();
 
-   private Map<CategoryName, List<Booking>> category2Booking;
+   private Map<Category, List<Booking>> category2Booking;
 
-   public ListProperty<CategoryName> categoriesProperty() {
+   public ListProperty<Category> categoriesProperty() {
       return this.categories;
    }
 
@@ -54,11 +54,11 @@ public class MainViewModel implements ViewModel {
 
       importService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteria);
 
-      List<CategoryName> configuredCategories = filterCriteria.stream() //
+      List<Category> configuredCategories = filterCriteria.stream() //
             .filter(crit -> crit.getCategory().getParentCategoryName() == null) // Don't list sub-categories separately
             .map(FilterCriterion::getCategory) //
             .distinct() //
-            .sorted(Comparator.comparing(CategoryName::getName)) //
+            .sorted(Comparator.comparing(Category::getName)) //
             .collect(Collectors.toList());
 
       importedBookings.stream() //
@@ -71,7 +71,7 @@ public class MainViewModel implements ViewModel {
       this.category2Booking = new StatisticService().groupByCategory(importedBookings);
    }
 
-   public void refreshBookingTable(CategoryName selectedValue) {
+   public void refreshBookingTable(Category selectedValue) {
       if (selectedValue == null) {
          return;
       }
@@ -80,7 +80,7 @@ public class MainViewModel implements ViewModel {
       List<Booking> bookingsToDisplay = new ArrayList<>(category2Booking.getOrDefault(selectedValue, List.of()));
 
       // Add bookings of sub-categories
-      for (CategoryName sub : selectedValue.getSubCategories()) {
+      for (Category sub : selectedValue.getSubCategories()) {
          bookingsToDisplay.addAll(category2Booking.getOrDefault(sub, List.of()));
       }
 

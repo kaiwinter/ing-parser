@@ -6,13 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.kaiwinter.ingparser.config.ConfigurationService;
+import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.csv.ImportService;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
 import com.github.kaiwinter.ingparser.ui.MainView;
 import com.github.kaiwinter.ingparser.ui.MainViewModel;
-import com.github.kaiwinter.ingparser.ui.model.CategoryName;
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.ui.model.Category;
 
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.ViewTuple;
@@ -63,7 +63,7 @@ public class App extends Application {
             .distinct() //
             .filter(category -> !"ignore".equals(category.getName())) //
             .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
-            .map(CategoryName::getName) //
+            .map(Category::getName) //
             .sorted() //
             .toList();
 

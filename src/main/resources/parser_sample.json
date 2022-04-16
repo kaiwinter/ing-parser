@@ -1,24 +1,24 @@
 [
 	{
-		"name": "Lebensmittel",
-		"auftraggeber": [],
-		"verwendungszweck": ["Brötchen"],
+		"categoryName": "Lebensmittel",
+		"auftraggeberPattern": [],
+		"verwendungszweckPattern": ["Brötchen"],
 		"sub": [
 			{
-				"name": "Supermarkt",
-				"auftraggeber": ["Supermarkt"],
-				"verwendungszweck": []
+				"categoryName": "Supermarkt",
+				"auftraggeberPattern": ["Supermarkt"],
+				"verwendungszweckPattern": []
 			},
 			{
-				"name": "Restaurant",
-				"auftraggeber": ["Restaurant"],
-				"verwendungszweck": []
+				"categoryName": "Restaurant",
+				"auftraggeberPattern": ["Restaurant"],
+				"verwendungszweckPattern": []
 			}
 		] 
 	},
 	{
-		"name": "Handwerker",
-		"auftraggeber": ["Bäckermann"],
-		"verwendungszweck": []
+		"categoryName": "Handwerker",
+		"auftraggeberPattern": ["Bäckermann"],
+		"verwendungszweckPattern": []
 	}
 ]

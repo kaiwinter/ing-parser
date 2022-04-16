@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.opencsv.bean.CsvBindByPosition;
 import com.opencsv.bean.CsvDate;
 import com.opencsv.bean.CsvNumber;

@@ -10,10 +10,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
-import com.github.kaiwinter.ingparser.statistic.StatisticService;
-import com.github.kaiwinter.ingparser.ui.model.CategoryName;
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.ui.model.Category;
 
 /**
  * Tests for {@link StatisticService}.
@@ -24,8 +23,8 @@ class StatisticServiceTests {
 
    @Test
    void groupByCategory() {
-      CategoryName categoryName1 = new CategoryName("Autraggeber-Criterion");
-      CategoryName categoryName2 = new CategoryName("Verwendungszweck-Criterion");
+      Category categoryName1 = new Category("Autraggeber-Criterion");
+      Category categoryName2 = new Category("Verwendungszweck-Criterion");
       List<FilterCriterion> byAuftraggeber = FilterCriterion.byAuftraggeber(categoryName1, "shop");
       List<FilterCriterion> byVerwendungszweck = FilterCriterion.byVerwendungszweck(categoryName2, "stuff");
 
@@ -38,7 +37,7 @@ class StatisticServiceTests {
       booking2.setMatchedCriteria(byVerwendungszweck);
       List<Booking> bookings = List.of(booking1, booking2);
 
-      Map<CategoryName, List<Booking>> groupByCategory = statisticService.groupByCategory(bookings);
+      Map<Category, List<Booking>> groupByCategory = statisticService.groupByCategory(bookings);
 
       assertThat(groupByCategory) //
             .hasSize(2) //

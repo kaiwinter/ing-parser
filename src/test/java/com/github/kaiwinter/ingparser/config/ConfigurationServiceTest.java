@@ -6,9 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.github.kaiwinter.ingparser.config.ConfigurationService;
-import com.github.kaiwinter.ingparser.ui.model.CategoryName;
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
+import com.github.kaiwinter.ingparser.ui.model.Category;
 
 /**
  * Tests for {@link ConfigurationService}.
@@ -27,14 +25,14 @@ class ConfigurationServiceTest {
 
       assertThat(filterCriteria) //
             .extracting(FilterCriterion::getCategory) //
-            .extracting(CategoryName::getName) //
+            .extracting(Category::getName) //
             .containsOnly("Lebensmittel", "Supermarkt", "Restaurant", "Handwerker");
 
       // Should have "Lebensmittel" as parent category
       assertThat(filterCriteria)//
             .extracting(FilterCriterion::getCategory) //
             .filteredOn(category -> category.getName().equals("Supermarkt") || category.getName().equals("Restaurant")) //
-            .extracting(CategoryName::getParentCategoryName) //
+            .extracting(Category::getParentCategoryName) //
             .containsOnly("Lebensmittel");
 
       // Shouldn't have a parent category
@@ -42,7 +40,7 @@ class ConfigurationServiceTest {
             .extracting(FilterCriterion::getCategory) //
             .filteredOn(
                   category -> category.getName().equals("Lebensmittel") || category.getName().equals("Handwerker")) //
-            .extracting(CategoryName::getParentCategoryName) //
+            .extracting(Category::getParentCategoryName) //
             .containsOnlyNulls();
    }
 }

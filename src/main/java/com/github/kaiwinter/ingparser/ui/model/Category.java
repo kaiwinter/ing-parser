@@ -3,13 +3,13 @@ package com.github.kaiwinter.ingparser.ui.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryName {
+public class Category {
 
    private final String name;
    private String parentCategoryName;
-   private List<CategoryName> subCategories = new ArrayList<>();
+   private List<Category> subCategories = new ArrayList<>();
 
-   public CategoryName(String name) {
+   public Category(String name) {
       this.name = name;
    }
 
@@ -25,17 +25,17 @@ public class CategoryName {
       return name;
    }
 
-   public List<CategoryName> getSubCategories() {
+   public List<Category> getSubCategories() {
       return subCategories;
    }
 
-   public void setSubCategories(List<CategoryName> subCategories) {
+   public void setSubCategories(List<Category> subCategories) {
       this.subCategories = subCategories;
    }
 
    @Override
    public String toString() {
-      return "CategoryName [name=" + name + ", parentCategoryName=" + parentCategoryName + ", subCategories="
+      return "Category [name=" + name + ", parentCategoryName=" + parentCategoryName + ", subCategories="
             + subCategories + "]";
    }
 

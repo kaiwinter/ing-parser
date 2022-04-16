@@ -12,19 +12,19 @@ import java.util.stream.Collectors;
 
 import com.bethecoder.ascii_table.ASCIITable;
 import com.github.kaiwinter.ingparser.csv.Booking;
-import com.github.kaiwinter.ingparser.ui.model.CategoryName;
+import com.github.kaiwinter.ingparser.ui.model.Category;
 
 public class StatisticService {
 
    /**
     * Creates a Map with the category as key and a List of Bookings as value. If a Booking matches two categories it is
     * listed two times.
-    * 
+    *
     * @param bookings
     * @return
     */
-   public Map<CategoryName, List<Booking>> groupByCategory(List<Booking> bookings) {
-      Map<CategoryName, List<Booking>> groupToProductMapping = bookings.stream()
+   public Map<Category, List<Booking>> groupByCategory(List<Booking> bookings) {
+      Map<Category, List<Booking>> groupToProductMapping = bookings.stream()
             .flatMap(booking -> booking.getMatchedCriteria().stream()
                   .map(filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory(), booking)))
             .collect(Collectors.groupingBy(Map.Entry::getKey,

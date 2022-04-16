@@ -5,7 +5,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import com.github.kaiwinter.ingparser.ui.model.CategoryName;
+import com.github.kaiwinter.ingparser.ui.model.Category;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -24,7 +24,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    private MainViewModel viewModel;
 
    @FXML
-   private ListView<CategoryName> categoryList;
+   private ListView<Category> categoryList;
 
    @FXML
    private TableView<TableModel> bookingsTable;
@@ -48,9 +48,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       viewModel.bookingsProperty().bind(bookingsTable.itemsProperty());
 
       // List
-      categoryList.setCellFactory(param -> new ListCell<CategoryName>() {
+      categoryList.setCellFactory(param -> new ListCell<>() {
          @Override
-         public void updateItem(CategoryName category, boolean empty) {
+         public void updateItem(Category category, boolean empty) {
             super.updateItem(category, empty);
             if (empty || category == null) {
                setText(null);
@@ -66,7 +66,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       auftraggeberColumn.setCellValueFactory(column -> getValue(column.getValue().getAuftraggeber()));
       verwendungszweckColumn.setCellValueFactory(column -> getValue(column.getValue().getVerwendungszweck()));
 
-      bookingsTable.setRowFactory(__ -> new TableRow<TableModel>() {
+      bookingsTable.setRowFactory(__ -> new TableRow<>() {
          @Override
          protected void updateItem(TableModel item, boolean empty) {
             super.updateItem(item, empty);
@@ -81,7 +81,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    }
 
    private <T> ObservableValueBase<T> getValue(T localDate) {
-      return new ObservableValueBase<T>() {
+      return new ObservableValueBase<>() {
          @Override
          public T getValue() {
             return localDate;

@@ -3,31 +3,25 @@ package com.github.kaiwinter.ingparser.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
-
 /**
  * One instance represents one object from the configuration file. This object contains one List of Strings which match
  * against the Auftraggeber of a booking. If a booking matches this rule it is grouped into a category which name is
  * defined by this object. The second List of Strings match against the Verwendungszweck. The method
  * {@link #getCombinedFilterCriteria()} creates one List of {@link FilterCriterion} objects from these two Lists.
  */
-public class Category {
+public class CategoryConfiguration {
 
-   private String name;
-   private List<String> auftraggeber;
-   private List<String> verwendungszweck;
-   private List<Category> sub = new ArrayList<>();
-
-   public String getName() {
-      return name;
-   }
+   private String categoryName;
+   private List<String> auftraggeberPattern;
+   private List<String> verwendungszweckPattern;
+   private List<CategoryConfiguration> sub = new ArrayList<>();
 
    private List<FilterCriterion> getAuftraggeberAsFilterCriteria() {
-      return FilterCriterion.byAuftraggeber(name, auftraggeber.toArray(new String[0]));
+      return FilterCriterion.byAuftraggeber(categoryName, auftraggeberPattern.toArray(new String[0]));
    }
 
    private List<FilterCriterion> getVerwendungszweckAsFilterCriteria() {
-      return FilterCriterion.byVerwendungszweck(name, verwendungszweck.toArray(new String[0]));
+      return FilterCriterion.byVerwendungszweck(categoryName, verwendungszweckPattern.toArray(new String[0]));
    }
 
    /**
@@ -38,9 +32,9 @@ public class Category {
       List<FilterCriterion> filterCriteria = getAuftraggeberAsFilterCriteria();
       filterCriteria.addAll(getVerwendungszweckAsFilterCriteria());
 
-      for (Category subCategory : sub) {
+      for (CategoryConfiguration subCategory : sub) {
          List<FilterCriterion> combinedSubFilterCriteria = subCategory.getCombinedFilterCriteria();
-         combinedSubFilterCriteria.forEach(crit -> crit.getCategory().setParentCategoryName(name));
+         combinedSubFilterCriteria.forEach(crit -> crit.getCategory().setParentCategoryName(categoryName));
 
          // Add sub-categories to categories
          for (FilterCriterion f : filterCriteria) {

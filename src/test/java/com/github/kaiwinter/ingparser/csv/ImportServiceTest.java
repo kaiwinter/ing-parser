@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion;
-import com.github.kaiwinter.ingparser.ui.model.FilterCriterion.Type;
+import com.github.kaiwinter.ingparser.config.FilterCriterion;
+import com.github.kaiwinter.ingparser.config.FilterCriterion.MatchingCriterion;
 
 class ImportServiceTest {
 
@@ -47,8 +47,8 @@ class ImportServiceTest {
 
    /**
     * Tests if bookings are matched correctly by Auftraggeber.
-    * 
-    * @param filterPattern the Auftraggeber which is used to create a {@link Type#BY_AUFTRAGGEBER} criterion
+    *
+    * @param filterPattern the Auftraggeber which is used to create a {@link MatchingCriterion#AUFTRAGGEBER} criterion
     */
    @ParameterizedTest
    @ValueSource(strings = { "e-mart", "E-MART", "e-Mart" })
@@ -65,8 +65,8 @@ class ImportServiceTest {
 
    /**
     * Tests if bookings are matched correctly by Verwendungszweck.
-    * 
-    * @param filterPattern the Auftraggeber which is used to create a {@link Type#BY_VERWENDUNGSZWECK} criterion
+    *
+    * @param filterPattern the Auftraggeber which is used to create a {@link MatchingCriterion#VERWENDUNGSZWECK} criterion
     */
    @ParameterizedTest
    @ValueSource(strings = { "e-mart", "E-MART", "e-Mart" })
