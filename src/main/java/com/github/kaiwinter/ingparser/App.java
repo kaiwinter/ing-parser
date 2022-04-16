@@ -2,9 +2,6 @@ package com.github.kaiwinter.ingparser;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
@@ -26,7 +23,6 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-   private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
    private static final String CSV_FILE = "/ING_sample.csv";
    private static final String CONFIG_FILE = "/parser_sample.json";
 
@@ -47,11 +43,6 @@ public class App extends Application {
       ConfigurationService configurationService = new ConfigurationService();
 
       List<Booking> bookings = importService.importFromFile(CSV_FILE);
-
-      LOGGER.info("SIZE initial: {}", bookings.size());
-      importService.filterNegativeInplace(bookings);
-
-      LOGGER.info("SIZE initial (negative only): {}", bookings.size());
 
       List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
 

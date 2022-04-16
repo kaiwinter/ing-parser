@@ -20,11 +20,18 @@ public class ImportService {
    private static final int CSV_HEADER_LINES = 14;
 
    public List<Booking> importFromFile(String filename) {
-      return new CsvToBeanBuilder<Booking>(new InputStreamReader(App.class.getResourceAsStream(filename))) //
+      List<Booking> bookings = new CsvToBeanBuilder<Booking>(
+            new InputStreamReader(App.class.getResourceAsStream(filename))) //
             .withSeparator(';') //
             .withType(Booking.class) //
             .withSkipLines(CSV_HEADER_LINES) //
             .build().parse();
+
+      LOGGER.info("Imported {} bookings", bookings.size());
+      filterNegativeInplace(bookings);
+      LOGGER.info("Removed positive bookings, left: {} bookings", bookings.size());
+
+      return bookings;
    }
 
    public void filterNegativeInplace(List<Booking> list) {

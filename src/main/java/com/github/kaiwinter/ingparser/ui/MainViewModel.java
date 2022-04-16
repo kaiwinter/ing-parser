@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
@@ -23,7 +20,6 @@ import javafx.beans.property.SimpleListProperty;
 
 public class MainViewModel implements ViewModel {
 
-   private static final Logger LOGGER = LoggerFactory.getLogger(MainViewModel.class);
    private static final String CSV_FILE = "/ING_sample.csv";
    private static final String CONFIG_FILE = "/parser_sample.json";
 
@@ -44,12 +40,7 @@ public class MainViewModel implements ViewModel {
       ImportService importService = new ImportService();
       ConfigurationService configurationService = new ConfigurationService();
 
-      List<Booking> importedBookings = importService.importFromFile(CSV_FILE);
-
-      LOGGER.info("SIZE initial: {}", importedBookings.size());
-      importService.filterNegativeInplace(importedBookings);
-
-      LOGGER.info("SIZE initial (negative only): {}", importedBookings.size());
+      List<Booking> importedBookings = importService.importFromFile(csvFile);
 
       List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
 
