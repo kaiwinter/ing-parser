@@ -2,6 +2,7 @@ package com.github.kaiwinter.ingparser.ui.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class CategoryModel {
 
@@ -37,6 +38,24 @@ public class CategoryModel {
    public String toString() {
       return "Category [name=" + name + ", parentCategoryName=" + parentCategoryName + ", subCategories="
             + subCategories + "]";
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(name, parentCategoryName, subCategories);
+   }
+
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      CategoryModel other = (CategoryModel) obj;
+      return Objects.equals(name, other.name) && Objects.equals(parentCategoryName, other.parentCategoryName)
+            && Objects.equals(subCategories, other.subCategories);
    }
 
 }
