@@ -12,10 +12,13 @@ import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.beans.value.ObservableValueBase;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -42,6 +45,11 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    @FXML
    private ListView<FilterCriterion> criteriaList;
 
+   @FXML
+   private Label leftStatusLabel;
+   @FXML
+   private Label rightStatusLabel;
+
    @Override
    public void initialize(URL url, ResourceBundle resourceBundle) {
       // List click listener
@@ -49,8 +57,12 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             .addListener((__1, __2, newValue) -> viewModel.refreshBookingTable(newValue));
 
       // Table click listener
-      bookingsTable.getSelectionModel().selectedItemProperty()
-            .addListener((__1, __2, newValue) -> viewModel.refreshFilterCriteriaList(newValue));
+      bookingsTable.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
+         ObservableList<Booking> selected = bookingsTable.getSelectionModel().getSelectedItems();
+         viewModel.refreshFilterCriteriaList(selected);
+      });
+
+      bookingsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
       // Model of List and Table
       viewModel.categoriesProperty().bind(categoryList.itemsProperty());
@@ -87,6 +99,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             }
          }
       });
+
+      leftStatusLabel.textProperty().bind(viewModel.leftStatusLabelProperty());
+      rightStatusLabel.textProperty().bind(viewModel.rightStatusLabelProperty());
    }
 
    private <T> ObservableValueBase<T> getValue(T localDate) {

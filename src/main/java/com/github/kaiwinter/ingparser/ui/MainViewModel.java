@@ -1,5 +1,6 @@
 package com.github.kaiwinter.ingparser.ui;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -16,12 +17,18 @@ import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 public class MainViewModel implements ViewModel {
 
    private final ListProperty<CategoryModel> categories = new SimpleListProperty<>();
    private final ListProperty<Booking> bookings = new SimpleListProperty<>();
    private final ListProperty<FilterCriterion> filterCriteria = new SimpleListProperty<>();
+
+   private final StringProperty leftStatusLabel = new SimpleStringProperty();
+   private final StringProperty rightStatusLabel = new SimpleStringProperty();
 
    private Map<CategoryModel, List<Booking>> category2Booking;
 
@@ -35,6 +42,14 @@ public class MainViewModel implements ViewModel {
 
    public ListProperty<FilterCriterion> filterCriteriaProperty() {
       return this.filterCriteria;
+   }
+
+   public StringProperty leftStatusLabelProperty() {
+      return this.leftStatusLabel;
+   }
+
+   public StringProperty rightStatusLabelProperty() {
+      return this.rightStatusLabel;
    }
 
    public void loadData(String csvFile, String configFile) {
@@ -79,13 +94,26 @@ public class MainViewModel implements ViewModel {
          bookingsToDisplay.addAll(category2Booking.getOrDefault(sub, List.of()));
       }
       bookings.addAll(bookingsToDisplay);
+
+      BigDecimal total = bookingsToDisplay.stream() //
+            .map(Booking::getBetrag) //
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+      leftStatusLabel.setValue("Sum: " + total.toString());
    }
 
-   public void refreshFilterCriteriaList(Booking newValue) {
+   public void refreshFilterCriteriaList(ObservableList<Booking> selectedBookings) {
       filterCriteria.clear();
-      if (newValue == null) {
+      rightStatusLabel.setValue("");
+      if (selectedBookings.isEmpty()) {
          return;
       }
-      filterCriteria.addAll(newValue.getMatchedCriteria());
+      BigDecimal total = selectedBookings.stream() //
+            .map(Booking::getBetrag) //
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+      rightStatusLabel.setValue("Sum of selected: " + total.toString());
+      filterCriteria.addAll(selectedBookings.stream() //
+            .flatMap(booking -> booking.getMatchedCriteria().stream()) //
+            .distinct() //
+            .toList());
    }
 }
