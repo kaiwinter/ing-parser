@@ -19,29 +19,81 @@ public class Booking {
 
    @CsvBindByPosition(position = 0)
    @CsvDate(value = "dd.MM.yyyy")
-   public LocalDate date;
+   private LocalDate date;
 
    @CsvBindByPosition(position = 2)
-   public String auftraggeber;
+   private String auftraggeber;
 
    @CsvBindByPosition(position = 3)
-   public String buchungstext;
+   private String buchungstext;
 
    @CsvBindByPosition(position = 5)
-   public String verwendungszweck;
+   private String verwendungszweck;
 
    @CsvBindByPosition(position = 6)
    @CsvNumber(value = "#0.00")
-   public BigDecimal saldo;
+   private BigDecimal saldo;
 
    @CsvBindByPosition(position = 8)
    @CsvNumber(value = "#0.00")
-   public BigDecimal betrag;
+   private BigDecimal betrag;
 
-   public List<FilterCriterion> matchedCriteria = new ArrayList<>();
+   private List<FilterCriterion> matchedCriteria = new ArrayList<>();
+
+   public LocalDate getDate() {
+      return date;
+   }
+
+   public void setDate(LocalDate date) {
+      this.date = date;
+   }
+
+   public String getAuftraggeber() {
+      return auftraggeber;
+   }
+
+   public void setAuftraggeber(String auftraggeber) {
+      this.auftraggeber = auftraggeber;
+   }
+
+   public String getBuchungstext() {
+      return buchungstext;
+   }
+
+   public void setBuchungstext(String buchungstext) {
+      this.buchungstext = buchungstext;
+   }
+
+   public String getVerwendungszweck() {
+      return verwendungszweck;
+   }
+
+   public void setVerwendungszweck(String verwendungszweck) {
+      this.verwendungszweck = verwendungszweck;
+   }
+
+   public BigDecimal getSaldo() {
+      return saldo;
+   }
+
+   public void setSaldo(BigDecimal saldo) {
+      this.saldo = saldo;
+   }
 
    public BigDecimal getBetrag() {
       return betrag;
+   }
+
+   public void setBetrag(BigDecimal betrag) {
+      this.betrag = betrag;
+   }
+
+   public List<FilterCriterion> getMatchedCriteria() {
+      return matchedCriteria;
+   }
+
+   public void setMatchedCriteria(List<FilterCriterion> matchedCriteria) {
+      this.matchedCriteria = matchedCriteria;
    }
 
    @Override

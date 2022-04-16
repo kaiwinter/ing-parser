@@ -15,7 +15,7 @@ public class FilterService {
    private static final Logger LOGGER = LoggerFactory.getLogger(FilterService.class);
 
    public void filterNegativeInplace(List<Booking> list) {
-      list.removeIf(booking -> booking.betrag.compareTo(BigDecimal.ZERO) > 0);
+      list.removeIf(booking -> booking.getBetrag().compareTo(BigDecimal.ZERO) > 0);
    }
 
    /**
@@ -31,8 +31,8 @@ public class FilterService {
          matchBookingAgainstFilterCriteria(booking, filterCriteria);
       }
 
-      bookings.stream().filter(booking -> booking.matchedCriteria.isEmpty())
-            .map(booking -> booking.auftraggeber + " < -- > " + booking.verwendungszweck).distinct().sorted()
+      bookings.stream().filter(booking -> booking.getMatchedCriteria().isEmpty())
+            .map(booking -> booking.getAuftraggeber() + " < -- > " + booking.getVerwendungszweck()).distinct().sorted()
             .forEach(System.out::println);
    }
 
@@ -47,10 +47,10 @@ public class FilterService {
       // Iterate each filter criterion (in context of each booking)
       for (FilterCriterion filterCriterion : filterCriteria) {
          if (filterCriterion.getType() == FilterCriterion.Type.BY_AUFTRAGGEBER) {
-            matchBookingValueAgainstCriterion(booking, filterCriterion, booking.auftraggeber);
+            matchBookingValueAgainstCriterion(booking, filterCriterion, booking.getAuftraggeber());
 
          } else if (filterCriterion.getType() == FilterCriterion.Type.BY_VERWENDUNGSZWECK) {
-            matchBookingValueAgainstCriterion(booking, filterCriterion, booking.verwendungszweck);
+            matchBookingValueAgainstCriterion(booking, filterCriterion, booking.getVerwendungszweck());
 
          } else {
             throw new IllegalArgumentException("Unknown: " + filterCriterion.getType());
@@ -69,9 +69,9 @@ public class FilterService {
     */
    private void matchBookingValueAgainstCriterion(Booking booking, FilterCriterion filterCriterion, String value) {
       if (StringUtils.containsIgnoreCase(value, filterCriterion.getPattern())) {
-         booking.matchedCriteria.add(filterCriterion);
-         if (booking.matchedCriteria.size() > 1) {
-            LOGGER.warn("{} matching multiple Criteria: {}", booking, booking.matchedCriteria);
+         booking.getMatchedCriteria().add(filterCriterion);
+         if (booking.getMatchedCriteria().size() > 1) {
+            LOGGER.warn("{} matching multiple Criteria: {}", booking, booking.getMatchedCriteria());
          }
 
       }

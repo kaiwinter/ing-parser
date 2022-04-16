@@ -59,7 +59,7 @@ public class App extends Application {
       filterService.matchBookingsAgainstFilterCriteria(bookings, filterCriteria);
       // bookings.removeIf(booking -> !(booking.date.getYear() == 2021 && booking.date.getMonth() == Month.DECEMBER));
       bookings.removeIf(
-            booking -> booking.matchedCriteria.stream().anyMatch(crit -> crit.getCategory().equals("ignore")));
+            booking -> booking.getMatchedCriteria().stream().anyMatch(crit -> crit.getCategory().equals("ignore")));
 
       List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
             .distinct() //

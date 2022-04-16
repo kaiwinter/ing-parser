@@ -25,7 +25,7 @@ class FilterServiceTest {
 
       List<Booking> list = new ArrayList<>();
       Booking bookingLessThanZero = new Booking();
-      bookingLessThanZero.betrag = BigDecimal.valueOf(-12.34);
+      bookingLessThanZero.setBetrag(BigDecimal.valueOf(-12.34));
       list.add(bookingLessThanZero);
       filterService.filterNegativeInplace(list);
 
@@ -41,7 +41,7 @@ class FilterServiceTest {
 
       List<Booking> list = new ArrayList<>();
       Booking bookingLessThanZero = new Booking();
-      bookingLessThanZero.betrag = BigDecimal.valueOf(12.34);
+      bookingLessThanZero.setBetrag(BigDecimal.valueOf(12.34));
       list.add(bookingLessThanZero);
       filterService.filterNegativeInplace(list);
 
@@ -58,13 +58,13 @@ class FilterServiceTest {
    void moveToMapByCriteriaAuftraggeber(String filterPattern) {
       FilterService filterService = new FilterService();
       var booking = new Booking();
-      booking.auftraggeber = "quick-e-mart";
+      booking.setAuftraggeber("quick-e-mart");
       List<Booking> bookings = List.of(booking);
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byAuftraggeber("Markets", filterPattern);
 
       filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
-      assertEquals(1, booking.matchedCriteria.size());
+      assertEquals(1, booking.getMatchedCriteria().size());
    }
 
    /**
@@ -77,13 +77,13 @@ class FilterServiceTest {
    void moveToMapByCriteriaVerwendungszweck(String filterPattern) {
       FilterService filterService = new FilterService();
       var booking = new Booking();
-      booking.verwendungszweck = "quick-e-mart";
+      booking.setVerwendungszweck("quick-e-mart");
       List<Booking> bookings = List.of(booking);
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byVerwendungszweck("Markets", filterPattern);
 
       filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
-      assertEquals(1, booking.matchedCriteria.size());
+      assertEquals(1, booking.getMatchedCriteria().size());
    }
 
    /**
@@ -94,14 +94,14 @@ class FilterServiceTest {
       FilterService filterService = new FilterService();
 
       var booking = new Booking();
-      booking.auftraggeber = "quick-e-mart";
+      booking.setAuftraggeber("quick-e-mart");
       List<Booking> bookings = List.of(booking);
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byAuftraggeber("Quicks", "quick");
       moveDesciption.addAll(FilterCriterion.byAuftraggeber("Markets", "mart"));
 
       filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
-      assertEquals(2, booking.matchedCriteria.size());
+      assertEquals(2, booking.getMatchedCriteria().size());
    }
 
    /**
@@ -112,13 +112,13 @@ class FilterServiceTest {
       FilterService filterService = new FilterService();
 
       var booking = new Booking();
-      booking.verwendungszweck = "quick-e-mart";
+      booking.setVerwendungszweck("quick-e-mart");
       List<Booking> bookings = List.of(booking);
 
       List<FilterCriterion> moveDesciption = FilterCriterion.byVerwendungszweck("Quicks", "quick");
       moveDesciption.addAll(FilterCriterion.byVerwendungszweck("Markets", "mart"));
 
       filterService.matchBookingsAgainstFilterCriteria(bookings, moveDesciption);
-      assertEquals(2, booking.matchedCriteria.size());
+      assertEquals(2, booking.getMatchedCriteria().size());
    }
 }

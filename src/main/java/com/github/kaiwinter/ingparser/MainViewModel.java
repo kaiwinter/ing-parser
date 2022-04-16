@@ -57,8 +57,8 @@ public class MainViewModel implements ViewModel {
             .distinct() //
             .sorted().collect(Collectors.toList());
 
-      bookings.stream().filter(booking -> booking.matchedCriteria.isEmpty())
-            .forEach(booking -> booking.matchedCriteria.add(FilterCriterion.NULL_CRITERION));
+      bookings.stream().filter(booking -> booking.getMatchedCriteria().isEmpty())
+            .forEach(booking -> booking.getMatchedCriteria().add(FilterCriterion.NULL_CRITERION));
 
       categories.add(FilterCriterion.NULL_CRITERION.getCategory());
 
@@ -76,11 +76,11 @@ public class MainViewModel implements ViewModel {
       for (Booking booking : bookingsA) {
 
          TableModel tableModel = new TableModel();
-         tableModel.setDate(booking.date);
-         tableModel.setBetrag(booking.betrag);
-         tableModel.setAuftraggeber(booking.auftraggeber);
-         tableModel.setVerwendungszweck(booking.verwendungszweck);
-         tableModel.setMatchedCriteria(booking.matchedCriteria.size());
+         tableModel.setDate(booking.getDate());
+         tableModel.setBetrag(booking.getBetrag());
+         tableModel.setAuftraggeber(booking.getAuftraggeber());
+         tableModel.setVerwendungszweck(booking.getVerwendungszweck());
+         tableModel.setMatchedCriteria(booking.getMatchedCriteria().size());
          bookings.add(tableModel);
       }
    }

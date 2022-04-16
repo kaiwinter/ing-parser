@@ -26,7 +26,7 @@ public class StatisticService {
     */
    public Map<String, List<Booking>> groupByCategory(List<Booking> bookings) {
       Map<String, List<Booking>> groupToProductMapping = bookings.stream()
-            .flatMap(booking -> booking.matchedCriteria.stream()
+            .flatMap(booking -> booking.getMatchedCriteria().stream()
                   .map(filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory(), booking)))
             .collect(Collectors.groupingBy(Map.Entry::getKey,
                   Collectors.mapping(Map.Entry::getValue, Collectors.toList())));
@@ -45,26 +45,25 @@ public class StatisticService {
     */
    public void groupByCategoryAndMonth(List<Booking> bookings) {
       Map<String, List<Booking>> category2Bookings = bookings.stream()
-            .filter(booking -> !booking.matchedCriteria.isEmpty())
-            .collect(Collectors.groupingBy(booking -> booking.matchedCriteria.get(0).getCategory()));
+            .filter(booking -> !booking.getMatchedCriteria().isEmpty())
+            .collect(Collectors.groupingBy(booking -> booking.getMatchedCriteria().get(0).getCategory()));
 
       category2Bookings.remove("ignore");
       List<Booking> values = category2Bookings.values().stream().flatMap(Collection::stream)
             .collect(Collectors.toList());
-      values.sort(Comparator.comparingDouble(booking -> booking.betrag.doubleValue()));
+      values.sort(Comparator.comparingDouble(booking -> booking.getBetrag().doubleValue()));
 
       for (Entry<String, List<Booking>> entry : category2Bookings.entrySet()) {
          System.out.println(entry.getKey() + ", " + entry.getValue().size() + " Buchungen, Summe: "
-               + entry.getValue().stream().map(booking -> booking.betrag).reduce(BigDecimal.ZERO, BigDecimal::add));
+               + entry.getValue().stream().map(Booking::getBetrag).reduce(BigDecimal.ZERO, BigDecimal::add));
 
          Map<LocalDate, List<Booking>> byMonth = entry.getValue().stream()
-               .collect(Collectors.groupingBy(date -> date.date.withDayOfMonth(1)));
+               .collect(Collectors.groupingBy(booking -> booking.getDate().withDayOfMonth(1)));
 
          TreeMap<LocalDate, List<Booking>> sortedMap = new TreeMap<>(byMonth);
          for (Entry<LocalDate, List<Booking>> monthEntry : sortedMap.entrySet()) {
-            System.out.println(
-                  monthEntry.getKey() + ", " + monthEntry.getValue().size() + " Buchungen, Summe: " + monthEntry
-                        .getValue().stream().map(booking -> booking.betrag).reduce(BigDecimal.ZERO, BigDecimal::add));
+            System.out.println(monthEntry.getKey() + ", " + monthEntry.getValue().size() + " Buchungen, Summe: "
+                  + monthEntry.getValue().stream().map(Booking::getBetrag).reduce(BigDecimal.ZERO, BigDecimal::add));
          }
 
          System.out.println();
@@ -76,7 +75,7 @@ public class StatisticService {
 
       // Group by month
       Map<LocalDate, List<Booking>> byMonth = bookings.stream()
-            .collect(Collectors.groupingBy(date -> date.date.withDayOfMonth(1)));
+            .collect(Collectors.groupingBy(booking -> booking.getDate().withDayOfMonth(1)));
 
       List<String> headerRow = new ArrayList<>();
       headerRow.add("Monat");
@@ -112,7 +111,7 @@ public class StatisticService {
    }
 
    private boolean filterByCategory(Booking booking, String category) {
-      return booking.matchedCriteria.stream().anyMatch(booking2 -> booking2.getCategory().equals(category));
+      return booking.getMatchedCriteria().stream().anyMatch(booking2 -> booking2.getCategory().equals(category));
    }
 
 }
