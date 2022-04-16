@@ -13,6 +13,7 @@ import com.github.kaiwinter.ingparser.App;
 import com.github.kaiwinter.ingparser.config.FilterCriterion.MatchingCriterion;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * Reads the configuration from a file and returns the parsed {@link FilterCriterion} object.
@@ -126,7 +127,7 @@ public class ConfigurationService {
 
       Collection<CategoryConfiguration> values = categories.values();
 
-      String json = new Gson().toJson(values);
+      String json = new GsonBuilder().setPrettyPrinting().create().toJson(values);
       System.out.println(json);
       return json;
    }

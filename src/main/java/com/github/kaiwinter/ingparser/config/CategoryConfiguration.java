@@ -66,7 +66,7 @@ public class CategoryConfiguration {
             if (fc.getCategory().getName().equals(categoryName)) {
                fc.getCategory().getSubCategories().addAll(combinedSubFilterCriteria //
                      .stream() //
-                     // the parent category only stores it direct sub category:
+                     // the parent category only stores its direct sub categories:
                      .filter(csfc -> categoryName.equals(csfc.getCategory().getParentCategoryName())) //
                      .map(FilterCriterion::getCategory) //
                      .toList());

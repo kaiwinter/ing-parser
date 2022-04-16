@@ -45,6 +45,9 @@ class ConfigurationServiceTest {
             .containsOnlyNulls();
    }
 
+   /**
+    * Tests if loading and saving results in the same JSON string.
+    */
    @Test
    void saveFilterCriteriaToFile() {
       ConfigurationService configurationService = new ConfigurationService();
@@ -52,9 +55,41 @@ class ConfigurationServiceTest {
 
       String saveFilterCriteriaToFile = configurationService.saveFilterCriteriaToFile(filterCriteria);
 
-      assertEquals(
-            """
-                  [{"categoryName":"Lebensmittel","auftraggeberPattern":[],"verwendungszweckPattern":["Brötchen"],"subCategories":[{"categoryName":"Supermarkt","auftraggeberPattern":["Supermarkt"],"verwendungszweckPattern":[],"subCategories":[]},{"categoryName":"Restaurant","auftraggeberPattern":["Restaurant"],"verwendungszweckPattern":[],"subCategories":[]}]},{"categoryName":"Handwerker","auftraggeberPattern":["Bäckermann"],"verwendungszweckPattern":[],"subCategories":[]}]""",
-            saveFilterCriteriaToFile);
+      assertEquals("""
+            [
+              {
+                "categoryName": "Lebensmittel",
+                "auftraggeberPattern": [],
+                "verwendungszweckPattern": [
+                  "Brötchen"
+                ],
+                "subCategories": [
+                  {
+                    "categoryName": "Supermarkt",
+                    "auftraggeberPattern": [
+                      "Supermarkt"
+                    ],
+                    "verwendungszweckPattern": [],
+                    "subCategories": []
+                  },
+                  {
+                    "categoryName": "Restaurant",
+                    "auftraggeberPattern": [
+                      "Restaurant"
+                    ],
+                    "verwendungszweckPattern": [],
+                    "subCategories": []
+                  }
+                ]
+              },
+              {
+                "categoryName": "Handwerker",
+                "auftraggeberPattern": [
+                  "Bäckermann"
+                ],
+                "verwendungszweckPattern": [],
+                "subCategories": []
+              }
+            ]""", saveFilterCriteriaToFile);
    }
 }

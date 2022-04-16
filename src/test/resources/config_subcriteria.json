@@ -1,24 +1,35 @@
 [
-	{
-		"categoryName": "Lebensmittel",
-		"auftraggeberPattern": [],
-		"verwendungszweckPattern": ["Brötchen"],
-		"subCategories": [
-			{
-				"categoryName": "Supermarkt",
-				"auftraggeberPattern": ["Supermarkt"],
-				"verwendungszweckPattern": []
-			},
-			{
-				"categoryName": "Restaurant",
-				"auftraggeberPattern": ["Restaurant"],
-				"verwendungszweckPattern": []
-			}
-		] 
-	},
-	{
-		"categoryName": "Handwerker",
-		"auftraggeberPattern": ["Bäckermann"],
-		"verwendungszweckPattern": []
-	}
+  {
+    "categoryName": "Lebensmittel",
+    "auftraggeberPattern": [],
+    "verwendungszweckPattern": [
+      "Brötchen"
+    ],
+    "subCategories": [
+      {
+        "categoryName": "Supermarkt",
+        "auftraggeberPattern": [
+          "Supermarkt"
+        ],
+        "verwendungszweckPattern": [],
+        "subCategories": []
+      },
+      {
+        "categoryName": "Restaurant",
+        "auftraggeberPattern": [
+          "Restaurant"
+        ],
+        "verwendungszweckPattern": [],
+        "subCategories": []
+      }
+    ]
+  },
+  {
+    "categoryName": "Handwerker",
+    "auftraggeberPattern": [
+      "Bäckermann"
+    ],
+    "verwendungszweckPattern": [],
+    "subCategories": []
+  }
 ]
