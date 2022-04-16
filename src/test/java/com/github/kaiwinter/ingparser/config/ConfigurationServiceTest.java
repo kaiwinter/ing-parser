@@ -1,6 +1,7 @@
 package com.github.kaiwinter.ingparser.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
@@ -42,5 +43,18 @@ class ConfigurationServiceTest {
                   category -> category.getName().equals("Lebensmittel") || category.getName().equals("Handwerker")) //
             .extracting(CategoryModel::getParentCategoryName) //
             .containsOnlyNulls();
+   }
+
+   @Test
+   void saveFilterCriteriaToFile() {
+      ConfigurationService configurationService = new ConfigurationService();
+      List<FilterCriterion> filterCriteria = configurationService.readConfiguration("/config_subcriteria.json");
+
+      String saveFilterCriteriaToFile = configurationService.saveFilterCriteriaToFile(filterCriteria);
+
+      assertEquals(
+            """
+                  [{"categoryName":"Lebensmittel","auftraggeberPattern":[],"verwendungszweckPattern":["Brötchen"],"subCategories":[{"categoryName":"Supermarkt","auftraggeberPattern":["Supermarkt"],"verwendungszweckPattern":[],"subCategories":[]},{"categoryName":"Restaurant","auftraggeberPattern":["Restaurant"],"verwendungszweckPattern":[],"subCategories":[]}]},{"categoryName":"Handwerker","auftraggeberPattern":["Bäckermann"],"verwendungszweckPattern":[],"subCategories":[]}]""",
+            saveFilterCriteriaToFile);
    }
 }

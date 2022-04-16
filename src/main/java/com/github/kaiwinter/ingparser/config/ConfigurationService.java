@@ -3,9 +3,15 @@ package com.github.kaiwinter.ingparser.config;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.github.kaiwinter.ingparser.App;
+import com.github.kaiwinter.ingparser.config.FilterCriterion.MatchingCriterion;
+import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import com.google.gson.Gson;
 
 /**
@@ -29,6 +35,80 @@ public class ConfigurationService {
          filterCriteria.addAll(category.getCombinedFilterCriteria());
       }
 
-      return filterCriteria;
+      return Collections.unmodifiableList(filterCriteria);
+   }
+
+   /**
+    * Transforms {@link FilterCriterion} objects back to {@link CategoryConfiguration} in order to store them in a file.
+    * 
+    * @return
+    */
+   public String saveFilterCriteriaToFile(List<FilterCriterion> filterCriteria) {
+//      String json = new Gson().toJson(filterCriteria);
+//      System.out.println(json);
+
+      Map<String, CategoryConfiguration> categories = new HashMap<>();
+
+      for (FilterCriterion filterCriterion : filterCriteria) {
+
+         String parentCategoryName = filterCriterion.getCategory().getParentCategoryName();
+         if (parentCategoryName == null) {
+            // Create top level criterion (if not already exists)
+            CategoryConfiguration categoryConfiguration = categories
+                  .computeIfAbsent(filterCriterion.getCategory().getName(), name -> {
+                     CategoryConfiguration newCategoryConfiguration = new CategoryConfiguration();
+                     newCategoryConfiguration.setCategoryName(name);
+                     return newCategoryConfiguration;
+                  });
+
+            // Add pattern to criterion
+            if (filterCriterion.getMatchingCriterion() == MatchingCriterion.AUFTRAGGEBER) {
+               categoryConfiguration.getAuftraggeberPattern().add(filterCriterion.getPattern());
+            } else if (filterCriterion.getMatchingCriterion() == MatchingCriterion.VERWENDUNGSZWECK) {
+               categoryConfiguration.getVerwendungszweckPattern().add(filterCriterion.getPattern());
+            }
+
+            // Create placeholder for sub-category if not already exists
+            for (CategoryModel subCategoryModel : filterCriterion.getCategory().getSubCategories()) {
+               if (filterCriterion.getCategory().getSubCategories().stream().map(CategoryModel::getName)
+                     .noneMatch(name -> name.equals(subCategoryModel.getName()))) {
+                  CategoryConfiguration categoryConfigurationSub = new CategoryConfiguration();
+                  categoryConfigurationSub.setCategoryName(subCategoryModel.getName());
+                  categoryConfiguration.getSubCategories().add(categoryConfigurationSub);
+               }
+            }
+
+         } else {
+            // Create placeholder for top level category if not already exists
+            CategoryConfiguration categoryConfiguration = categories.computeIfAbsent(parentCategoryName, name -> {
+               CategoryConfiguration newCategoryConfiguration = new CategoryConfiguration();
+               newCategoryConfiguration.setCategoryName(name);
+               return newCategoryConfiguration;
+            });
+
+            // Create sub-criteria (if not already exists)
+            CategoryConfiguration categoryConfigurationSub = categoryConfiguration.getSubCategories().stream()
+                  .filter(subCat -> subCat.getCategoryName().equals(filterCriterion.getCategory().getName()))
+                  .findFirst().orElseGet(() -> {
+                     CategoryConfiguration newCategoryConfiguration = new CategoryConfiguration();
+                     newCategoryConfiguration.setCategoryName(filterCriterion.getCategory().getName());
+                     categoryConfiguration.getSubCategories().add(newCategoryConfiguration);
+                     return newCategoryConfiguration;
+                  });
+
+            // Add pattern to criterion
+            if (filterCriterion.getMatchingCriterion() == MatchingCriterion.AUFTRAGGEBER) {
+               categoryConfigurationSub.getAuftraggeberPattern().add(filterCriterion.getPattern());
+            } else if (filterCriterion.getMatchingCriterion() == MatchingCriterion.VERWENDUNGSZWECK) {
+               categoryConfigurationSub.getVerwendungszweckPattern().add(filterCriterion.getPattern());
+            }
+         }
+      }
+
+      Collection<CategoryConfiguration> values = categories.values();
+
+      String json = new Gson().toJson(values);
+      System.out.println(json);
+      return json;
    }
 }

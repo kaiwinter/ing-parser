@@ -12,9 +12,29 @@ import java.util.List;
 public class CategoryConfiguration {
 
    private String categoryName;
-   private List<String> auftraggeberPattern;
-   private List<String> verwendungszweckPattern;
+   private List<String> auftraggeberPattern = new ArrayList<>();
+   private List<String> verwendungszweckPattern = new ArrayList<>();
    private List<CategoryConfiguration> subCategories = new ArrayList<>();
+
+   public List<String> getAuftraggeberPattern() {
+      return auftraggeberPattern;
+   }
+
+   public List<String> getVerwendungszweckPattern() {
+      return verwendungszweckPattern;
+   }
+
+   public List<CategoryConfiguration> getSubCategories() {
+      return subCategories;
+   }
+
+   public String getCategoryName() {
+      return categoryName;
+   }
+
+   public void setCategoryName(String categoryName) {
+      this.categoryName = categoryName;
+   }
 
    private List<FilterCriterion> getAuftraggeberAsFilterCriteria() {
       return FilterCriterion.byAuftraggeber(categoryName, auftraggeberPattern.toArray(new String[0]));

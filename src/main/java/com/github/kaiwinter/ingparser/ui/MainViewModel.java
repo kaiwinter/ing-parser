@@ -60,6 +60,8 @@ public class MainViewModel implements ViewModel {
 
       configuredCategories.add(FilterCriterion.NULL_CRITERION.getCategory());
 
+      configurationService.saveFilterCriteriaToFile(filterCriteria);
+
       this.categories.addAll(configuredCategories);
       this.category2Booking = new StatisticService().groupByCategory(importedBookings);
    }
@@ -81,6 +83,9 @@ public class MainViewModel implements ViewModel {
 
    public void refreshFilterCriteriaList(Booking newValue) {
       filterCriteria.clear();
+      if (newValue == null) {
+         return;
+      }
       filterCriteria.addAll(newValue.getMatchedCriteria());
    }
 }
