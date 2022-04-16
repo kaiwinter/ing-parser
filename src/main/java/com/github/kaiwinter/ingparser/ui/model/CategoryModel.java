@@ -8,7 +8,7 @@ public class CategoryModel {
 
    private final String name;
    private String parentCategoryName;
-   private List<CategoryModel> subCategories = new ArrayList<>();
+   private final List<CategoryModel> subCategories = new ArrayList<>();
 
    public CategoryModel(String name) {
       this.name = name;
@@ -28,10 +28,6 @@ public class CategoryModel {
 
    public List<CategoryModel> getSubCategories() {
       return subCategories;
-   }
-
-   public void setSubCategories(List<CategoryModel> subCategories) {
-      this.subCategories = subCategories;
    }
 
    @Override

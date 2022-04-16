@@ -11,7 +11,6 @@ import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.csv.ImportService;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
-import com.github.kaiwinter.ingparser.ui.model.BookingModel;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.ViewModel;
@@ -21,7 +20,8 @@ import javafx.beans.property.SimpleListProperty;
 public class MainViewModel implements ViewModel {
 
    private final ListProperty<CategoryModel> categories = new SimpleListProperty<>();
-   private final ListProperty<BookingModel> bookings = new SimpleListProperty<>();
+   private final ListProperty<Booking> bookings = new SimpleListProperty<>();
+   private final ListProperty<FilterCriterion> filterCriteria = new SimpleListProperty<>();
 
    private Map<CategoryModel, List<Booking>> category2Booking;
 
@@ -29,8 +29,12 @@ public class MainViewModel implements ViewModel {
       return this.categories;
    }
 
-   public ListProperty<BookingModel> bookingsProperty() {
+   public ListProperty<Booking> bookingsProperty() {
       return this.bookings;
+   }
+
+   public ListProperty<FilterCriterion> filterCriteriaProperty() {
+      return this.filterCriteria;
    }
 
    public void loadData(String csvFile, String configFile) {
@@ -72,15 +76,11 @@ public class MainViewModel implements ViewModel {
       for (CategoryModel sub : selectedValue.getSubCategories()) {
          bookingsToDisplay.addAll(category2Booking.getOrDefault(sub, List.of()));
       }
+      bookings.addAll(bookingsToDisplay);
+   }
 
-      for (Booking booking : bookingsToDisplay) {
-         BookingModel tableModel = new BookingModel();
-         tableModel.setDate(booking.getDate());
-         tableModel.setBetrag(booking.getBetrag());
-         tableModel.setAuftraggeber(booking.getAuftraggeber());
-         tableModel.setVerwendungszweck(booking.getVerwendungszweck());
-         tableModel.setMatchedCriteria(booking.getMatchedCriteria().size());
-         bookings.add(tableModel);
-      }
+   public void refreshFilterCriteriaList(Booking newValue) {
+      filterCriteria.clear();
+      filterCriteria.addAll(newValue.getMatchedCriteria());
    }
 }

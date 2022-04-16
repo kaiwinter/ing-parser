@@ -101,9 +101,9 @@
                <content>
                 <SplitPane dividerPositions="0.2505567928730512, 0.7505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0">
                   <items>
-                    <AnchorPane maxWidth="200.0">
+                    <AnchorPane maxWidth="150.0">
                       <children>
-                              <ListView fx:id="categoryList" prefHeight="550.5" prefWidth="222.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <ListView fx:id="categoryList" prefHeight="550.5" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                       </children>
                     </AnchorPane>
                   <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0">
@@ -119,9 +119,9 @@
                                     <TableView fx:id="bookingsTable" prefHeight="400.0" prefWidth="326.0">
                                       <columns>
                                           <TableColumn fx:id="dateColumn" prefWidth="87.0" text="Datum" />
-                                          <TableColumn fx:id="betragColumn" prefWidth="88.0" style="-fx-alignment: CENTER-RIGHT;" text="Betrag" />
-                                        <TableColumn fx:id="auftraggeberColumn" prefWidth="268.0" text="Auftraggeber" />
-                                        <TableColumn fx:id="verwendungszweckColumn" prefWidth="443.0" text="Verwendungszweck" />
+                                          <TableColumn fx:id="betragColumn" prefWidth="73.0" style="-fx-alignment: CENTER-RIGHT;" text="Betrag" />
+                                        <TableColumn fx:id="auftraggeberColumn" prefWidth="247.0" text="Auftraggeber" />
+                                        <TableColumn fx:id="verwendungszweckColumn" prefWidth="479.0" text="Verwendungszweck" />
                                       </columns>
                                     </TableView>
                                  </children>
@@ -130,14 +130,7 @@
                   </AnchorPane>
                     <AnchorPane maxWidth="300.0">
                       <children>
-                        <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">
-                                 <font>
-                            <Font size="18.0" fx:id="x1" />
-                                 </font>
-                                 <textFill>
-                            <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
-                                 </textFill>
-                              </Label>
+                              <ListView fx:id="criteriaList" prefHeight="553.0" prefWidth="230.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                       </children>
                     </AnchorPane>
                   </items>

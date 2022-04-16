@@ -27,9 +27,9 @@ public class FilterCriterion {
       AUFTRAGGEBER, VERWENDUNGSZWECK
    }
 
-   private FilterCriterion(CategoryModel category, MatchingCriterion type, String pattern) {
+   private FilterCriterion(CategoryModel category, MatchingCriterion matchingCriterion, String pattern) {
       this.category = category;
-      this.matchingCriterion = type;
+      this.matchingCriterion = matchingCriterion;
       this.pattern = pattern;
    }
 
@@ -67,8 +67,8 @@ public class FilterCriterion {
 
    @Override
    public String toString() {
-      return "FilterCriterion [category=" + category + ", matchingCriterion=" + matchingCriterion + ", pattern="
-            + pattern + "]";
+      return "FilterCriterion [pattern=" + pattern + ", matchingCriterion=" + matchingCriterion + ", category="
+            + category + "]";
    }
 
 }

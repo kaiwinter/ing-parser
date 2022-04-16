@@ -5,7 +5,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import com.github.kaiwinter.ingparser.ui.model.BookingModel;
+import com.github.kaiwinter.ingparser.config.FilterCriterion;
+import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.FxmlView;
@@ -28,15 +29,18 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    private ListView<CategoryModel> categoryList;
 
    @FXML
-   private TableView<BookingModel> bookingsTable;
+   private TableView<Booking> bookingsTable;
    @FXML
-   private TableColumn<BookingModel, BigDecimal> betragColumn;
+   private TableColumn<Booking, BigDecimal> betragColumn;
    @FXML
-   private TableColumn<BookingModel, LocalDate> dateColumn;
+   private TableColumn<Booking, LocalDate> dateColumn;
    @FXML
-   private TableColumn<BookingModel, String> auftraggeberColumn;
+   private TableColumn<Booking, String> auftraggeberColumn;
    @FXML
-   private TableColumn<BookingModel, String> verwendungszweckColumn;
+   private TableColumn<Booking, String> verwendungszweckColumn;
+
+   @FXML
+   private ListView<FilterCriterion> criteriaList;
 
    @Override
    public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,9 +48,14 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       categoryList.getSelectionModel().selectedItemProperty()
             .addListener((__1, __2, newValue) -> viewModel.refreshBookingTable(newValue));
 
+      // Table click listener
+      bookingsTable.getSelectionModel().selectedItemProperty()
+            .addListener((__1, __2, newValue) -> viewModel.refreshFilterCriteriaList(newValue));
+
       // Model of List and Table
       viewModel.categoriesProperty().bind(categoryList.itemsProperty());
       viewModel.bookingsProperty().bind(bookingsTable.itemsProperty());
+      viewModel.filterCriteriaProperty().bind(criteriaList.itemsProperty());
 
       // List
       categoryList.setCellFactory(param -> new ListCell<>() {
@@ -69,9 +78,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       bookingsTable.setRowFactory(__ -> new TableRow<>() {
          @Override
-         protected void updateItem(BookingModel item, boolean empty) {
+         protected void updateItem(Booking item, boolean empty) {
             super.updateItem(item, empty);
-            if (item != null && item.getMatchedCriteria() > 1) {
+            if (item != null && item.getMatchedCriteria().size() > 1) {
                setStyle("-fx-background-color: #ffcccb;");
             } else {
                setStyle("");
