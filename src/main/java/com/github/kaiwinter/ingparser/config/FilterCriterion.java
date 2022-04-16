@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.kaiwinter.ingparser.ui.model.Category;
+import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 /**
  * {@link FilterCriterion} objects are build on base of a {@link CategoryConfiguration}. While a
@@ -14,11 +14,11 @@ import com.github.kaiwinter.ingparser.ui.model.Category;
  */
 public class FilterCriterion {
 
-   private final Category category;
+   private final CategoryModel category;
    private final MatchingCriterion matchingCriterion;
    private final String pattern;
 
-   public static final FilterCriterion NULL_CRITERION = new FilterCriterion(new Category("unmatched"), null, null);
+   public static final FilterCriterion NULL_CRITERION = new FilterCriterion(new CategoryModel("unmatched"), null, null);
 
    /**
     * Defines on which criterion the pattern will be tested.
@@ -27,33 +27,33 @@ public class FilterCriterion {
       AUFTRAGGEBER, VERWENDUNGSZWECK
    }
 
-   private FilterCriterion(Category category, MatchingCriterion type, String pattern) {
+   private FilterCriterion(CategoryModel category, MatchingCriterion type, String pattern) {
       this.category = category;
       this.matchingCriterion = type;
       this.pattern = pattern;
    }
 
    public static List<FilterCriterion> byAuftraggeber(String category, String... pattern) {
-      return byAuftraggeber(new Category(category), pattern);
+      return byAuftraggeber(new CategoryModel(category), pattern);
    }
 
-   public static List<FilterCriterion> byAuftraggeber(Category category, String... pattern) {
+   public static List<FilterCriterion> byAuftraggeber(CategoryModel category, String... pattern) {
       return Arrays.asList(pattern).stream()
             .map(string -> new FilterCriterion(category, MatchingCriterion.AUFTRAGGEBER, string.trim()))
             .collect(Collectors.toList());
    }
 
    public static List<FilterCriterion> byVerwendungszweck(String category, String... pattern) {
-      return byVerwendungszweck(new Category(category), pattern);
+      return byVerwendungszweck(new CategoryModel(category), pattern);
    }
 
-   public static List<FilterCriterion> byVerwendungszweck(Category category, String... pattern) {
+   public static List<FilterCriterion> byVerwendungszweck(CategoryModel category, String... pattern) {
       return Arrays.asList(pattern).stream()
             .map(string -> new FilterCriterion(category, MatchingCriterion.VERWENDUNGSZWECK, string.trim()))
             .collect(Collectors.toList());
    }
 
-   public Category getCategory() {
+   public CategoryModel getCategory() {
       return category;
    }
 

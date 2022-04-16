@@ -5,7 +5,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import com.github.kaiwinter.ingparser.ui.model.Category;
+import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
+import com.github.kaiwinter.ingparser.ui.model.BookingModel;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -24,18 +25,18 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    private MainViewModel viewModel;
 
    @FXML
-   private ListView<Category> categoryList;
+   private ListView<CategoryModel> categoryList;
 
    @FXML
-   private TableView<TableModel> bookingsTable;
+   private TableView<BookingModel> bookingsTable;
    @FXML
-   private TableColumn<TableModel, BigDecimal> betragColumn;
+   private TableColumn<BookingModel, BigDecimal> betragColumn;
    @FXML
-   private TableColumn<TableModel, LocalDate> dateColumn;
+   private TableColumn<BookingModel, LocalDate> dateColumn;
    @FXML
-   private TableColumn<TableModel, String> auftraggeberColumn;
+   private TableColumn<BookingModel, String> auftraggeberColumn;
    @FXML
-   private TableColumn<TableModel, String> verwendungszweckColumn;
+   private TableColumn<BookingModel, String> verwendungszweckColumn;
 
    @Override
    public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -50,7 +51,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       // List
       categoryList.setCellFactory(param -> new ListCell<>() {
          @Override
-         public void updateItem(Category category, boolean empty) {
+         public void updateItem(CategoryModel category, boolean empty) {
             super.updateItem(category, empty);
             if (empty || category == null) {
                setText(null);
@@ -68,7 +69,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       bookingsTable.setRowFactory(__ -> new TableRow<>() {
          @Override
-         protected void updateItem(TableModel item, boolean empty) {
+         protected void updateItem(BookingModel item, boolean empty) {
             super.updateItem(item, empty);
             if (item != null && item.getMatchedCriteria() > 1) {
                setStyle("-fx-background-color: #ffcccb;");

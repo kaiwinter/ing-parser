@@ -12,7 +12,7 @@ import com.github.kaiwinter.ingparser.csv.ImportService;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
 import com.github.kaiwinter.ingparser.ui.MainView;
 import com.github.kaiwinter.ingparser.ui.MainViewModel;
-import com.github.kaiwinter.ingparser.ui.model.Category;
+import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.ViewTuple;
@@ -63,7 +63,7 @@ public class App extends Application {
             .distinct() //
             .filter(category -> !"ignore".equals(category.getName())) //
             .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
-            .map(Category::getName) //
+            .map(CategoryModel::getName) //
             .sorted() //
             .toList();
 

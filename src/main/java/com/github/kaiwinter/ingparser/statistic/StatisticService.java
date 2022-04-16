@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import com.bethecoder.ascii_table.ASCIITable;
 import com.github.kaiwinter.ingparser.csv.Booking;
-import com.github.kaiwinter.ingparser.ui.model.Category;
+import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 public class StatisticService {
 
@@ -23,8 +23,8 @@ public class StatisticService {
     * @param bookings
     * @return
     */
-   public Map<Category, List<Booking>> groupByCategory(List<Booking> bookings) {
-      Map<Category, List<Booking>> groupToProductMapping = bookings.stream()
+   public Map<CategoryModel, List<Booking>> groupByCategory(List<Booking> bookings) {
+      Map<CategoryModel, List<Booking>> groupToProductMapping = bookings.stream()
             .flatMap(booking -> booking.getMatchedCriteria().stream()
                   .map(filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory(), booking)))
             .collect(Collectors.groupingBy(Map.Entry::getKey,

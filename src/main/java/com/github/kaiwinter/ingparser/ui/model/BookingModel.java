@@ -1,9 +1,9 @@
-package com.github.kaiwinter.ingparser.ui;
+package com.github.kaiwinter.ingparser.ui.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public final class TableModel {
+public final class BookingModel {
 
    private LocalDate date;
    private BigDecimal betrag;

@@ -14,7 +14,7 @@ public class CategoryConfiguration {
    private String categoryName;
    private List<String> auftraggeberPattern;
    private List<String> verwendungszweckPattern;
-   private List<CategoryConfiguration> sub = new ArrayList<>();
+   private List<CategoryConfiguration> subCategories = new ArrayList<>();
 
    private List<FilterCriterion> getAuftraggeberAsFilterCriteria() {
       return FilterCriterion.byAuftraggeber(categoryName, auftraggeberPattern.toArray(new String[0]));
@@ -32,7 +32,7 @@ public class CategoryConfiguration {
       List<FilterCriterion> filterCriteria = getAuftraggeberAsFilterCriteria();
       filterCriteria.addAll(getVerwendungszweckAsFilterCriteria());
 
-      for (CategoryConfiguration subCategory : sub) {
+      for (CategoryConfiguration subCategory : subCategories) {
          List<FilterCriterion> combinedSubFilterCriteria = subCategory.getCombinedFilterCriteria();
          combinedSubFilterCriteria.forEach(crit -> crit.getCategory().setParentCategoryName(categoryName));
 

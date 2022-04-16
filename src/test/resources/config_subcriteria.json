@@ -3,7 +3,7 @@
 		"categoryName": "Lebensmittel",
 		"auftraggeberPattern": [],
 		"verwendungszweckPattern": ["Brötchen"],
-		"sub": [
+		"subCategories": [
 			{
 				"categoryName": "Supermarkt",
 				"auftraggeberPattern": ["Supermarkt"],
