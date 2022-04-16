@@ -12,7 +12,14 @@
 			{
 				"categoryName": "Restaurant",
 				"auftraggeberPattern": ["Restaurant"],
-				"verwendungszweckPattern": []
+				"verwendungszweckPattern": [],
+				"subCategories": [
+					{
+						"categoryName": "Döner",
+						"auftraggeberPattern": ["Hal"],
+						"verwendungszweckPattern": []
+					}
+				] 
 			}
 		] 
 	},

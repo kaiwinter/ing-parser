@@ -24,6 +24,7 @@ public class StatisticService {
     * @return
     */
    public Map<CategoryModel, List<Booking>> groupByCategory(List<Booking> bookings) {
+      // TODO: if there is more than one sub-level, this fails:
       Map<CategoryModel, List<Booking>> groupToProductMapping = bookings.stream()
             .flatMap(booking -> booking.getMatchedCriteria().stream()
                   .map(filterCriterion -> new AbstractMap.SimpleEntry<>(filterCriterion.getCategory(), booking)))

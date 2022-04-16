@@ -54,13 +54,23 @@ public class CategoryConfiguration {
 
       for (CategoryConfiguration subCategory : subCategories) {
          List<FilterCriterion> combinedSubFilterCriteria = subCategory.getCombinedFilterCriteria();
-         combinedSubFilterCriteria.forEach(crit -> crit.getCategory().setParentCategoryName(categoryName));
+         for (FilterCriterion fc : combinedSubFilterCriteria) {
+            // Name gets set down in recursion, skip if it is already set
+            if (fc.getCategory().getParentCategoryName() == null) {
+               fc.getCategory().setParentCategoryName(categoryName);
+            }
+         }
 
          // Add sub-categories to categories
-         for (FilterCriterion f : filterCriteria.stream().filter(f -> f.getCategory().getName().equals(categoryName))
-               .toList()) {
-            f.getCategory().getSubCategories()
-                  .addAll(combinedSubFilterCriteria.stream().map(FilterCriterion::getCategory).toList());
+         for (FilterCriterion fc : filterCriteria) {
+            if (fc.getCategory().getName().equals(categoryName)) {
+               fc.getCategory().getSubCategories().addAll(combinedSubFilterCriteria //
+                     .stream() //
+                     // the parent category only stores it direct sub category:
+                     .filter(csfc -> categoryName.equals(csfc.getCategory().getParentCategoryName())) //
+                     .map(FilterCriterion::getCategory) //
+                     .toList());
+            }
          }
 
          filterCriteria.addAll(combinedSubFilterCriteria);
