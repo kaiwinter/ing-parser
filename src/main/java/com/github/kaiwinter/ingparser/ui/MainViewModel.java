@@ -98,7 +98,7 @@ public class MainViewModel implements ViewModel {
       BigDecimal total = bookingsToDisplay.stream() //
             .map(Booking::getBetrag) //
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-      leftStatusLabel.setValue("Sum: " + total.toString());
+      leftStatusLabel.setValue("Bookings: " + bookingsToDisplay.size() + ", Sum: " + total.toString());
    }
 
    public void refreshFilterCriteriaList(ObservableList<Booking> selectedBookings) {
@@ -110,7 +110,7 @@ public class MainViewModel implements ViewModel {
       BigDecimal total = selectedBookings.stream() //
             .map(Booking::getBetrag) //
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-      rightStatusLabel.setValue("Sum of selected: " + total.toString());
+      rightStatusLabel.setValue("Selected: " + selectedBookings.size() + ", sum: " + total.toString());
       filterCriteria.addAll(selectedBookings.stream() //
             .flatMap(booking -> booking.getMatchedCriteria().stream()) //
             .distinct() //
