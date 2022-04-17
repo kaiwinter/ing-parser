@@ -15,6 +15,7 @@ import javafx.beans.value.ObservableValueBase;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -50,11 +51,23 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    @FXML
    private Label rightStatusLabel;
 
+   @FXML
+   private Button newMainCategoryButton;
+   @FXML
+   private Button newSubCategoryButton;
+
    @Override
    public void initialize(URL url, ResourceBundle resourceBundle) {
       // List click listener
-      categoryList.getSelectionModel().selectedItemProperty()
-            .addListener((__1, __2, newValue) -> viewModel.refreshBookingTable(newValue));
+      categoryList.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
+
+         viewModel.refreshBookingTable(newValue);
+         if (newValue == null) {
+            newSubCategoryButton.setDisable(true);
+         } else {
+            newSubCategoryButton.setDisable(newValue.getParentCategoryName() != null);
+         }
+      });
 
       // Table click listener
       bookingsTable.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
