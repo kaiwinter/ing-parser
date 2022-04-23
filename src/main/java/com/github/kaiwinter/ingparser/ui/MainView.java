@@ -114,6 +114,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          }
          viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
          new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile());
+         viewModel.applyFilterCriteriaOnBookings();
       });
 
       // List click listener

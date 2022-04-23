@@ -23,6 +23,9 @@ import javafx.collections.ObservableList;
 
 public class MainViewModel implements ViewModel {
 
+   private final ImportService importService = new ImportService();
+   private final ConfigurationService configurationService = new ConfigurationService();
+
    private final ListProperty<CategoryModel> categories = new SimpleListProperty<>();
    private final ListProperty<Booking> bookingsOfSelectedCategory = new SimpleListProperty<>();
    private final ListProperty<FilterCriterion> filterCriteriaOfSelectedBooking = new SimpleListProperty<>();
@@ -31,7 +34,9 @@ public class MainViewModel implements ViewModel {
    private final StringProperty rightStatusLabel = new SimpleStringProperty();
 
    private Map<CategoryModel, List<Booking>> category2Booking;
+
    private List<FilterCriterion> filterCriteriaFromFile;
+   private List<Booking> bookingsFromFile;
 
    public ListProperty<CategoryModel> categoriesProperty() {
       return this.categories;
@@ -58,14 +63,16 @@ public class MainViewModel implements ViewModel {
    }
 
    public void loadData(String csvFile, String configFile) {
-      ImportService importService = new ImportService();
-      ConfigurationService configurationService = new ConfigurationService();
-
-      List<Booking> importedBookings = importService.importFromFile(csvFile);
-
+      bookingsFromFile = importService.importFromFile(csvFile);
       filterCriteriaFromFile = configurationService.readConfiguration(configFile);
+      applyFilterCriteriaOnBookings();
+   }
 
-      importService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteriaFromFile);
+   public void applyFilterCriteriaOnBookings() {
+      // on re-run: clean matchings!
+      bookingsFromFile.forEach(booking -> booking.getMatchedCriteria().clear());
+
+      importService.matchBookingsAgainstFilterCriteria(bookingsFromFile, filterCriteriaFromFile);
 
       List<CategoryModel> configuredCategories = filterCriteriaFromFile.stream() //
             .filter(crit -> crit.getCategory().getParentCategoryName() == null) // Don't list sub-categories separately
@@ -74,7 +81,7 @@ public class MainViewModel implements ViewModel {
             .sorted(Comparator.comparing(CategoryModel::getName)) //
             .collect(Collectors.toList());
 
-      importedBookings.stream() //
+      bookingsFromFile.stream() //
             .filter(booking -> booking.getMatchedCriteria().isEmpty())
             .forEach(booking -> booking.getMatchedCriteria().add(FilterCriterion.NULL_CRITERION));
 
@@ -82,8 +89,8 @@ public class MainViewModel implements ViewModel {
 
       configurationService.saveFilterCriteriaToFile(filterCriteriaFromFile);
 
-      this.categories.addAll(configuredCategories);
-      this.category2Booking = new StatisticService().groupByCategory(importedBookings);
+      this.categories.setAll(configuredCategories);
+      this.category2Booking = new StatisticService().groupByCategory(bookingsFromFile);
    }
 
    public void refreshBookingTable(CategoryModel selectedValue) {
