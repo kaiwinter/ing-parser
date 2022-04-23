@@ -3,6 +3,8 @@ package com.github.kaiwinter.ingparser.ui;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -17,12 +19,12 @@ import de.saxsys.mvvmfx.InjectViewModel;
 import de.saxsys.mvvmfx.ViewTuple;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValueBase;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -102,7 +104,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          ViewTuple<NewFilterCriterionView, NewFilterCriterionViewModel> viewTuple = FluentViewLoader
                .fxmlView(NewFilterCriterionView.class).load();
 
-         viewTuple.getViewModel().categoriesProperty().setValue(viewModel.categoriesProperty().getValue());
+         // remove "unmatched" item
+         List<CategoryModel> my = new ArrayList<>(viewModel.categoriesProperty().getValue());
+         my.remove(FilterCriterion.NULL_CRITERION.getCategory());
+         viewTuple.getViewModel().categoriesProperty().setValue(FXCollections.observableArrayList(my));
          Optional<FilterCriterion> newFilterCriterion = viewTuple.getCodeBehind().showAndWait();
          if (newFilterCriterion.isEmpty()) {
             return;
@@ -136,17 +141,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       viewModel.filterCriteriaOfSelectedBookingProperty().bind(criteriaList.itemsProperty());
 
       // List
-      categoryList.setCellFactory(param -> new ListCell<>() {
-         @Override
-         public void updateItem(CategoryModel category, boolean empty) {
-            super.updateItem(category, empty);
-            if (empty || category == null) {
-               setText(null);
-            } else {
-               setText(category.getName());
-            }
-         }
-      });
+      categoryList.setCellFactory(param -> new CategoryModelListCell());
 
       // Table cells
       betragColumn.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));

@@ -47,6 +47,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
 
       categories.itemsProperty().bind(viewModel.categoriesProperty());
       criteria.itemsProperty().bind(viewModel.matchingCriteriaProperty());
+      categories.setCellFactory(param -> new CategoryModelListCell());
+      categories.setButtonCell(new CategoryModelListCell());
 
       Node okButton = dialogPane.lookupButton(ButtonType.OK);
       okButton.disableProperty().bind(categories.getSelectionModel().selectedItemProperty().isNull() //
