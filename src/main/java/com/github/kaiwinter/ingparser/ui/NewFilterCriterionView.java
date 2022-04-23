@@ -53,7 +53,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
       Node okButton = dialogPane.lookupButton(ButtonType.OK);
       okButton.disableProperty().bind(categories.getSelectionModel().selectedItemProperty().isNull() //
             .or(criteria.getSelectionModel().selectedItemProperty().isNull()) //
-            .or(pattern.textProperty().isEmpty()));
+            .or(pattern.textProperty().isEmpty()) //
+            .or(pattern.textProperty().isEqualTo(FilterCriterion.NULL_CRITERION.getCategory().getName())));
 
       dialog.setResultConverter(buttonType -> {
 

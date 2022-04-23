@@ -104,7 +104,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          ViewTuple<NewFilterCriterionView, NewFilterCriterionViewModel> viewTuple = FluentViewLoader
                .fxmlView(NewFilterCriterionView.class).load();
 
-         // remove "unmatched" item
+         // don't show "unmatched" category in dialog
          List<CategoryModel> my = new ArrayList<>(viewModel.categoriesProperty().getValue());
          my.remove(FilterCriterion.NULL_CRITERION.getCategory());
          viewTuple.getViewModel().categoriesProperty().setValue(FXCollections.observableArrayList(my));
