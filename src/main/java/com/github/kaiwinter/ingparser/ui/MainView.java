@@ -117,6 +117,11 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          viewModel.applyFilterCriteriaOnBookings();
       });
 
+      removeFilterCriterionButton.setOnAction(__ -> {
+         viewModel.getFilterCriteriaFromFile().removeAll(criteriaList.getItems());
+         viewModel.applyFilterCriteriaOnBookings();
+      });
+
       // List click listener
       categoryList.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
 
