@@ -3,14 +3,19 @@ package com.github.kaiwinter.ingparser.ui;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
+import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
+import de.saxsys.mvvmfx.ViewTuple;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValueBase;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -56,8 +61,56 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    @FXML
    private Button newSubCategoryButton;
 
+   @FXML
+   private Button newFilterCriterionButton;
+   @FXML
+   private Button removeFilterCriterionButton;
+
    @Override
    public void initialize(URL url, ResourceBundle resourceBundle) {
+      newFilterCriterionButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
+
+         CategoryModel selectedItem = categoryList.getSelectionModel().getSelectedItem();
+         if (selectedItem == null) {
+            return true;
+         }
+         return !FilterCriterion.NULL_CRITERION.getCategory().getName().equals(selectedItem.getName());
+      }, categoryList.getSelectionModel().selectedItemProperty()));
+
+      removeFilterCriterionButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
+         ObservableList<Booking> selectedItems = bookingsTable.getSelectionModel().getSelectedItems();
+         if (selectedItems.isEmpty()) {
+            return true;
+         }
+         return selectedItems.stream().anyMatch(booking -> {
+            if (booking.getMatchedCriteria().isEmpty()) {
+               return true;
+            }
+            return booking.getMatchedCriteria().stream()
+                  .anyMatch(filterCriterion -> filterCriterion == FilterCriterion.NULL_CRITERION);
+
+         });
+      }, bookingsTable.getSelectionModel().selectedItemProperty()));
+
+      // click listener
+      newMainCategoryButton.setOnAction(__ -> {
+         CategoryModel newCategory = new CategoryModel("NEU");
+         viewModel.categoriesProperty().add(newCategory);
+      });
+
+      newFilterCriterionButton.setOnAction(__ -> {
+         ViewTuple<NewFilterCriterionView, NewFilterCriterionViewModel> viewTuple = FluentViewLoader
+               .fxmlView(NewFilterCriterionView.class).load();
+
+         viewTuple.getViewModel().categoriesProperty().setValue(viewModel.categoriesProperty().getValue());
+         Optional<FilterCriterion> newFilterCriterion = viewTuple.getCodeBehind().showAndWait();
+         if (newFilterCriterion.isEmpty()) {
+            return;
+         }
+         viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
+         new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile());
+      });
+
       // List click listener
       categoryList.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
 
@@ -79,8 +132,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       // Model of List and Table
       viewModel.categoriesProperty().bind(categoryList.itemsProperty());
-      viewModel.bookingsProperty().bind(bookingsTable.itemsProperty());
-      viewModel.filterCriteriaProperty().bind(criteriaList.itemsProperty());
+      viewModel.bookingsOfSelectedCategoryProperty().bind(bookingsTable.itemsProperty());
+      viewModel.filterCriteriaOfSelectedBookingProperty().bind(criteriaList.itemsProperty());
 
       // List
       categoryList.setCellFactory(param -> new ListCell<>() {

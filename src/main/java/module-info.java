@@ -10,6 +10,7 @@ open module com.github.kaiwinter.ingparser {
    requires javafx.fxml;
    requires javafx.graphics;
    requires java.base;
+   requires javafx.base;
 
    exports com.github.kaiwinter.ingparser;
 }

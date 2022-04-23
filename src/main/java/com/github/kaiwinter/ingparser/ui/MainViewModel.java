@@ -24,24 +24,25 @@ import javafx.collections.ObservableList;
 public class MainViewModel implements ViewModel {
 
    private final ListProperty<CategoryModel> categories = new SimpleListProperty<>();
-   private final ListProperty<Booking> bookings = new SimpleListProperty<>();
-   private final ListProperty<FilterCriterion> filterCriteria = new SimpleListProperty<>();
+   private final ListProperty<Booking> bookingsOfSelectedCategory = new SimpleListProperty<>();
+   private final ListProperty<FilterCriterion> filterCriteriaOfSelectedBooking = new SimpleListProperty<>();
 
    private final StringProperty leftStatusLabel = new SimpleStringProperty();
    private final StringProperty rightStatusLabel = new SimpleStringProperty();
 
    private Map<CategoryModel, List<Booking>> category2Booking;
+   private List<FilterCriterion> filterCriteriaFromFile;
 
    public ListProperty<CategoryModel> categoriesProperty() {
       return this.categories;
    }
 
-   public ListProperty<Booking> bookingsProperty() {
-      return this.bookings;
+   public ListProperty<Booking> bookingsOfSelectedCategoryProperty() {
+      return this.bookingsOfSelectedCategory;
    }
 
-   public ListProperty<FilterCriterion> filterCriteriaProperty() {
-      return this.filterCriteria;
+   public ListProperty<FilterCriterion> filterCriteriaOfSelectedBookingProperty() {
+      return this.filterCriteriaOfSelectedBooking;
    }
 
    public StringProperty leftStatusLabelProperty() {
@@ -52,17 +53,21 @@ public class MainViewModel implements ViewModel {
       return this.rightStatusLabel;
    }
 
+   public List<FilterCriterion> getFilterCriteriaFromFile() {
+      return filterCriteriaFromFile;
+   }
+
    public void loadData(String csvFile, String configFile) {
       ImportService importService = new ImportService();
       ConfigurationService configurationService = new ConfigurationService();
 
       List<Booking> importedBookings = importService.importFromFile(csvFile);
 
-      List<FilterCriterion> filterCriteria = configurationService.readConfiguration(configFile);
+      filterCriteriaFromFile = configurationService.readConfiguration(configFile);
 
-      importService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteria);
+      importService.matchBookingsAgainstFilterCriteria(importedBookings, filterCriteriaFromFile);
 
-      List<CategoryModel> configuredCategories = filterCriteria.stream() //
+      List<CategoryModel> configuredCategories = filterCriteriaFromFile.stream() //
             .filter(crit -> crit.getCategory().getParentCategoryName() == null) // Don't list sub-categories separately
             .map(FilterCriterion::getCategory) //
             .distinct() //
@@ -75,7 +80,7 @@ public class MainViewModel implements ViewModel {
 
       configuredCategories.add(FilterCriterion.NULL_CRITERION.getCategory());
 
-      configurationService.saveFilterCriteriaToFile(filterCriteria);
+      configurationService.saveFilterCriteriaToFile(filterCriteriaFromFile);
 
       this.categories.addAll(configuredCategories);
       this.category2Booking = new StatisticService().groupByCategory(importedBookings);
@@ -85,15 +90,15 @@ public class MainViewModel implements ViewModel {
       if (selectedValue == null) {
          return;
       }
-      bookings.clear();
+      bookingsOfSelectedCategory.clear();
 
       List<Booking> bookingsToDisplay = new ArrayList<>(category2Booking.getOrDefault(selectedValue, List.of()));
 
-      // Add bookings of sub-categories
+      // Add bookingsOfSelectedCategory of sub-categories
       for (CategoryModel sub : selectedValue.getSubCategories()) {
          bookingsToDisplay.addAll(category2Booking.getOrDefault(sub, List.of()));
       }
-      bookings.addAll(bookingsToDisplay);
+      bookingsOfSelectedCategory.addAll(bookingsToDisplay);
 
       BigDecimal total = bookingsToDisplay.stream() //
             .map(Booking::getBetrag) //
@@ -102,7 +107,7 @@ public class MainViewModel implements ViewModel {
    }
 
    public void refreshFilterCriteriaList(ObservableList<Booking> selectedBookings) {
-      filterCriteria.clear();
+      filterCriteriaOfSelectedBooking.clear();
       rightStatusLabel.setValue("");
       if (selectedBookings.isEmpty()) {
          return;
@@ -111,7 +116,7 @@ public class MainViewModel implements ViewModel {
             .map(Booking::getBetrag) //
             .reduce(BigDecimal.ZERO, BigDecimal::add);
       rightStatusLabel.setValue("Selected: " + selectedBookings.size() + ", sum: " + total.toString());
-      filterCriteria.addAll(selectedBookings.stream() //
+      filterCriteriaOfSelectedBooking.addAll(selectedBookings.stream() //
             .flatMap(booking -> booking.getMatchedCriteria().stream()) //
             .distinct() //
             .toList());

@@ -4,7 +4,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class ConfigurationService {
          filterCriteria.addAll(category.getCombinedFilterCriteria());
       }
 
-      return Collections.unmodifiableList(filterCriteria);
+      return filterCriteria;
    }
 
    /**

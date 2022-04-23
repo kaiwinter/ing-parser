@@ -119,24 +119,34 @@
                     </AnchorPane>
                   <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0">
                     <children>
-                              <GridPane prefHeight="551.0" prefWidth="443.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
+                              <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <TableView fx:id="bookingsTable" prefHeight="400.0" prefWidth="326.0">
-                                      <columns>
-                                          <TableColumn fx:id="dateColumn" prefWidth="87.0" text="Datum" />
-                                          <TableColumn fx:id="betragColumn" prefWidth="73.0" style="-fx-alignment: CENTER-RIGHT;" text="Betrag" />
-                                        <TableColumn fx:id="auftraggeberColumn" prefWidth="247.0" text="Auftraggeber" />
-                                        <TableColumn fx:id="verwendungszweckColumn" prefWidth="479.0" text="Verwendungszweck" />
-                                      </columns>
-                                    </TableView>
+                                    <HBox prefWidth="200.0">
+                                       <children>
+                                          <Button fx:id="newFilterCriterionButton" disable="true" mnemonicParsing="false" text="Neues Filterkriterium" />
+                                          <Button fx:id="removeFilterCriterionButton" disable="true" mnemonicParsing="false" text="Kriterium entfernen" />
+                                       </children>
+                                    </HBox>
+                                    <GridPane prefHeight="551.0" prefWidth="443.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <TableView fx:id="bookingsTable" prefHeight="400.0" prefWidth="326.0">
+                                            <columns>
+                                                <TableColumn fx:id="dateColumn" prefWidth="87.0" text="Datum" />
+                                                <TableColumn fx:id="betragColumn" prefWidth="73.0" style="-fx-alignment: CENTER-RIGHT;" text="Betrag" />
+                                              <TableColumn fx:id="auftraggeberColumn" prefWidth="247.0" text="Auftraggeber" />
+                                              <TableColumn fx:id="verwendungszweckColumn" prefWidth="479.0" text="Verwendungszweck" />
+                                            </columns>
+                                          </TableView>
+                                       </children>
+                                    </GridPane>
                                  </children>
-                              </GridPane>
+                              </VBox>
                     </children>
                   </AnchorPane>
                     <AnchorPane maxWidth="300.0">
