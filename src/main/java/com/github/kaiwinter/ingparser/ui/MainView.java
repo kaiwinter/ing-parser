@@ -112,14 +112,21 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          if (newFilterCriterion.isEmpty()) {
             return;
          }
+         CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
          viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
          new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile());
          viewModel.applyFilterCriteriaOnBookings();
+
+         categoryList.getSelectionModel().select(selected);
       });
 
       removeFilterCriterionButton.setOnAction(__ -> {
+         CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
+
          viewModel.getFilterCriteriaFromFile().removeAll(criteriaList.getItems());
          viewModel.applyFilterCriteriaOnBookings();
+
+         categoryList.getSelectionModel().select(selected);
       });
 
       // List click listener
