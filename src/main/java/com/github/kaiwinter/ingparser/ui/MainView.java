@@ -156,6 +156,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       // List
       categoryList.setCellFactory(param -> new CategoryModelListCell());
 
+      criteriaList.setCellFactory(param -> new LambdaListCell<FilterCriterion>(
+            crit -> crit.getMatchingCriterion().toString() + ": " + crit.getPattern()));
+
       // Table cells
       betragColumn.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));
       dateColumn.setCellValueFactory(column -> getValue(column.getValue().getDate()));
