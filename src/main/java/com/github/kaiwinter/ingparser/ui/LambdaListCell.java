@@ -18,7 +18,12 @@ public class LambdaListCell<T> extends ListCell<T> {
       if (empty || object == null) {
          setText(null);
       } else {
-         setText(valueSupplier.apply(object));
+         String value = valueSupplier.apply(object);
+         if (value == null) {
+            setText("");
+         } else {
+            setText(value);
+         }
       }
    }
 

@@ -35,8 +35,13 @@ public class MainViewModel implements ViewModel {
 
    private Map<CategoryModel, List<Booking>> category2Booking;
 
-   private List<FilterCriterion> filterCriteriaFromFile;
-   private List<Booking> bookingsFromFile;
+   // Tab 2
+   public final ListProperty<FilterCriterion> filterCriteriaFromFileP = new SimpleListProperty<>();
+   public List<FilterCriterion> filterCriteriaFromFile;
+   public List<Booking> bookingsFromFile;
+   private final ListProperty<Booking> bookingsWithSelectedFilterCriterion = new SimpleListProperty<>();
+
+   //
 
    public ListProperty<CategoryModel> categoriesProperty() {
       return this.categories;
@@ -44,6 +49,10 @@ public class MainViewModel implements ViewModel {
 
    public ListProperty<Booking> bookingsOfSelectedCategoryProperty() {
       return this.bookingsOfSelectedCategory;
+   }
+
+   public ListProperty<Booking> bookingsWithSelectedFilterCriterionProperty() {
+      return this.bookingsWithSelectedFilterCriterion;
    }
 
    public ListProperty<FilterCriterion> filterCriteriaOfSelectedBookingProperty() {
@@ -60,6 +69,10 @@ public class MainViewModel implements ViewModel {
 
    public List<FilterCriterion> getFilterCriteriaFromFile() {
       return filterCriteriaFromFile;
+   }
+
+   public ListProperty<FilterCriterion> filterCriteriaFromFilePProperty() {
+      return filterCriteriaFromFileP;
    }
 
    public void loadData(String csvFile, String configFile) {
@@ -87,10 +100,9 @@ public class MainViewModel implements ViewModel {
 
       configuredCategories.add(FilterCriterion.NULL_CRITERION.getCategory());
 
-      configurationService.saveFilterCriteriaToFile(filterCriteriaFromFile);
-
       this.categories.setAll(configuredCategories);
       this.category2Booking = new StatisticService().groupByCategory(bookingsFromFile);
+      this.filterCriteriaFromFileP.setAll(filterCriteriaFromFile);
    }
 
    public void refreshBookingTable(CategoryModel selectedValue) {
@@ -124,8 +136,16 @@ public class MainViewModel implements ViewModel {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
       rightStatusLabel.setValue("Selected: " + selectedBookings.size() + ", sum: " + total.toString());
       filterCriteriaOfSelectedBooking.addAll(selectedBookings.stream() //
-            .flatMap(booking -> booking.getMatchedCriteria().stream()) //
+            .flatMap(booking -> booking.getMatchedCriteria().stream()
+                  .filter(crit -> crit != FilterCriterion.NULL_CRITERION)) // Filter Unmatched-Criterion
             .distinct() //
             .toList());
+   }
+
+   public void showBookingsWithFilterCriterion(FilterCriterion newValue) {
+      List<Booking> bookings = bookingsFromFile.stream()
+            .filter(booking -> booking.getMatchedCriteria().contains(newValue)).toList();
+
+      bookingsWithSelectedFilterCriterion.setAll(bookings);
    }
 }

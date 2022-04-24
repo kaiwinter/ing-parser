@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
+import com.github.kaiwinter.ingparser.statistic.StatisticService;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -68,6 +69,24 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    @FXML
    private Button removeFilterCriterionButton;
 
+   // Tab 2
+   @FXML
+   private ListView<FilterCriterion> criteriaList2;
+
+   @FXML
+   private TableView<Booking> bookingsTable2;
+   @FXML
+   private TableColumn<Booking, BigDecimal> betragColumn2;
+   @FXML
+   private TableColumn<Booking, LocalDate> dateColumn2;
+   @FXML
+   private TableColumn<Booking, String> auftraggeberColumn2;
+   @FXML
+   private TableColumn<Booking, String> verwendungszweckColumn2;
+
+   @FXML
+   private Button removeFilterCriterionButton2;
+
    @Override
    public void initialize(URL url, ResourceBundle resourceBundle) {
       newFilterCriterionButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
@@ -118,6 +137,15 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          viewModel.applyFilterCriteriaOnBookings();
 
          categoryList.getSelectionModel().select(selected);
+
+         List<String> categories = viewModel.getFilterCriteriaFromFile().stream().map(FilterCriterion::getCategory) //
+               .distinct() //
+               .filter(category -> !"ignore".equals(category.getName())) //
+               .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
+               .map(CategoryModel::getName) //
+               .sorted() //
+               .toList();
+         new StatisticService().groupByMonthAndCategory(viewModel.bookingsFromFile, categories);
       });
 
       removeFilterCriterionButton.setOnAction(__ -> {
@@ -156,9 +184,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       // List
       categoryList.setCellFactory(param -> new CategoryModelListCell());
 
-      criteriaList.setCellFactory(
-            param -> new LambdaListCell<FilterCriterion>(crit -> crit.getMatchingCriterion() == null ? ""
-                  : crit.getMatchingCriterion().toString() + ": " + crit.getPattern()));
+      criteriaList.setCellFactory(new FilterCriterionListCell());
 
       // Table cells
       betragColumn.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));
@@ -180,6 +206,22 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       leftStatusLabel.textProperty().bind(viewModel.leftStatusLabelProperty());
       rightStatusLabel.textProperty().bind(viewModel.rightStatusLabelProperty());
+
+      // Tab 2
+      viewModel.filterCriteriaFromFilePProperty().bind(criteriaList2.itemsProperty());
+      criteriaList2.setCellFactory(new FilterCriterionListCell());
+      criteriaList2.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
+
+         viewModel.showBookingsWithFilterCriterion(newValue);
+      });
+      viewModel.bookingsWithSelectedFilterCriterionProperty().bind(bookingsTable2.itemsProperty());
+      betragColumn2.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));
+      dateColumn2.setCellValueFactory(column -> getValue(column.getValue().getDate()));
+      auftraggeberColumn2.setCellValueFactory(column -> getValue(column.getValue().getAuftraggeber()));
+      verwendungszweckColumn2.setCellValueFactory(column -> getValue(column.getValue().getVerwendungszweck()));
+
+      removeFilterCriterionButton2.disableProperty()
+            .bind(criteriaList2.getSelectionModel().selectedItemProperty().isNull());
    }
 
    private <T> ObservableValueBase<T> getValue(T localDate) {
