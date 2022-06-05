@@ -120,7 +120,7 @@
                                           <Button fx:id="newSubCategoryButton" disable="true" mnemonicParsing="false" text="Neue Unterkategorie" />
                                        </children>
                                     </VBox>
-                                    <ListView fx:id="categoryList" prefHeight="550.5" prefWidth="100.0" />
+                                    <ListView fx:id="categoryList" prefHeight="550.5" prefWidth="100.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                       </children>
@@ -135,7 +135,7 @@
                                           <Button fx:id="removeFilterCriterionButton" disable="true" mnemonicParsing="false" text="Kriterium entfernen" />
                                        </children>
                                     </HBox>
-                                    <GridPane prefHeight="551.0" prefWidth="443.0">
+                                    <GridPane prefHeight="551.0" prefWidth="443.0" VBox.vgrow="ALWAYS">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                                        </columnConstraints>
@@ -175,7 +175,7 @@
                               <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Button fx:id="removeFilterCriterionButton2" disable="true" mnemonicParsing="false" text="Kriterium entfernen" />
-                                    <ListView fx:id="criteriaList2" prefHeight="553.0" prefWidth="230.0" />
+                                    <ListView fx:id="criteriaList2" prefHeight="553.0" prefWidth="230.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                       </children>
@@ -185,7 +185,7 @@
                               <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <HBox prefWidth="200.0" />
-                                    <GridPane prefHeight="551.0" prefWidth="443.0">
+                                    <GridPane prefHeight="551.0" prefWidth="443.0" VBox.vgrow="ALWAYS">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                                        </columnConstraints>
