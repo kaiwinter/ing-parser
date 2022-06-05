@@ -23,8 +23,6 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 public class MainViewModel implements ViewModel {
 
@@ -81,28 +79,12 @@ public class MainViewModel implements ViewModel {
    }
 
    public void loadCsvFile(File file) throws FileNotFoundException {
-      try {
-         bookingsFromFile = importService.importFromFile(new FileInputStream(file));
-      } catch (RuntimeException e) {
-         bookingsFromFile = new ArrayList<>();
-
-         Alert alert = new Alert(AlertType.ERROR);
-         alert.setContentText("Die Datei konnte nicht eingelesen werden.");
-         alert.show();
-      }
+      bookingsFromFile = importService.importFromFile(new FileInputStream(file));
       applyFilterCriteriaOnBookings();
    }
 
    public void loadParserFile(File file) throws FileNotFoundException {
-      try {
-         filterCriteriaFromFile = configurationService.readConfiguration(new FileInputStream(file));
-      } catch (RuntimeException e) {
-         bookingsFromFile = new ArrayList<>();
-
-         Alert alert = new Alert(AlertType.ERROR);
-         alert.setContentText("Die Datei konnte nicht eingelesen werden.");
-         alert.show();
-      }
+      filterCriteriaFromFile = configurationService.readConfiguration(new FileInputStream(file));
       applyFilterCriteriaOnBookings();
    }
 

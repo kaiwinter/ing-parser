@@ -27,6 +27,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -236,7 +238,14 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       fileChooser.setTitle("Wähle die Datei");
       File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
       if (file != null) {
-         viewModel.loadCsvFile(file);
+         try {
+            viewModel.loadCsvFile(file);
+
+         } catch (RuntimeException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Die Datei konnte nicht eingelesen werden.");
+            alert.show();
+         }
       }
    }
 
@@ -248,7 +257,14 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       fileChooser.setTitle("Wähle die Datei");
       File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
       if (file != null) {
-         viewModel.loadParserFile(file);
+         try {
+            viewModel.loadParserFile(file);
+
+         } catch (RuntimeException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Die Datei konnte nicht eingelesen werden.");
+            alert.show();
+         }
       }
    }
 
