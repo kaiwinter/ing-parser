@@ -14,6 +14,7 @@ import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
+import com.github.kaiwinter.ingparser.ui.FilterCriterionListCell.Type;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -188,7 +189,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       // List
       categoryList.setCellFactory(param -> new CategoryModelListCell());
 
-      criteriaList.setCellFactory(new FilterCriterionListCell());
+      criteriaList.setCellFactory(new FilterCriterionListCell(Type.SHORT));
 
       // Table cells
       betragColumn.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));
@@ -213,7 +214,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       // Tab 2
       viewModel.filterCriteriaFromFilePProperty().bind(criteriaList2.itemsProperty());
-      criteriaList2.setCellFactory(new FilterCriterionListCell());
+      criteriaList2.setCellFactory(new FilterCriterionListCell(Type.LONG));
       criteriaList2.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
 
          viewModel.showBookingsWithFilterCriterion(newValue);
