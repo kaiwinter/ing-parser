@@ -1,5 +1,7 @@
 package com.github.kaiwinter.ingparser.ui;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
@@ -31,6 +33,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
 
@@ -222,6 +226,29 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       removeFilterCriterionButton2.disableProperty()
             .bind(criteriaList2.getSelectionModel().selectedItemProperty().isNull());
+   }
+
+   public void openCsvFile() throws FileNotFoundException {
+      FileChooser fileChooser = new FileChooser();
+      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV Dateien (*.csv)", "*.csv");
+      fileChooser.getExtensionFilters().add(extFilter);
+      fileChooser.setTitle("Wähle die Datei");
+      File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
+      if (file != null) {
+         viewModel.loadCsvFile(file);
+      }
+   }
+
+   public void openParserFile() throws FileNotFoundException {
+      FileChooser fileChooser = new FileChooser();
+      FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Parser-Konfigurationen (*.json)",
+            "*.json");
+      fileChooser.getExtensionFilters().add(extFilter);
+      fileChooser.setTitle("Wähle die Datei");
+      File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
+      if (file != null) {
+         viewModel.loadParserFile(file);
+      }
    }
 
    private <T> ObservableValueBase<T> getValue(T localDate) {

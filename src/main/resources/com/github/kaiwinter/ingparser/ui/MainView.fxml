@@ -45,6 +45,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -96,6 +97,12 @@
         </Menu>
       </menus>
     </MenuBar>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button mnemonicParsing="false" onAction="#openCsvFile" text="Open CSV file" />
+            <Button mnemonicParsing="false" onAction="#openParserFile" text="Open Parser file" />
+        </items>
+      </ToolBar>
       <TabPane VBox.vgrow="ALWAYS">
          <tabs>
             <Tab closable="false" text="Zuordnung">

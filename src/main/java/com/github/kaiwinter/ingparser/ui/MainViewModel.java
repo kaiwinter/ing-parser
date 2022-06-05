@@ -1,5 +1,8 @@
 package com.github.kaiwinter.ingparser.ui;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -20,6 +23,8 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class MainViewModel implements ViewModel {
 
@@ -37,8 +42,8 @@ public class MainViewModel implements ViewModel {
 
    // Tab 2
    public final ListProperty<FilterCriterion> filterCriteriaFromFileP = new SimpleListProperty<>();
-   public List<FilterCriterion> filterCriteriaFromFile;
-   public List<Booking> bookingsFromFile;
+   private List<FilterCriterion> filterCriteriaFromFile = new ArrayList<>();
+   public List<Booking> bookingsFromFile = new ArrayList<>();
    private final ListProperty<Booking> bookingsWithSelectedFilterCriterion = new SimpleListProperty<>();
 
    //
@@ -75,9 +80,29 @@ public class MainViewModel implements ViewModel {
       return filterCriteriaFromFileP;
    }
 
-   public void loadData(String csvFile, String configFile) {
-      bookingsFromFile = importService.importFromFile(csvFile);
-      filterCriteriaFromFile = configurationService.readConfiguration(configFile);
+   public void loadCsvFile(File file) throws FileNotFoundException {
+      try {
+         bookingsFromFile = importService.importFromFile(new FileInputStream(file));
+      } catch (RuntimeException e) {
+         bookingsFromFile = new ArrayList<>();
+
+         Alert alert = new Alert(AlertType.ERROR);
+         alert.setContentText("Die Datei konnte nicht eingelesen werden.");
+         alert.show();
+      }
+      applyFilterCriteriaOnBookings();
+   }
+
+   public void loadParserFile(File file) throws FileNotFoundException {
+      try {
+         filterCriteriaFromFile = configurationService.readConfiguration(new FileInputStream(file));
+      } catch (RuntimeException e) {
+         bookingsFromFile = new ArrayList<>();
+
+         Alert alert = new Alert(AlertType.ERROR);
+         alert.setContentText("Die Datei konnte nicht eingelesen werden.");
+         alert.show();
+      }
       applyFilterCriteriaOnBookings();
    }
 

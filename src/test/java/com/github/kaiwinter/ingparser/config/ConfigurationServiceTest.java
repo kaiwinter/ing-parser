@@ -20,7 +20,8 @@ class ConfigurationServiceTest {
    @Test
    void subCriteria() {
       ConfigurationService configurationService = new ConfigurationService();
-      List<FilterCriterion> filterCriteria = configurationService.readConfiguration("/config_subcriteria.json");
+      List<FilterCriterion> filterCriteria = configurationService
+            .readConfiguration(ConfigurationServiceTest.class.getResourceAsStream("/config_subcriteria.json"));
 
       assertThat(filterCriteria).hasSize(4);
 
@@ -51,7 +52,8 @@ class ConfigurationServiceTest {
    @Test
    void saveFilterCriteriaToFile() {
       ConfigurationService configurationService = new ConfigurationService();
-      List<FilterCriterion> filterCriteria = configurationService.readConfiguration("/config_subcriteria.json");
+      List<FilterCriterion> filterCriteria = configurationService
+            .readConfiguration(ConfigurationServiceTest.class.getResourceAsStream("/config_subcriteria.json"));
 
       String saveFilterCriteriaToFile = configurationService.saveFilterCriteriaToFile(filterCriteria);
 

@@ -1,5 +1,6 @@
 package com.github.kaiwinter.ingparser.csv;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.List;
@@ -8,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.kaiwinter.ingparser.App;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -19,9 +19,8 @@ public class ImportService {
    // Number of lines to skip from the CSV file.
    private static final int CSV_HEADER_LINES = 14;
 
-   public List<Booking> importFromFile(String filename) {
-      List<Booking> bookings = new CsvToBeanBuilder<Booking>(
-            new InputStreamReader(App.class.getResourceAsStream(filename))) //
+   public List<Booking> importFromFile(InputStream inputStream) {
+      List<Booking> bookings = new CsvToBeanBuilder<Booking>(new InputStreamReader(inputStream)) //
             .withSeparator(';') //
             .withType(Booking.class) //
             .withSkipLines(CSV_HEADER_LINES) //

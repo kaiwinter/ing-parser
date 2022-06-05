@@ -1,5 +1,6 @@
 package com.github.kaiwinter.ingparser.config;
 
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
@@ -8,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.kaiwinter.ingparser.App;
 import com.github.kaiwinter.ingparser.config.FilterCriterion.MatchingCriterion;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import com.google.gson.Gson;
@@ -25,8 +25,8 @@ public class ConfigurationService {
     * @param configFile file name of the configuration file
     * @return List of filter criteria
     */
-   public List<FilterCriterion> readConfiguration(String configFile) {
-      Reader fileReader = new InputStreamReader(App.class.getResourceAsStream(configFile));
+   public List<FilterCriterion> readConfiguration(InputStream inputStream) {
+      Reader fileReader = new InputStreamReader(inputStream);
       CategoryConfiguration[] categories = new Gson().fromJson(fileReader, CategoryConfiguration[].class);
 
       List<FilterCriterion> filterCriteria = new ArrayList<>();
