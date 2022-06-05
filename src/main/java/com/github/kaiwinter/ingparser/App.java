@@ -1,7 +1,5 @@
 package com.github.kaiwinter.ingparser;
 
-import com.github.kaiwinter.ingparser.config.ConfigurationService;
-import com.github.kaiwinter.ingparser.csv.ImportService;
 import com.github.kaiwinter.ingparser.ui.MainView;
 import com.github.kaiwinter.ingparser.ui.MainViewModel;
 
@@ -29,28 +27,6 @@ public class App extends Application {
    }
 
    public static void main(String[] args) {
-
-      ImportService importService = new ImportService();
-      ConfigurationService configurationService = new ConfigurationService();
-
-      // List<Booking> bookings = importService.importFromFile(CSV_FILE);
-
-      // List<FilterCriterion> filterCriteria = configurationService.readConfiguration(CONFIG_FILE);
-
-//      importService.matchBookingsAgainstFilterCriteria(bookings, filterCriteria);
-//      bookings.removeIf(booking -> booking.getMatchedCriteria().stream()
-//            .anyMatch(crit -> crit.getCategory().getName().equals("ignore")));
-//
-//      List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
-//            .distinct() //
-//            .filter(category -> !"ignore".equals(category.getName())) //
-//            .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
-//            .map(CategoryModel::getName) //
-//            .sorted() //
-//            .toList();
-//
-//      new StatisticService().groupByMonthAndCategory(bookings, categories);
-
       launch();
    }
 

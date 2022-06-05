@@ -252,6 +252,24 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       }
    }
 
+   public void printStatistics() {
+      List<Booking> bookings = viewModel.bookingsFromFile;
+      List<FilterCriterion> filterCriteria = viewModel.getFilterCriteriaFromFile();
+
+//      bookings.removeIf(booking -> booking.getMatchedCriteria().stream()
+//            .anyMatch(crit -> crit.getCategory().getName().equals("ignore")));
+
+      List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
+            .distinct() //
+            .filter(category -> !"ignore".equals(category.getName())) //
+            .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
+            .map(CategoryModel::getName) //
+            .sorted() //
+            .toList();
+
+      new StatisticService().groupByMonthAndCategory(bookings, categories);
+   }
+
    private <T> ObservableValueBase<T> getValue(T localDate) {
       return new ObservableValueBase<>() {
          @Override
