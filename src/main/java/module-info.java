@@ -11,6 +11,7 @@ open module com.github.kaiwinter.ingparser {
    requires javafx.graphics;
    requires java.base;
    requires javafx.base;
+   requires java.prefs;
 
    exports com.github.kaiwinter.ingparser;
 }

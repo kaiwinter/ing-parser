@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
+import com.github.kaiwinter.ingparser.preferences.PreferenceStore;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
 import com.github.kaiwinter.ingparser.ui.FilterCriterionListCell.Type;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
@@ -240,6 +241,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       if (file != null) {
          try {
             viewModel.loadCsvFile(file);
+            PreferenceStore.saveLastUsedCsvFile(file.getAbsolutePath());
 
          } catch (RuntimeException e) {
             Alert alert = new Alert(AlertType.ERROR);
@@ -259,6 +261,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       if (file != null) {
          try {
             viewModel.loadParserFile(file);
+            PreferenceStore.saveLastUsedParserFile(file.getAbsolutePath());
 
          } catch (RuntimeException e) {
             Alert alert = new Alert(AlertType.ERROR);
