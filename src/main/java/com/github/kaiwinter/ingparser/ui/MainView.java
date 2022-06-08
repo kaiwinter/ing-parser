@@ -145,15 +145,6 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          viewModel.applyFilterCriteriaOnBookings();
 
          categoryList.getSelectionModel().select(selected);
-
-         List<String> categories = viewModel.getFilterCriteriaFromFile().stream().map(FilterCriterion::getCategory) //
-               .distinct() //
-               .filter(category -> !"ignore".equals(category.getName())) //
-               .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
-               .map(CategoryModel::getName) //
-               .sorted() //
-               .toList();
-         new StatisticService().groupByMonthAndCategory(viewModel.bookingsFromFile, categories);
       });
 
       removeFilterCriterionButton.setOnAction(__ -> {
@@ -272,7 +263,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    }
 
    public void printStatistics() {
-      List<Booking> bookings = viewModel.bookingsFromFile;
+      List<Booking> bookings = viewModel.getBookingsFromFile();
       List<FilterCriterion> filterCriteria = viewModel.getFilterCriteriaFromFile();
 
 //      bookings.removeIf(booking -> booking.getMatchedCriteria().stream()

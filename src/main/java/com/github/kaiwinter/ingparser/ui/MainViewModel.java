@@ -39,9 +39,9 @@ public class MainViewModel implements ViewModel {
    private Map<CategoryModel, List<Booking>> category2Booking;
 
    // Tab 2
-   public final ListProperty<FilterCriterion> filterCriteriaFromFileP = new SimpleListProperty<>();
+   private final ListProperty<FilterCriterion> filterCriteriaFromFileP = new SimpleListProperty<>();
    private List<FilterCriterion> filterCriteriaFromFile = new ArrayList<>();
-   public List<Booking> bookingsFromFile = new ArrayList<>();
+   private List<Booking> bookingsFromFile = new ArrayList<>();
    private final ListProperty<Booking> bookingsWithSelectedFilterCriterion = new SimpleListProperty<>();
 
    //
@@ -72,6 +72,10 @@ public class MainViewModel implements ViewModel {
 
    public List<FilterCriterion> getFilterCriteriaFromFile() {
       return filterCriteriaFromFile;
+   }
+
+   public List<Booking> getBookingsFromFile() {
+      return bookingsFromFile;
    }
 
    public ListProperty<FilterCriterion> filterCriteriaFromFilePProperty() {
