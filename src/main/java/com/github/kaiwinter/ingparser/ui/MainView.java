@@ -135,6 +135,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          List<CategoryModel> my = new ArrayList<>(viewModel.categoriesProperty().getValue());
          my.remove(FilterCriterion.NULL_CRITERION.getCategory());
          viewTuple.getViewModel().categoriesProperty().setValue(FXCollections.observableArrayList(my));
+         viewTuple.getViewModel().bookingsProperty().setValue(bookingsTable.getSelectionModel().getSelectedItems());
          Optional<FilterCriterion> newFilterCriterion = viewTuple.getCodeBehind().showAndWait();
          if (newFilterCriterion.isEmpty()) {
             return;

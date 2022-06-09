@@ -6,11 +6,13 @@ import java.util.ResourceBundle;
 
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.config.FilterCriterion.MatchingCriterion;
+import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -56,6 +58,24 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
             .or(pattern.textProperty().isEmpty()) //
             .or(pattern.textProperty().isEqualTo(FilterCriterion.NULL_CRITERION.getCategory().getName())));
 
+      // Suggest pattern of selected booking
+      criteria.getSelectionModel().selectedItemProperty()
+            .addListener((ChangeListener<MatchingCriterion>) (observable, oldValue, newValue) -> {
+               if (viewModel.bookingsProperty().isEmpty()) {
+                  return;
+               }
+
+               Booking firstBooking = viewModel.bookingsProperty().get(0);
+               if (newValue == MatchingCriterion.AUFTRAGGEBER) {
+                  pattern.setText(firstBooking.getAuftraggeber());
+               } else if (newValue == MatchingCriterion.VERWENDUNGSZWECK) {
+                  pattern.setText(firstBooking.getVerwendungszweck());
+               } else {
+                  throw new IllegalArgumentException("Unknown type: " + newValue);
+               }
+
+            });
+
       dialog.setResultConverter(buttonType -> {
 
          if (buttonType == ButtonType.CANCEL) {
@@ -67,7 +87,7 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
          } else if (criteria.getValue() == MatchingCriterion.VERWENDUNGSZWECK) {
             return FilterCriterion.byVerwendungszweck(categories.getValue(), pattern.getText()).get(0);
          } else {
-            throw new IllegalArgumentException("Unknown type");
+            throw new IllegalArgumentException("Unknown type: " + criteria.getValue());
          }
       });
 
