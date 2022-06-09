@@ -196,6 +196,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    public void newMainCategory() {
       CategoryModel newCategory = new CategoryModel("NEU");
       viewModel.categoriesProperty().add(newCategory);
+
+      dirtyParserConfiguration();
    }
 
    public void newFilterCriterion() {
@@ -218,8 +220,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       categoryList.getSelectionModel().select(selected);
 
-      // Set dirty flag
-      viewModel.parserConfigurationChangedProperty().set(true);
+      dirtyParserConfiguration();
    }
 
    public void removeFilterCriterion() {
@@ -229,6 +230,15 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       viewModel.applyFilterCriteriaOnBookings();
 
       categoryList.getSelectionModel().select(selected);
+
+      dirtyParserConfiguration();
+   }
+
+   /**
+    * Sets the dirty flag for the parser configuration.
+    */
+   private void dirtyParserConfiguration() {
+      viewModel.parserConfigurationChangedProperty().set(true);
    }
 
    public void openCsvFile() throws FileNotFoundException {
