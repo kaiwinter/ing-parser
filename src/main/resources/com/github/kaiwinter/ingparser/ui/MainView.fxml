@@ -117,7 +117,7 @@
                                  <children>
                                     <VBox>
                                        <children>
-                                          <Button fx:id="newMainCategoryButton" mnemonicParsing="false" text="Neue Hauptkategorie" />
+                                          <Button fx:id="newMainCategoryButton" mnemonicParsing="false" onAction="#newMainCategory" text="Neue Hauptkategorie" />
                                           <Button fx:id="newSubCategoryButton" disable="true" mnemonicParsing="false" text="Neue Unterkategorie" />
                                        </children>
                                     </VBox>
@@ -132,8 +132,8 @@
                                  <children>
                                     <HBox prefWidth="200.0">
                                        <children>
-                                          <Button fx:id="newFilterCriterionButton" disable="true" mnemonicParsing="false" text="Neues Filterkriterium" />
-                                          <Button fx:id="removeFilterCriterionButton" disable="true" mnemonicParsing="false" text="Kriterium entfernen" />
+                                          <Button fx:id="newFilterCriterionButton" disable="true" mnemonicParsing="false" onAction="#newFilterCriterion" text="Neues Filterkriterium" />
+                                          <Button fx:id="removeFilterCriterionButton" disable="true" mnemonicParsing="false" onAction="#removeFilterCriterion" text="Kriterium entfernen" />
                                        </children>
                                     </HBox>
                                     <GridPane prefHeight="551.0" prefWidth="443.0" VBox.vgrow="ALWAYS">

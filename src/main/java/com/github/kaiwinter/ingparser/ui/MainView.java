@@ -124,45 +124,6 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          });
       }, bookingsTable.getSelectionModel().selectedItemProperty()));
 
-      // click listener
-      newMainCategoryButton.setOnAction(__ -> {
-         CategoryModel newCategory = new CategoryModel("NEU");
-         viewModel.categoriesProperty().add(newCategory);
-      });
-
-      newFilterCriterionButton.setOnAction(__ -> {
-         ViewTuple<NewFilterCriterionView, NewFilterCriterionViewModel> viewTuple = FluentViewLoader
-               .fxmlView(NewFilterCriterionView.class).load();
-
-         // don't show "unmatched" category in dialog
-         List<CategoryModel> my = new ArrayList<>(viewModel.categoriesProperty().getValue());
-         my.remove(FilterCriterion.NULL_CRITERION.getCategory());
-         viewTuple.getViewModel().categoriesProperty().setValue(FXCollections.observableArrayList(my));
-         viewTuple.getViewModel().bookingsProperty().setValue(bookingsTable.getSelectionModel().getSelectedItems());
-         Optional<FilterCriterion> newFilterCriterion = viewTuple.getCodeBehind().showAndWait();
-         if (newFilterCriterion.isEmpty()) {
-            return;
-         }
-         CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
-         viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
-         new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile());
-         viewModel.applyFilterCriteriaOnBookings();
-
-         categoryList.getSelectionModel().select(selected);
-
-         // Set dirty flag
-         viewModel.parserConfigurationChangedProperty().set(true);
-      });
-
-      removeFilterCriterionButton.setOnAction(__ -> {
-         CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
-
-         viewModel.getFilterCriteriaFromFile().removeAll(criteriaList.getItems());
-         viewModel.applyFilterCriteriaOnBookings();
-
-         categoryList.getSelectionModel().select(selected);
-      });
-
       // List click listener
       categoryList.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
 
@@ -230,6 +191,44 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       removeFilterCriterionButton2.disableProperty()
             .bind(criteriaList2.getSelectionModel().selectedItemProperty().isNull());
+   }
+
+   public void newMainCategory() {
+      CategoryModel newCategory = new CategoryModel("NEU");
+      viewModel.categoriesProperty().add(newCategory);
+   }
+
+   public void newFilterCriterion() {
+      ViewTuple<NewFilterCriterionView, NewFilterCriterionViewModel> viewTuple = FluentViewLoader
+            .fxmlView(NewFilterCriterionView.class).load();
+
+      // don't show "unmatched" category in dialog
+      List<CategoryModel> my = new ArrayList<>(viewModel.categoriesProperty().getValue());
+      my.remove(FilterCriterion.NULL_CRITERION.getCategory());
+      viewTuple.getViewModel().categoriesProperty().setValue(FXCollections.observableArrayList(my));
+      viewTuple.getViewModel().bookingsProperty().setValue(bookingsTable.getSelectionModel().getSelectedItems());
+      Optional<FilterCriterion> newFilterCriterion = viewTuple.getCodeBehind().showAndWait();
+      if (newFilterCriterion.isEmpty()) {
+         return;
+      }
+      CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
+      viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
+      new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile());
+      viewModel.applyFilterCriteriaOnBookings();
+
+      categoryList.getSelectionModel().select(selected);
+
+      // Set dirty flag
+      viewModel.parserConfigurationChangedProperty().set(true);
+   }
+
+   public void removeFilterCriterion() {
+      CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
+
+      viewModel.getFilterCriteriaFromFile().removeAll(criteriaList.getItems());
+      viewModel.applyFilterCriteriaOnBookings();
+
+      categoryList.getSelectionModel().select(selected);
    }
 
    public void openCsvFile() throws FileNotFoundException {
