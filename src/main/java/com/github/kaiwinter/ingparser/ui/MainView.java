@@ -77,6 +77,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    @FXML
    private Button removeFilterCriterionButton;
 
+   @FXML
+   private Button saveParserFileButton;
+
    // Tab 2
    @FXML
    private ListView<FilterCriterion> criteriaList2;
@@ -146,6 +149,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          viewModel.applyFilterCriteriaOnBookings();
 
          categoryList.getSelectionModel().select(selected);
+
+         // Set dirty flag
+         viewModel.parserConfigurationChangedProperty().set(true);
       });
 
       removeFilterCriterionButton.setOnAction(__ -> {
@@ -207,6 +213,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       leftStatusLabel.textProperty().bind(viewModel.leftStatusLabelProperty());
       rightStatusLabel.textProperty().bind(viewModel.rightStatusLabelProperty());
 
+      saveParserFileButton.disableProperty().bind(viewModel.parserConfigurationChangedProperty().not());
+
       // Tab 2
       viewModel.filterCriteriaFromFilePProperty().bind(criteriaList2.itemsProperty());
       criteriaList2.setCellFactory(new FilterCriterionListCell(Type.LONG));
@@ -261,6 +269,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             alert.show();
          }
       }
+   }
+
+   public void saveParserFile() {
+      throw new UnsupportedOperationException("TODO");
    }
 
    public void printStatistics() {

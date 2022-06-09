@@ -18,7 +18,9 @@ import com.github.kaiwinter.ingparser.statistic.StatisticService;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
 import de.saxsys.mvvmfx.ViewModel;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -35,6 +37,8 @@ public class MainViewModel implements ViewModel {
 
    private final StringProperty leftStatusLabel = new SimpleStringProperty();
    private final StringProperty rightStatusLabel = new SimpleStringProperty();
+
+   private final SimpleBooleanProperty parserConfigurationChanged = new SimpleBooleanProperty(false);
 
    private Map<CategoryModel, List<Booking>> category2Booking;
 
@@ -68,6 +72,10 @@ public class MainViewModel implements ViewModel {
 
    public StringProperty rightStatusLabelProperty() {
       return this.rightStatusLabel;
+   }
+
+   public BooleanProperty parserConfigurationChangedProperty() {
+      return this.parserConfigurationChanged;
    }
 
    public List<FilterCriterion> getFilterCriteriaFromFile() {

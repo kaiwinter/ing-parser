@@ -101,6 +101,7 @@
         <items>
           <Button mnemonicParsing="false" onAction="#openCsvFile" text="Open CSV file" />
             <Button mnemonicParsing="false" onAction="#openParserFile" text="Open Parser file" />
+            <Button fx:id="saveParserFileButton" disable="true" mnemonicParsing="false" onAction="#saveParserFile" text="Save Parser file" />
             <Button mnemonicParsing="false" onAction="#printStatistics" text="Print statistics" />
         </items>
       </ToolBar>
