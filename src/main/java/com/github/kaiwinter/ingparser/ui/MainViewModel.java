@@ -14,6 +14,7 @@ import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.csv.ImportService;
+import com.github.kaiwinter.ingparser.preferences.PreferenceStore;
 import com.github.kaiwinter.ingparser.statistic.StatisticService;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
@@ -27,6 +28,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
 public class MainViewModel implements ViewModel {
+
+   private final StringProperty currentParserFile = new SimpleStringProperty();
 
    private final ImportService importService = new ImportService();
    private final ConfigurationService configurationService = new ConfigurationService();
@@ -49,6 +52,9 @@ public class MainViewModel implements ViewModel {
    private final ListProperty<Booking> bookingsWithSelectedFilterCriterion = new SimpleListProperty<>();
 
    //
+   public StringProperty currentParserFileProperty() {
+      return currentParserFile;
+   }
 
    public ListProperty<CategoryModel> categoriesProperty() {
       return this.categories;
@@ -98,6 +104,8 @@ public class MainViewModel implements ViewModel {
    public void loadParserFile(File file) throws FileNotFoundException {
       filterCriteriaFromFile = configurationService.readConfiguration(new FileInputStream(file));
       applyFilterCriteriaOnBookings();
+      currentParserFile.setValue(file.getAbsolutePath());
+      PreferenceStore.saveLastUsedParserFile(file.getAbsolutePath());
    }
 
    public void applyFilterCriteriaOnBookings() {

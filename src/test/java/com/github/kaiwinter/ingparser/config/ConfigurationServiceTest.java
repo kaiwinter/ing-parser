@@ -3,6 +3,8 @@ package com.github.kaiwinter.ingparser.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -50,12 +52,14 @@ class ConfigurationServiceTest {
     * Tests if loading and saving results in the same JSON string.
     */
    @Test
-   void saveFilterCriteriaToFile() {
+   void saveFilterCriteriaToFile() throws IOException {
       ConfigurationService configurationService = new ConfigurationService();
       List<FilterCriterion> filterCriteria = configurationService
             .readConfiguration(ConfigurationServiceTest.class.getResourceAsStream("/config_subcriteria.json"));
 
-      String saveFilterCriteriaToFile = configurationService.saveFilterCriteriaToFile(filterCriteria);
+      StringWriter writer = new StringWriter();
+      configurationService.saveFilterCriteriaToFile(filterCriteria, writer);
+      String saveFilterCriteriaToFile = writer.toString();
 
       assertEquals("""
             [

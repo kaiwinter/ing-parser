@@ -12,6 +12,8 @@ import com.github.kaiwinter.ingparser.ui.MainViewModel;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.ViewTuple;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -26,8 +28,6 @@ public class App extends Application {
 
    @Override
    public void start(Stage stage) {
-      stage.setTitle("ING CSV Parser (DE)");
-
       ViewTuple<MainView, MainViewModel> viewTuple = FluentViewLoader.fxmlView(MainView.class).load();
 
       Parent root = viewTuple.getView();
@@ -35,6 +35,10 @@ public class App extends Application {
       stage.show();
 
       MainViewModel viewModel = viewTuple.getViewModel();
+      StringExpression titleExpression = StringExpression.stringExpression(Bindings.concat("ING CSV Parser (DE) - "))
+            .concat(viewModel.currentParserFileProperty());
+      stage.titleProperty().bind(titleExpression);
+
       String lastUsedParserFile = PreferenceStore.loadLastUsedParserFile();
       if (!StringUtils.isBlank(lastUsedParserFile)) {
          try {

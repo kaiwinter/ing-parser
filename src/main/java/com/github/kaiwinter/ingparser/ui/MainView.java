@@ -2,6 +2,9 @@ package com.github.kaiwinter.ingparser.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
@@ -31,6 +34,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -215,7 +220,6 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       }
       CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
       viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
-      new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile());
       viewModel.applyFilterCriteriaOnBookings();
 
       categoryList.getSelectionModel().select(selected);
@@ -247,16 +251,17 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       fileChooser.getExtensionFilters().add(extFilter);
       fileChooser.setTitle("Wähle die Datei");
       File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
-      if (file != null) {
-         try {
-            viewModel.loadCsvFile(file);
-            PreferenceStore.saveLastUsedCsvFile(file.getAbsolutePath());
+      if (file == null) {
+         return;
+      }
+      try {
+         viewModel.loadCsvFile(file);
+         PreferenceStore.saveLastUsedCsvFile(file.getAbsolutePath());
 
-         } catch (RuntimeException e) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setContentText("Die Datei konnte nicht eingelesen werden.");
-            alert.show();
-         }
+      } catch (RuntimeException e) {
+         Alert alert = new Alert(AlertType.ERROR);
+         alert.setContentText("Die Datei konnte nicht eingelesen werden.");
+         alert.show();
       }
    }
 
@@ -267,21 +272,61 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       fileChooser.getExtensionFilters().add(extFilter);
       fileChooser.setTitle("Wähle die Datei");
       File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
-      if (file != null) {
-         try {
-            viewModel.loadParserFile(file);
-            PreferenceStore.saveLastUsedParserFile(file.getAbsolutePath());
+      if (file == null) {
+         return;
+      }
+      try {
+         viewModel.loadParserFile(file);
 
-         } catch (RuntimeException e) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setContentText("Die Datei konnte nicht eingelesen werden.");
-            alert.show();
-         }
+      } catch (RuntimeException e) {
+         Alert alert = new Alert(AlertType.ERROR);
+         alert.setContentText("Die Datei konnte nicht eingelesen werden.");
+         alert.show();
       }
    }
 
    public void saveParserFile() {
-      throw new UnsupportedOperationException("TODO");
+      Alert alert = new Alert(AlertType.CONFIRMATION);
+      alert.setTitle("Parser Datei speichern");
+      alert.setHeaderText("""
+            Soll die bestehende Datei
+            $file
+            überschrieben werden?""".replace("$file", viewModel.currentParserFileProperty().getValue()));
+
+      ButtonType overwrite = new ButtonType("Ja", ButtonData.YES);
+      ButtonType saveAs = new ButtonType("Speichern unter ...");
+      ButtonType cancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
+
+      alert.getButtonTypes().setAll(overwrite, saveAs, cancel);
+
+      Optional<ButtonType> result = alert.showAndWait();
+      if (result.isEmpty()) {
+         return;
+      }
+      if (result.get() == overwrite) {
+         try (Writer writer = new FileWriter(viewModel.currentParserFileProperty().getValue())) {
+            new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile(), writer);
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
+      } else if (result.get() == saveAs) {
+         FileChooser fileChooser = new FileChooser();
+         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Parser-Konfigurationen (*.json)",
+               "*.json");
+         fileChooser.getExtensionFilters().add(extFilter);
+         fileChooser.setTitle("Wähle die Datei");
+         File selectedFile = fileChooser.showSaveDialog(Window.getWindows().iterator().next());
+         if (selectedFile == null) {
+            return;
+         }
+         try (Writer writer = new FileWriter(selectedFile)) {
+            new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile(), writer);
+            writer.flush(); // flush to make loading work
+            viewModel.loadParserFile(selectedFile);
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
+      }
    }
 
    public void printStatistics() {

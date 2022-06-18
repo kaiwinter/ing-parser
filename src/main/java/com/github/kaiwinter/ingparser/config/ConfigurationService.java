@@ -1,8 +1,10 @@
 package com.github.kaiwinter.ingparser.config;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,12 +43,14 @@ public class ConfigurationService {
    /**
     * Transforms {@link FilterCriterion} objects back to {@link CategoryConfiguration} in order to store them in a file.
     * 
-    * @return
+    * @throws IOException
     */
-   public String saveFilterCriteriaToFile(List<FilterCriterion> filterCriteria) {
-//      String json = new Gson().toJson(filterCriteria);
-//      System.out.println(json);
+   public void saveFilterCriteriaToFile(List<FilterCriterion> filterCriteria, Writer writer) throws IOException {
+      String json = filterCriteriaToString(filterCriteria);
+      writer.write(json);
+   }
 
+   private String filterCriteriaToString(List<FilterCriterion> filterCriteria) {
       Map<String, CategoryConfiguration> categories = new HashMap<>();
 
       Map<String, CategoryConfiguration> subcategories = new HashMap<>();
