@@ -13,6 +13,7 @@ import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.ViewTuple;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanExpression;
 import javafx.beans.binding.StringExpression;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -36,7 +37,8 @@ public class App extends Application {
 
       MainViewModel viewModel = viewTuple.getViewModel();
       StringExpression titleExpression = StringExpression.stringExpression(Bindings.concat("ING CSV Parser (DE) - "))
-            .concat(viewModel.currentParserFileProperty());
+            .concat(viewModel.currentParserFileProperty())
+            .concat(BooleanExpression.booleanExpression(viewModel.parserConfigurationChangedProperty()));
       stage.titleProperty().bind(titleExpression);
 
       String lastUsedParserFile = PreferenceStore.loadLastUsedParserFile();
