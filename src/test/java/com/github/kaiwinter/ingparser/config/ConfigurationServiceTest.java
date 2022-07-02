@@ -69,6 +69,7 @@ class ConfigurationServiceTest {
                 "verwendungszweckPattern": [
                   "Brötchen"
                 ],
+                "notizPattern": [],
                 "subCategories": [
                   {
                     "categoryName": "Supermarkt",
@@ -76,6 +77,7 @@ class ConfigurationServiceTest {
                       "Supermarkt"
                     ],
                     "verwendungszweckPattern": [],
+                    "notizPattern": [],
                     "subCategories": []
                   },
                   {
@@ -84,6 +86,7 @@ class ConfigurationServiceTest {
                       "Restaurant"
                     ],
                     "verwendungszweckPattern": [],
+                    "notizPattern": [],
                     "subCategories": []
                   }
                 ]
@@ -94,6 +97,7 @@ class ConfigurationServiceTest {
                   "Bäckermann"
                 ],
                 "verwendungszweckPattern": [],
+                "notizPattern": [],
                 "subCategories": []
               }
             ]""", saveFilterCriteriaToFile);

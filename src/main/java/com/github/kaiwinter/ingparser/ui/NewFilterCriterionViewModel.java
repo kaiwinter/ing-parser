@@ -16,7 +16,8 @@ public class NewFilterCriterionViewModel implements ViewModel {
    private final ListProperty<FilterCriterion> filterCriteria = new SimpleListProperty<>();
 
    private final ListProperty<MatchingCriterion> matchingCriteria = new SimpleListProperty<>(
-         FXCollections.observableArrayList(MatchingCriterion.AUFTRAGGEBER, MatchingCriterion.VERWENDUNGSZWECK));
+         FXCollections.observableArrayList(MatchingCriterion.AUFTRAGGEBER, MatchingCriterion.VERWENDUNGSZWECK,
+               MatchingCriterion.NOTIZ));
 
    public ListProperty<CategoryModel> categoriesProperty() {
       return this.categories;

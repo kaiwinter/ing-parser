@@ -70,6 +70,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
                   pattern.setText(firstBooking.getAuftraggeber());
                } else if (newValue == MatchingCriterion.VERWENDUNGSZWECK) {
                   pattern.setText(firstBooking.getVerwendungszweck());
+               } else if (newValue == MatchingCriterion.NOTIZ) {
+                  pattern.setText(firstBooking.getNotiz());
                } else {
                   throw new IllegalArgumentException("Unknown type: " + newValue);
                }
@@ -86,6 +88,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
             return FilterCriterion.byAuftraggeber(categories.getValue(), pattern.getText()).get(0);
          } else if (criteria.getValue() == MatchingCriterion.VERWENDUNGSZWECK) {
             return FilterCriterion.byVerwendungszweck(categories.getValue(), pattern.getText()).get(0);
+         } else if (criteria.getValue() == MatchingCriterion.NOTIZ) {
+            return FilterCriterion.byNotiz(categories.getValue(), pattern.getText()).get(0);
          } else {
             throw new IllegalArgumentException("Unknown type: " + criteria.getValue());
          }

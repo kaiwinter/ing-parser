@@ -71,6 +71,9 @@ public class ImportService {
          } else if (filterCriterion.getMatchingCriterion() == FilterCriterion.MatchingCriterion.VERWENDUNGSZWECK) {
             matchBookingValueAgainstCriterion(booking, filterCriterion, booking.getVerwendungszweck());
 
+         } else if (filterCriterion.getMatchingCriterion() == FilterCriterion.MatchingCriterion.NOTIZ) {
+            matchBookingValueAgainstCriterion(booking, filterCriterion, booking.getNotiz());
+
          } else {
             throw new IllegalArgumentException("Unknown: " + filterCriterion.getMatchingCriterion());
          }

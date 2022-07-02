@@ -14,6 +14,7 @@ public class CategoryConfiguration {
    private String categoryName;
    private List<String> auftraggeberPattern = new ArrayList<>();
    private List<String> verwendungszweckPattern = new ArrayList<>();
+   private List<String> notizPattern = new ArrayList<>();
    private List<CategoryConfiguration> subCategories = new ArrayList<>();
 
    public List<String> getAuftraggeberPattern() {
@@ -22,6 +23,10 @@ public class CategoryConfiguration {
 
    public List<String> getVerwendungszweckPattern() {
       return verwendungszweckPattern;
+   }
+
+   public List<String> getNotizPattern() {
+      return notizPattern;
    }
 
    public List<CategoryConfiguration> getSubCategories() {
@@ -44,6 +49,10 @@ public class CategoryConfiguration {
       return FilterCriterion.byVerwendungszweck(categoryName, verwendungszweckPattern.toArray(new String[0]));
    }
 
+   private List<FilterCriterion> getNotizAsFilterCriteria() {
+      return FilterCriterion.byNotiz(categoryName, notizPattern.toArray(new String[0]));
+   }
+
    /**
     * @return List of {@link FilterCriterion} which is a combination of filter criteria for Auftraggeber and
     *         Verwendungszweck
@@ -51,6 +60,7 @@ public class CategoryConfiguration {
    public List<FilterCriterion> getCombinedFilterCriteria() {
       List<FilterCriterion> filterCriteria = getAuftraggeberAsFilterCriteria();
       filterCriteria.addAll(getVerwendungszweckAsFilterCriteria());
+      filterCriteria.addAll(getNotizAsFilterCriteria());
 
       for (CategoryConfiguration subCategory : subCategories) {
          List<FilterCriterion> combinedSubFilterCriteria = subCategory.getCombinedFilterCriteria();
