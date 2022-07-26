@@ -28,6 +28,9 @@ public class Booking {
    @CsvBindByPosition(position = 3)
    private String buchungstext;
 
+   @CsvBindByPosition(position = 4)
+   private String notiz;
+
    @CsvBindByPosition(position = 5)
    private String verwendungszweck;
 
@@ -67,6 +70,14 @@ public class Booking {
 
    public String getVerwendungszweck() {
       return verwendungszweck;
+   }
+
+   public String getNotiz() {
+      return notiz;
+   }
+
+   public void setNotiz(String notiz) {
+      this.notiz = notiz;
    }
 
    public void setVerwendungszweck(String verwendungszweck) {

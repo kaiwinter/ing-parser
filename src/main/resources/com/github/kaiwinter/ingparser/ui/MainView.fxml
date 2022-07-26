@@ -150,6 +150,7 @@
                                                 <TableColumn fx:id="betragColumn" prefWidth="73.0" style="-fx-alignment: CENTER-RIGHT;" text="Betrag" />
                                               <TableColumn fx:id="auftraggeberColumn" prefWidth="247.0" text="Auftraggeber" />
                                               <TableColumn fx:id="verwendungszweckColumn" prefWidth="479.0" text="Verwendungszweck" />
+                                              <TableColumn fx:id="notizColumn" prefWidth="479.0" text="Notiz" />
                                             </columns>
                                           </TableView>
                                        </children>

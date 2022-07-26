@@ -63,6 +63,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    private TableColumn<Booking, String> auftraggeberColumn;
    @FXML
    private TableColumn<Booking, String> verwendungszweckColumn;
+   @FXML
+   private TableColumn<Booking, String> notizColumn;
 
    @FXML
    private ListView<FilterCriterion> criteriaList;
@@ -163,6 +165,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       dateColumn.setCellValueFactory(column -> getValue(column.getValue().getDate()));
       auftraggeberColumn.setCellValueFactory(column -> getValue(column.getValue().getAuftraggeber()));
       verwendungszweckColumn.setCellValueFactory(column -> getValue(column.getValue().getVerwendungszweck()));
+      notizColumn.setCellValueFactory(column -> getValue(column.getValue().getNotiz()));
 
       bookingsTable.setRowFactory(__ -> new TableRow<>() {
          @Override
