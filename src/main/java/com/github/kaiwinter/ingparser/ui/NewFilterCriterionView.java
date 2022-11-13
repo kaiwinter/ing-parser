@@ -44,7 +44,7 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
    @Override
    public void initialize(URL location, ResourceBundle resources) {
       dialog = new Dialog<>();
-      dialog.setTitle("Create new Filter Criterion");
+      dialog.setTitle("Neues Filterkriterium");
       dialog.setDialogPane(dialogPane);
 
       categories.itemsProperty().bind(viewModel.categoriesProperty());
