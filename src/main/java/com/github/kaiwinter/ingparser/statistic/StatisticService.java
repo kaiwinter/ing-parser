@@ -2,6 +2,7 @@ package com.github.kaiwinter.ingparser.statistic;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class StatisticService {
       for (Entry<LocalDate, List<Booking>> entry : new TreeMap<>(byMonth).entrySet()) {
 
          List<String> dataRow = new ArrayList<>();
-         dataRow.add(entry.getKey().toString());
+         dataRow.add(entry.getKey().format(DateTimeFormatter.ofPattern("yyyy-MM")));
          BigDecimal grandTotal = BigDecimal.ZERO;
          for (String category : categories) {
             BigDecimal total = entry.getValue().stream() //
