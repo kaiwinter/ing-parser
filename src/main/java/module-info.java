@@ -5,13 +5,13 @@ open module com.github.kaiwinter.ingparser {
    requires org.apache.commons.lang3;
    requires com.google.gson;
    requires org.slf4j;
-   requires java.ascii.table.master;
    requires de.saxsys.mvvmfx;
    requires javafx.fxml;
    requires javafx.graphics;
    requires java.base;
    requires javafx.base;
    requires java.prefs;
+   requires ascii.table;
 
    exports com.github.kaiwinter.ingparser;
 }

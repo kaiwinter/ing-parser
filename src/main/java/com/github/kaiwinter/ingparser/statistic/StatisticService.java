@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import com.bethecoder.ascii_table.ASCIITable;
+import com.github.freva.asciitable.AsciiTable;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
@@ -70,7 +70,8 @@ public class StatisticService {
       String[] header = headerList.toArray(new String[0]);
       String[][] data = datas.toArray(new String[0][0]);
 
-      ASCIITable.getInstance().printTable(header, data);
+      System.out.println(AsciiTable.getTable(AsciiTable.BASIC_ASCII_NO_DATA_SEPARATORS, header, new String[] {}, data));
+
    }
 
    private boolean filterByCategory(Booking booking, String category) {

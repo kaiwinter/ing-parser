@@ -61,7 +61,7 @@ class StatisticServiceTests {
 
          assertEquals("""
                +------------+---------------+-------+
-               |    Monat   | Main category | Summe |
+               | Monat      | Main category | Summe |
                +------------+---------------+-------+
                | 2022-04-01 |            16 |    16 |
                +------------+---------------+-------+
@@ -85,7 +85,7 @@ class StatisticServiceTests {
 
          assertEquals("""
                +------------+---------------+-------+
-               |    Monat   | Main category | Summe |
+               | Monat      | Main category | Summe |
                +------------+---------------+-------+
                | 2022-04-01 |            10 |    10 |
                | 2022-06-01 |             6 |     6 |
@@ -110,7 +110,7 @@ class StatisticServiceTests {
 
          assertEquals("""
                +------------+---------------+------------------+-------+
-               |    Monat   | Main category | Another category | Summe |
+               | Monat      | Main category | Another category | Summe |
                +------------+---------------+------------------+-------+
                | 2022-04-01 |            10 |                6 |    16 |
                +------------+---------------+------------------+-------+
@@ -134,7 +134,7 @@ class StatisticServiceTests {
 
          assertEquals("""
                +------------+---------------+------------------+-------+
-               |    Monat   | Main category | Another category | Summe |
+               | Monat      | Main category | Another category | Summe |
                +------------+---------------+------------------+-------+
                | 2022-04-01 |            10 |                0 |    10 |
                | 2022-07-01 |             0 |                6 |     6 |

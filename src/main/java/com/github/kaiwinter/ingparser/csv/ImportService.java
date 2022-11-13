@@ -52,7 +52,7 @@ public class ImportService {
 
       bookings.stream().filter(booking -> booking.getMatchedCriteria().isEmpty())
             .map(booking -> booking.getAuftraggeber() + " < -- > " + booking.getVerwendungszweck()).distinct().sorted()
-            .forEach(System.out::println);
+            .forEach(booking -> LOGGER.info("Unmatched booking: {}", booking));
    }
 
    /**
