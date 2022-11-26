@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,6 +13,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import com.github.freva.asciitable.AsciiTable;
+import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 
@@ -25,6 +27,19 @@ public class StatisticService {
     * @return
     */
    public Map<CategoryModel, List<Booking>> groupByCategory(List<Booking> bookings) {
+
+      bookings.forEach(booking -> {
+         if (booking.getMatchedCriteria().stream().anyMatch(filterCriterion -> FilterCriterion.IGNORE_CATEGORY_CAPTION
+               .equals(filterCriterion.getCategory().getName()))) {
+            for (Iterator<FilterCriterion> iterator = booking.getMatchedCriteria().iterator(); iterator.hasNext();) {
+               FilterCriterion fc = iterator.next();
+               if (!FilterCriterion.IGNORE_CATEGORY_CAPTION.equals(fc.getCategory().getName())) {
+                  iterator.remove();
+               }
+            }
+         }
+      });
+
       // TODO: if there is more than one sub-level, this fails:
       Map<CategoryModel, List<Booking>> groupToProductMapping = bookings.stream()
             .flatMap(booking -> booking.getMatchedCriteria().stream()

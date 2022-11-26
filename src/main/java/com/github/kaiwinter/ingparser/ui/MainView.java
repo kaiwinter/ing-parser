@@ -83,6 +83,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
    private Button newFilterCriterionButton;
    @FXML
    private Button removeFilterCriterionButton;
+   @FXML
+   private Button ignoreBookingButton;
 
    @FXML
    private Button saveParserFileButton;
@@ -131,6 +133,22 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          });
       }, bookingsTable.getSelectionModel().selectedItemProperty()));
 
+      ignoreBookingButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
+         ObservableList<Booking> selectedItems = bookingsTable.getSelectionModel().getSelectedItems();
+         if (selectedItems.isEmpty()) {
+            return true;
+         }
+         return selectedItems.stream().anyMatch(booking -> {
+            if (booking.getMatchedCriteria().isEmpty()) {
+               return true;
+            }
+            return booking.getMatchedCriteria().stream()
+                  .anyMatch(filterCriterion -> filterCriterion == FilterCriterion.NULL_CRITERION
+                        || FilterCriterion.IGNORE_CATEGORY_CAPTION.equals(filterCriterion.getCategory().getName()));
+
+         });
+      }, bookingsTable.getSelectionModel().selectedItemProperty()));
+
       // List click listener
       categoryList.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
 
@@ -158,7 +176,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       // List
       categoryList.setCellFactory(param -> new CategoryModelListCell());
 
-      criteriaList.setCellFactory(new FilterCriterionListCell(Type.SHORT));
+      criteriaList.setCellFactory(new FilterCriterionListCell(Type.LONG));
 
       // Table cells
       betragColumn.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));
@@ -234,6 +252,27 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
 
       viewModel.getFilterCriteriaFromFile().removeAll(criteriaList.getItems());
+      viewModel.applyFilterCriteriaOnBookings();
+
+      categoryList.getSelectionModel().select(selected);
+
+      dirtyParserConfiguration();
+   }
+
+   public void ignoreBooking() {
+      CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
+      ObservableList<Booking> selectedItems = bookingsTable.getSelectionModel().getSelectedItems();
+
+      if (selectedItems.isEmpty()) {
+         return;
+      }
+      selectedItems.forEach(booking -> {
+         List<FilterCriterion> ignoreCriterion = FilterCriterion
+               .byVerwendungszweck(FilterCriterion.IGNORE_CATEGORY_CAPTION, booking.getVerwendungszweck());
+         viewModel.getFilterCriteriaFromFile().addAll(ignoreCriterion);
+         booking.getMatchedCriteria().addAll(ignoreCriterion);
+      });
+
       viewModel.applyFilterCriteriaOnBookings();
 
       categoryList.getSelectionModel().select(selected);
@@ -336,12 +375,9 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       List<Booking> bookings = viewModel.getBookingsFromFile();
       List<FilterCriterion> filterCriteria = viewModel.getFilterCriteriaFromFile();
 
-//      bookings.removeIf(booking -> booking.getMatchedCriteria().stream()
-//            .anyMatch(crit -> crit.getCategory().getName().equals("ignore")));
-
       List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
             .distinct() //
-            .filter(category -> !"ignore".equals(category.getName())) //
+            .filter(category -> !FilterCriterion.IGNORE_CATEGORY_CAPTION.equals(category.getName())) //
             .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
             .map(CategoryModel::getName) //
             .sorted() //

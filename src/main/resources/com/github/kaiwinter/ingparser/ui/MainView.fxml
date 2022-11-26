@@ -91,6 +91,7 @@
                                        <children>
                                           <Button fx:id="newFilterCriterionButton" disable="true" mnemonicParsing="false" onAction="#newFilterCriterion" text="Neues Filterkriterium" />
                                           <Button fx:id="removeFilterCriterionButton" disable="true" mnemonicParsing="false" onAction="#removeFilterCriterion" text="Kriterium entfernen" />
+                                          <Button fx:id="ignoreBookingButton" mnemonicParsing="false" onAction="#ignoreBooking" text="Buchung ignorieren" />
                                        </children>
                                     </HBox>
                                     <GridPane prefHeight="551.0" prefWidth="443.0" VBox.vgrow="ALWAYS">
@@ -129,7 +130,7 @@
                <content>
                 <SplitPane dividerPositions="0.2505567928730512" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0">
                   <items>
-                    <AnchorPane maxWidth="300.0">
+                    <AnchorPane maxWidth="600.0">
                       <children>
                               <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>

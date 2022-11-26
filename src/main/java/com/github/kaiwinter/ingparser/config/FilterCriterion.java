@@ -18,6 +18,7 @@ public class FilterCriterion {
    private final MatchingCriterion matchingCriterion;
    private final String pattern;
 
+   public static final String IGNORE_CATEGORY_CAPTION = "ignore";
    public static final FilterCriterion NULL_CRITERION = new FilterCriterion(new CategoryModel("unmatched"), null, null);
 
    /**
