@@ -60,11 +60,11 @@ class StatisticServiceTests {
          statisticService.groupByMonthAndCategory(bookings, categories);
 
          assertEquals("""
-               +------------+---------------+-------+
-               | Monat      | Main category | Summe |
-               +------------+---------------+-------+
-               | 2022-04-01 |            16 |    16 |
-               +------------+---------------+-------+
+               +---------+---------------+-------+
+               | Monat   | Main category | Summe |
+               +---------+---------------+-------+
+               | 2022-04 |            16 |    16 |
+               +---------+---------------+-------+
                """.trim(), outContent.toString().trim());
       });
    }
@@ -84,12 +84,12 @@ class StatisticServiceTests {
          statisticService.groupByMonthAndCategory(bookings, categories);
 
          assertEquals("""
-               +------------+---------------+-------+
-               | Monat      | Main category | Summe |
-               +------------+---------------+-------+
-               | 2022-04-01 |            10 |    10 |
-               | 2022-06-01 |             6 |     6 |
-               +------------+---------------+-------+
+               +---------+---------------+-------+
+               | Monat   | Main category | Summe |
+               +---------+---------------+-------+
+               | 2022-04 |            10 |    10 |
+               | 2022-06 |             6 |     6 |
+               +---------+---------------+-------+
                """.trim(), outContent.toString().trim());
       });
    }
@@ -109,11 +109,11 @@ class StatisticServiceTests {
          statisticService.groupByMonthAndCategory(bookings, categories);
 
          assertEquals("""
-               +------------+---------------+------------------+-------+
-               | Monat      | Main category | Another category | Summe |
-               +------------+---------------+------------------+-------+
-               | 2022-04-01 |            10 |                6 |    16 |
-               +------------+---------------+------------------+-------+
+               +---------+---------------+------------------+-------+
+               | Monat   | Main category | Another category | Summe |
+               +---------+---------------+------------------+-------+
+               | 2022-04 |            10 |                6 |    16 |
+               +---------+---------------+------------------+-------+
                """.trim(), outContent.toString().trim());
       });
    }
@@ -133,12 +133,12 @@ class StatisticServiceTests {
          statisticService.groupByMonthAndCategory(bookings, categories);
 
          assertEquals("""
-               +------------+---------------+------------------+-------+
-               | Monat      | Main category | Another category | Summe |
-               +------------+---------------+------------------+-------+
-               | 2022-04-01 |            10 |                0 |    10 |
-               | 2022-07-01 |             0 |                6 |     6 |
-               +------------+---------------+------------------+-------+
+               +---------+---------------+------------------+-------+
+               | Monat   | Main category | Another category | Summe |
+               +---------+---------------+------------------+-------+
+               | 2022-04 |            10 |                0 |    10 |
+               | 2022-07 |             0 |                6 |     6 |
+               +---------+---------------+------------------+-------+
                """.trim(), outContent.toString().trim());
       });
    }
