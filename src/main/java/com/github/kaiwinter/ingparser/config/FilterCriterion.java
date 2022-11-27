@@ -18,8 +18,8 @@ public class FilterCriterion {
    private final MatchingCriterion matchingCriterion;
    private final String pattern;
 
-   public static final String IGNORE_CATEGORY_CAPTION = "ignore";
-   public static final FilterCriterion NULL_CRITERION = new FilterCriterion(new CategoryModel("unmatched"), null, null);
+   public static final FilterCriterion UNMATCHED_CRITERION = new FilterCriterion(CategoryModel.UNMATCHED_CATEGORY, null,
+         null);
 
    /**
     * Defines on which criterion the pattern will be tested.
@@ -62,6 +62,14 @@ public class FilterCriterion {
       return Arrays.asList(pattern).stream()
             .map(string -> new FilterCriterion(category, MatchingCriterion.NOTIZ, string.trim()))
             .collect(Collectors.toList());
+   }
+
+   public boolean isIgnoreFilterCriterion() {
+      return category.isIgnoreCategory();
+   }
+
+   public boolean isUnmatchedFilterCriterion() {
+      return category.isUnmatchedCategory();
    }
 
    public CategoryModel getCategory() {

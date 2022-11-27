@@ -6,12 +6,23 @@ import java.util.Objects;
 
 public class CategoryModel {
 
+   public static final CategoryModel UNMATCHED_CATEGORY = new CategoryModel("unmatched");
+   public static final CategoryModel IGNORE_CATEGORY = new CategoryModel("ignore");
+
    private final String name;
    private String parentCategoryName;
    private final List<CategoryModel> subCategories = new ArrayList<>();
 
    public CategoryModel(String name) {
       this.name = name;
+   }
+
+   public boolean isIgnoreCategory() {
+      return IGNORE_CATEGORY.getName().equals(name);
+   }
+
+   public boolean isUnmatchedCategory() {
+      return UNMATCHED_CATEGORY.getName().equals(name);
    }
 
    public String getParentCategoryName() {

@@ -115,7 +115,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          if (selectedItem == null) {
             return true;
          }
-         return !FilterCriterion.NULL_CRITERION.getCategory().getName().equals(selectedItem.getName());
+         return !selectedItem.isUnmatchedCategory();
       }, categoryList.getSelectionModel().selectedItemProperty()));
 
       removeFilterCriterionButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
@@ -127,8 +127,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             if (booking.getMatchedCriteria().isEmpty()) {
                return true;
             }
-            return booking.getMatchedCriteria().stream()
-                  .anyMatch(filterCriterion -> filterCriterion == FilterCriterion.NULL_CRITERION);
+            return booking.getMatchedCriteria().stream().anyMatch(FilterCriterion::isUnmatchedFilterCriterion);
 
          });
       }, bookingsTable.getSelectionModel().selectedItemProperty()));
@@ -143,8 +142,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
                return true;
             }
             return booking.getMatchedCriteria().stream()
-                  .anyMatch(filterCriterion -> filterCriterion == FilterCriterion.NULL_CRITERION
-                        || FilterCriterion.IGNORE_CATEGORY_CAPTION.equals(filterCriterion.getCategory().getName()));
+                  .anyMatch(filterCriterion -> filterCriterion.isUnmatchedFilterCriterion()
+                        || filterCriterion.isIgnoreFilterCriterion());
 
          });
       }, bookingsTable.getSelectionModel().selectedItemProperty()));
@@ -232,7 +231,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       // don't show "unmatched" category in dialog
       List<CategoryModel> my = new ArrayList<>(viewModel.categoriesProperty().getValue());
-      my.remove(FilterCriterion.NULL_CRITERION.getCategory());
+      my.remove(FilterCriterion.UNMATCHED_CRITERION.getCategory());
       viewTuple.getViewModel().categoriesProperty().setValue(FXCollections.observableArrayList(my));
       viewTuple.getViewModel().bookingsProperty().setValue(bookingsTable.getSelectionModel().getSelectedItems());
       Optional<FilterCriterion> newFilterCriterion = viewTuple.getCodeBehind().showAndWait();
@@ -267,8 +266,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          return;
       }
       selectedItems.forEach(booking -> {
-         List<FilterCriterion> ignoreCriterion = FilterCriterion
-               .byVerwendungszweck(FilterCriterion.IGNORE_CATEGORY_CAPTION, booking.getVerwendungszweck());
+         List<FilterCriterion> ignoreCriterion = FilterCriterion.byVerwendungszweck(CategoryModel.IGNORE_CATEGORY,
+               booking.getVerwendungszweck());
          viewModel.getFilterCriteriaFromFile().addAll(ignoreCriterion);
          booking.getMatchedCriteria().addAll(ignoreCriterion);
       });
@@ -377,7 +376,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
 
       List<String> categories = filterCriteria.stream().map(FilterCriterion::getCategory) //
             .distinct() //
-            .filter(category -> !FilterCriterion.IGNORE_CATEGORY_CAPTION.equals(category.getName())) //
+            .filter(category -> !category.isIgnoreCategory()) //
             .filter(category -> category.getParentCategoryName() == null) // SubCategories nicht separat aufführen
             .map(CategoryModel::getName) //
             .sorted() //

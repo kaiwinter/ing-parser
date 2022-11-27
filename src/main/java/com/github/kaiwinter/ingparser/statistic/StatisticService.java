@@ -5,11 +5,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.github.freva.asciitable.AsciiTable;
@@ -21,24 +21,17 @@ public class StatisticService {
 
    /**
     * Creates a Map with the category as key and a List of Bookings as value. If a Booking matches two categories it is
-    * listed two times.
+    * listed in both. If a Booking matches two (or more) categories and one of which is the ignore category it is
+    * removed from the other categories.
     *
     * @param bookings
     * @return
     */
    public Map<CategoryModel, List<Booking>> groupByCategory(List<Booking> bookings) {
-
-      bookings.forEach(booking -> {
-         if (booking.getMatchedCriteria().stream().anyMatch(filterCriterion -> FilterCriterion.IGNORE_CATEGORY_CAPTION
-               .equals(filterCriterion.getCategory().getName()))) {
-            for (Iterator<FilterCriterion> iterator = booking.getMatchedCriteria().iterator(); iterator.hasNext();) {
-               FilterCriterion fc = iterator.next();
-               if (!FilterCriterion.IGNORE_CATEGORY_CAPTION.equals(fc.getCategory().getName())) {
-                  iterator.remove();
-               }
-            }
-         }
-      });
+      bookings.stream()
+            .filter(booking -> booking.getMatchedCriteria().stream().anyMatch(FilterCriterion::isIgnoreFilterCriterion))
+            .forEach(booking -> booking.getMatchedCriteria()
+                  .removeIf(Predicate.not(FilterCriterion::isIgnoreFilterCriterion)));
 
       // TODO: if there is more than one sub-level, this fails:
       Map<CategoryModel, List<Booking>> groupToProductMapping = bookings.stream()

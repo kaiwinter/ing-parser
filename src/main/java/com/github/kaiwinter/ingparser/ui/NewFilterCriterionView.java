@@ -56,7 +56,7 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
       okButton.disableProperty().bind(categories.getSelectionModel().selectedItemProperty().isNull() //
             .or(criteria.getSelectionModel().selectedItemProperty().isNull()) //
             .or(pattern.textProperty().isEmpty()) //
-            .or(pattern.textProperty().isEqualTo(FilterCriterion.NULL_CRITERION.getCategory().getName())));
+            .or(pattern.textProperty().isEqualTo(FilterCriterion.UNMATCHED_CRITERION.getCategory().getName())));
 
       // Suggest pattern of selected booking
       criteria.getSelectionModel().selectedItemProperty()

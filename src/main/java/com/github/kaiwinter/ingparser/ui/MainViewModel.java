@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import com.github.kaiwinter.ingparser.config.ConfigurationService;
@@ -123,9 +124,9 @@ public class MainViewModel implements ViewModel {
 
       bookingsFromFile.stream() //
             .filter(booking -> booking.getMatchedCriteria().isEmpty())
-            .forEach(booking -> booking.getMatchedCriteria().add(FilterCriterion.NULL_CRITERION));
+            .forEach(booking -> booking.getMatchedCriteria().add(FilterCriterion.UNMATCHED_CRITERION));
 
-      configuredCategories.add(FilterCriterion.NULL_CRITERION.getCategory());
+      configuredCategories.add(FilterCriterion.UNMATCHED_CRITERION.getCategory());
 
       this.categories.setAll(configuredCategories);
       this.category2Booking = new StatisticService().groupByCategory(bookingsFromFile);
@@ -164,7 +165,7 @@ public class MainViewModel implements ViewModel {
       rightStatusLabel.setValue("Selected: " + selectedBookings.size() + ", sum: " + total.toString());
       filterCriteriaOfSelectedBooking.addAll(selectedBookings.stream() //
             .flatMap(booking -> booking.getMatchedCriteria().stream()
-                  .filter(crit -> crit != FilterCriterion.NULL_CRITERION)) // Filter Unmatched-Criterion
+                  .filter(Predicate.not(FilterCriterion::isUnmatchedFilterCriterion))) // Filter Unmatched-Criterion
             .distinct() //
             .toList());
    }
