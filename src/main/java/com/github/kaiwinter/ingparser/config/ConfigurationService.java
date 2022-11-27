@@ -74,6 +74,8 @@ public class ConfigurationService {
                categoryConfiguration.getVerwendungszweckPattern().add(filterCriterion.getPattern());
             } else if (filterCriterion.getMatchingCriterion() == MatchingCriterion.NOTIZ) {
                categoryConfiguration.getNotizPattern().add(filterCriterion.getPattern());
+            } else if (filterCriterion.getMatchingCriterion() == MatchingCriterion.IDENTITY) {
+               categoryConfiguration.getIdentityPattern().add(filterCriterion.getPattern());
             } else {
                throw new IllegalArgumentException("Unknown: " + filterCriterion.getMatchingCriterion());
             }
@@ -104,6 +106,8 @@ public class ConfigurationService {
                categoryConfiguration.getVerwendungszweckPattern().add(filterCriterion.getPattern());
             } else if (filterCriterion.getMatchingCriterion() == MatchingCriterion.NOTIZ) {
                categoryConfiguration.getNotizPattern().add(filterCriterion.getPattern());
+            } else if (filterCriterion.getMatchingCriterion() == MatchingCriterion.IDENTITY) {
+               categoryConfiguration.getIdentityPattern().add(filterCriterion.getPattern());
             } else {
                throw new IllegalArgumentException("Unknown: " + filterCriterion.getMatchingCriterion());
             }

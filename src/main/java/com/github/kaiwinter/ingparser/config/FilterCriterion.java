@@ -25,7 +25,7 @@ public class FilterCriterion {
     * Defines on which criterion the pattern will be tested.
     */
    public enum MatchingCriterion {
-      AUFTRAGGEBER, VERWENDUNGSZWECK, NOTIZ
+      AUFTRAGGEBER, VERWENDUNGSZWECK, NOTIZ, IDENTITY
    }
 
    private FilterCriterion(CategoryModel category, MatchingCriterion matchingCriterion, String pattern) {
@@ -61,6 +61,12 @@ public class FilterCriterion {
    public static List<FilterCriterion> byNotiz(CategoryModel category, String... pattern) {
       return Arrays.asList(pattern).stream()
             .map(string -> new FilterCriterion(category, MatchingCriterion.NOTIZ, string.trim()))
+            .collect(Collectors.toList());
+   }
+
+   public static List<FilterCriterion> byIdentity(CategoryModel category, String... pattern) {
+      return Arrays.asList(pattern).stream()
+            .map(string -> new FilterCriterion(category, MatchingCriterion.IDENTITY, string.trim()))
             .collect(Collectors.toList());
    }
 

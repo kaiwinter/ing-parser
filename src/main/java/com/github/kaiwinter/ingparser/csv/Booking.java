@@ -1,8 +1,13 @@
 package com.github.kaiwinter.ingparser.csv;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
@@ -61,6 +66,19 @@ public class Booking {
    }
 
    private List<FilterCriterion> matchedCriteria = new ArrayList<>();
+
+   public String calculateIdentity() {
+
+      try {
+         MessageDigest digest = MessageDigest.getInstance("SHA-256");
+         String concat = date.format(DateTimeFormatter.BASIC_ISO_DATE) + auftraggeber + buchungstext + notiz
+               + verwendungszweck + saldo + betrag;
+         byte[] hash = digest.digest(concat.getBytes(StandardCharsets.UTF_8));
+         return Base64.getEncoder().encodeToString(hash);
+      } catch (NoSuchAlgorithmException e) {
+         throw new RuntimeException(e);
+      }
+   }
 
    public LocalDate getDate() {
       return date;

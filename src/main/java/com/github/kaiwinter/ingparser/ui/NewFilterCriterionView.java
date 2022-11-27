@@ -52,6 +52,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
       categories.setCellFactory(param -> new CategoryModelListCell());
       categories.setButtonCell(new CategoryModelListCell());
 
+      pattern.disableProperty().bind(criteria.valueProperty().isEqualTo(MatchingCriterion.IDENTITY));
+
       Node okButton = dialogPane.lookupButton(ButtonType.OK);
       okButton.disableProperty().bind(categories.getSelectionModel().selectedItemProperty().isNull() //
             .or(criteria.getSelectionModel().selectedItemProperty().isNull()) //
@@ -72,6 +74,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
                   pattern.setText(firstBooking.getVerwendungszweck());
                } else if (newValue == MatchingCriterion.NOTIZ) {
                   pattern.setText(firstBooking.getNotiz());
+               } else if (newValue == MatchingCriterion.IDENTITY) {
+                  pattern.setText(firstBooking.calculateIdentity());
                } else {
                   throw new IllegalArgumentException("Unknown type: " + newValue);
                }
@@ -90,6 +94,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
             return FilterCriterion.byVerwendungszweck(categories.getValue(), pattern.getText()).get(0);
          } else if (criteria.getValue() == MatchingCriterion.NOTIZ) {
             return FilterCriterion.byNotiz(categories.getValue(), pattern.getText()).get(0);
+         } else if (criteria.getValue() == MatchingCriterion.IDENTITY) {
+            return FilterCriterion.byIdentity(categories.getValue(), pattern.getText()).get(0);
          } else {
             throw new IllegalArgumentException("Unknown type: " + criteria.getValue());
          }
