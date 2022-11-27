@@ -82,8 +82,8 @@ public class ImportService {
    }
 
    /**
-    * Matches the value of one booking against one filter criterion. If the value matches the criterion the criterion is
-    * added to the list of matched criteria in the booking.
+    * Matches the value of one booking against one filter criterion. If the value matches the criterion it is added to
+    * the list of matched criteria in the booking.
     *
     * @param booking         the booking
     * @param filterCriterion the filter criterion

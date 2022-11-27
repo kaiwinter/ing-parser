@@ -42,6 +42,24 @@ public class Booking {
    @CsvNumber(value = "#0.00")
    private BigDecimal betrag;
 
+   public Booking() {
+   }
+
+   /**
+    * Copy constructor.
+    * 
+    * @param booking origin Booking
+    */
+   public Booking(Booking booking) {
+      this.date = booking.date;
+      this.auftraggeber = booking.auftraggeber;
+      this.buchungstext = booking.buchungstext;
+      this.notiz = booking.notiz;
+      this.verwendungszweck = booking.verwendungszweck;
+      this.saldo = booking.saldo;
+      this.betrag = booking.betrag;
+   }
+
    private List<FilterCriterion> matchedCriteria = new ArrayList<>();
 
    public LocalDate getDate() {

@@ -176,4 +176,23 @@ public class MainViewModel implements ViewModel {
 
       bookingsWithSelectedFilterCriterion.setAll(bookings);
    }
+
+   /**
+    * Calculates the number of matched Bookings for a {@link FilterCriterion}.
+    * 
+    * @param filterCriterion the {@link FilterCriterion} to test
+    * @return number of matching bookings
+    */
+   public Long calculateMatchesOfFilterCriterion(FilterCriterion filterCriterion) {
+      // Make a copy of all Bookings
+      List<Booking> copies = new ArrayList<>();
+      bookingsFromFile.forEach(booking -> copies.add(new Booking(booking)));
+
+      // Match Filter Criterion in copy of Bookings
+      copies.forEach(booking -> booking.getMatchedCriteria().clear());
+      importService.matchBookingsAgainstFilterCriteria(copies, List.of(filterCriterion));
+
+      // Count matches
+      return copies.stream().map(Booking::getMatchedCriteria).flatMap(List::stream).collect(Collectors.counting());
+   }
 }

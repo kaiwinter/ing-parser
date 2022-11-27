@@ -43,6 +43,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Window;
 
 public class MainView implements FxmlView<MainViewModel>, Initializable {
@@ -238,13 +239,22 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       if (newFilterCriterion.isEmpty()) {
          return;
       }
-      CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
-      viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
-      viewModel.applyFilterCriteriaOnBookings();
+      Long matches = viewModel.calculateMatchesOfFilterCriterion(newFilterCriterion.get());
+      Alert alert = new Alert(AlertType.CONFIRMATION,
+            "Dem neuen Filterkriterium entsprechen " + matches + " Buchungen.");
+      alert.initModality(Modality.APPLICATION_MODAL);
 
-      categoryList.getSelectionModel().select(selected);
+      alert.showAndWait().ifPresent(buttonType -> {
+         if (buttonType == ButtonType.OK) {
+            CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
+            viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
+            viewModel.applyFilterCriteriaOnBookings();
 
-      dirtyParserConfiguration();
+            categoryList.getSelectionModel().select(selected);
+
+            dirtyParserConfiguration();
+         }
+      });
    }
 
    public void removeFilterCriterion() {
