@@ -276,8 +276,8 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          return;
       }
       selectedItems.forEach(booking -> {
-         List<FilterCriterion> ignoreCriterion = FilterCriterion.byVerwendungszweck(CategoryModel.IGNORE_CATEGORY,
-               booking.getVerwendungszweck());
+         List<FilterCriterion> ignoreCriterion = FilterCriterion.byIdentity(CategoryModel.IGNORE_CATEGORY,
+               booking.calculateIdentity());
          viewModel.getFilterCriteriaFromFile().addAll(ignoreCriterion);
          booking.getMatchedCriteria().addAll(ignoreCriterion);
       });
