@@ -70,6 +70,7 @@ class ConfigurationServiceTest {
                   "Brötchen"
                 ],
                 "notizPattern": [],
+                "identityPattern": [],
                 "subCategories": [
                   {
                     "categoryName": "Supermarkt",
@@ -78,6 +79,7 @@ class ConfigurationServiceTest {
                     ],
                     "verwendungszweckPattern": [],
                     "notizPattern": [],
+                    "identityPattern": [],
                     "subCategories": []
                   },
                   {
@@ -87,6 +89,7 @@ class ConfigurationServiceTest {
                     ],
                     "verwendungszweckPattern": [],
                     "notizPattern": [],
+                    "identityPattern": [],
                     "subCategories": []
                   }
                 ]
@@ -98,6 +101,7 @@ class ConfigurationServiceTest {
                 ],
                 "verwendungszweckPattern": [],
                 "notizPattern": [],
+                "identityPattern": [],
                 "subCategories": []
               }
             ]""", saveFilterCriteriaToFile);

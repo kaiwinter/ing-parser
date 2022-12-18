@@ -1,7 +1,6 @@
 package com.github.kaiwinter.ingparser.statistic;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -59,13 +58,13 @@ class StatisticServiceTests {
 
          statisticService.groupByMonthAndCategory(bookings, categories);
 
-         assertEquals("""
+         assertThat("""
                +---------+---------------+-------+
                | Monat   | Main category | Summe |
                +---------+---------------+-------+
                | 2022-04 |            16 |    16 |
                +---------+---------------+-------+
-               """.trim(), outContent.toString().trim());
+               """).isEqualToNormalizingNewlines(outContent.toString());
       });
    }
 
@@ -83,14 +82,14 @@ class StatisticServiceTests {
 
          statisticService.groupByMonthAndCategory(bookings, categories);
 
-         assertEquals("""
+         assertThat("""
                +---------+---------------+-------+
                | Monat   | Main category | Summe |
                +---------+---------------+-------+
                | 2022-04 |            10 |    10 |
                | 2022-06 |             6 |     6 |
                +---------+---------------+-------+
-               """.trim(), outContent.toString().trim());
+               """).isEqualToNormalizingNewlines(outContent.toString());
       });
    }
 
@@ -108,13 +107,13 @@ class StatisticServiceTests {
 
          statisticService.groupByMonthAndCategory(bookings, categories);
 
-         assertEquals("""
+         assertThat("""
                +---------+---------------+------------------+-------+
                | Monat   | Main category | Another category | Summe |
                +---------+---------------+------------------+-------+
                | 2022-04 |            10 |                6 |    16 |
                +---------+---------------+------------------+-------+
-               """.trim(), outContent.toString().trim());
+               """).isEqualToNormalizingNewlines(outContent.toString());
       });
    }
 
@@ -132,14 +131,14 @@ class StatisticServiceTests {
 
          statisticService.groupByMonthAndCategory(bookings, categories);
 
-         assertEquals("""
+         assertThat("""
                +---------+---------------+------------------+-------+
                | Monat   | Main category | Another category | Summe |
                +---------+---------------+------------------+-------+
                | 2022-04 |            10 |                0 |    10 |
                | 2022-07 |             0 |                6 |     6 |
                +---------+---------------+------------------+-------+
-               """.trim(), outContent.toString().trim());
+               """).isEqualToNormalizingNewlines(outContent.toString());
       });
    }
 
