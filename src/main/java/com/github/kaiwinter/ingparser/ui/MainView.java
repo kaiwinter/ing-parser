@@ -357,6 +357,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       if (result.get() == overwrite) {
          try (Writer writer = new FileWriter(viewModel.currentParserFileProperty().getValue())) {
             new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile(), writer);
+            viewModel.parserConfigurationChangedProperty().set(false);
          } catch (IOException e) {
             throw new RuntimeException(e);
          }
@@ -372,6 +373,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
          }
          try (Writer writer = new FileWriter(selectedFile)) {
             new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile(), writer);
+            viewModel.parserConfigurationChangedProperty().set(false);
             writer.flush(); // flush to make loading work
             viewModel.loadParserFile(selectedFile);
          } catch (IOException e) {
