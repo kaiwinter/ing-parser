@@ -202,7 +202,7 @@ public class MainViewModel implements ViewModel {
       importService.matchBookingsAgainstFilterCriteria(copies, List.of(filterCriterion));
 
       // Count matches
-      return copies.stream().map(Booking::getMatchedCriteria).flatMap(List::stream).collect(Collectors.counting());
+      return copies.stream().map(Booking::getMatchedCriteria).mapToLong(List::size).sum();
    }
 
    public boolean askForSave(Alert alert) {

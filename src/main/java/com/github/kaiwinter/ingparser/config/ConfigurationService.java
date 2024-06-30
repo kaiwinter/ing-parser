@@ -24,7 +24,7 @@ public class ConfigurationService {
    /**
     * Reads the configuration which defines how groups should be built from the CSV file.
     *
-    * @param configFile file name of the configuration file
+    * @param inputStream {@link InputStream} of the configuration file
     * @return List of filter criteria
     */
    public List<FilterCriterion> readConfiguration(InputStream inputStream) {

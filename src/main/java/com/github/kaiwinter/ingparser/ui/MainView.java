@@ -2,9 +2,6 @@ package com.github.kaiwinter.ingparser.ui;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDate;
@@ -13,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import com.github.kaiwinter.ingparser.config.ConfigurationService;
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.csv.Booking;
 import com.github.kaiwinter.ingparser.preferences.PreferenceStore;
@@ -34,7 +30,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -205,10 +200,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       // Tab 2
       viewModel.filterCriteriaFromFilePProperty().bind(criteriaList2.itemsProperty());
       criteriaList2.setCellFactory(new FilterCriterionListCell(Type.LONG));
-      criteriaList2.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> {
-
-         viewModel.showBookingsWithFilterCriterion(newValue);
-      });
+      criteriaList2.getSelectionModel().selectedItemProperty().addListener((__1, __2, newValue) -> viewModel.showBookingsWithFilterCriterion(newValue));
       viewModel.bookingsWithSelectedFilterCriterionProperty().bind(bookingsTable2.itemsProperty());
       betragColumn2.setCellValueFactory(column -> getValue(column.getValue().getBetrag()));
       dateColumn2.setCellValueFactory(column -> getValue(column.getValue().getDate()));
@@ -305,7 +297,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV Dateien (*.csv)", "*.csv");
       fileChooser.getExtensionFilters().add(extFilter);
       fileChooser.setTitle("Wähle die Datei");
-      File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
+      File file = fileChooser.showOpenDialog(Window.getWindows().getFirst());
       if (file == null) {
          return;
       }
@@ -326,7 +318,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             "*.json");
       fileChooser.getExtensionFilters().add(extFilter);
       fileChooser.setTitle("Wähle die Datei");
-      File file = fileChooser.showOpenDialog(Window.getWindows().iterator().next());
+      File file = fileChooser.showOpenDialog(Window.getWindows().getFirst());
       if (file == null) {
          return;
       }

@@ -3,8 +3,6 @@ package com.github.kaiwinter.ingparser;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import javafx.event.EventHandler;
-import javafx.stage.WindowEvent;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.kaiwinter.ingparser.preferences.PreferenceStore;

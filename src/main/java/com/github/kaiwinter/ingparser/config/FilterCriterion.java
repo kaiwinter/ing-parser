@@ -39,7 +39,7 @@ public class FilterCriterion {
    }
 
    public static List<FilterCriterion> byAuftraggeber(CategoryModel category, String... pattern) {
-      return Arrays.asList(pattern).stream()
+      return Arrays.stream(pattern)
             .map(string -> new FilterCriterion(category, MatchingCriterion.AUFTRAGGEBER, string.trim()))
             .collect(Collectors.toList());
    }
@@ -49,7 +49,7 @@ public class FilterCriterion {
    }
 
    public static List<FilterCriterion> byVerwendungszweck(CategoryModel category, String... pattern) {
-      return Arrays.asList(pattern).stream()
+      return Arrays.stream(pattern)
             .map(string -> new FilterCriterion(category, MatchingCriterion.VERWENDUNGSZWECK, string.trim()))
             .collect(Collectors.toList());
    }
@@ -59,13 +59,13 @@ public class FilterCriterion {
    }
 
    public static List<FilterCriterion> byNotiz(CategoryModel category, String... pattern) {
-      return Arrays.asList(pattern).stream()
+      return Arrays.stream(pattern)
             .map(string -> new FilterCriterion(category, MatchingCriterion.NOTIZ, string.trim()))
             .collect(Collectors.toList());
    }
 
    public static List<FilterCriterion> byIdentity(CategoryModel category, String... pattern) {
-      return Arrays.asList(pattern).stream()
+      return Arrays.stream(pattern)
             .map(string -> new FilterCriterion(category, MatchingCriterion.IDENTITY, string.trim()))
             .collect(Collectors.toList());
    }

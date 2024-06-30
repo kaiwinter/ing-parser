@@ -23,7 +23,7 @@ class MainViewModelTest {
       booking2.setAuftraggeber("Store ABC");
       mainViewModel.getBookingsFromFile().add(booking2);
 
-      FilterCriterion filterCriterion = FilterCriterion.byAuftraggeber("Main category", "shop").get(0);
+      FilterCriterion filterCriterion = FilterCriterion.byAuftraggeber("Main category", "shop").getFirst();
       Long result = mainViewModel.calculateMatchesOfFilterCriterion(filterCriterion);
 
       assertEquals(1, result);
@@ -40,7 +40,7 @@ class MainViewModelTest {
       booking2.setAuftraggeber("Shop DEF");
       mainViewModel.getBookingsFromFile().add(booking2);
 
-      FilterCriterion filterCriterion = FilterCriterion.byAuftraggeber("Main category", "shop").get(0);
+      FilterCriterion filterCriterion = FilterCriterion.byAuftraggeber("Main category", "shop").getFirst();
       Long result = mainViewModel.calculateMatchesOfFilterCriterion(filterCriterion);
 
       assertEquals(2, result);

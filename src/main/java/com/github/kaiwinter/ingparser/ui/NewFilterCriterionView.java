@@ -12,7 +12,6 @@ import com.github.kaiwinter.ingparser.ui.model.CategoryModel;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -62,12 +61,12 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
 
       // Suggest pattern of selected booking
       criteria.getSelectionModel().selectedItemProperty()
-            .addListener((ChangeListener<MatchingCriterion>) (observable, oldValue, newValue) -> {
+            .addListener((observable, oldValue, newValue) -> {
                if (viewModel.bookingsProperty().isEmpty()) {
                   return;
                }
 
-               Booking firstBooking = viewModel.bookingsProperty().get(0);
+               Booking firstBooking = viewModel.bookingsProperty().getFirst();
                if (newValue == MatchingCriterion.AUFTRAGGEBER) {
                   pattern.setText(firstBooking.getAuftraggeber());
                } else if (newValue == MatchingCriterion.VERWENDUNGSZWECK) {
@@ -89,13 +88,13 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
          }
 
          if (criteria.getValue() == MatchingCriterion.AUFTRAGGEBER) {
-            return FilterCriterion.byAuftraggeber(categories.getValue(), pattern.getText()).get(0);
+            return FilterCriterion.byAuftraggeber(categories.getValue(), pattern.getText()).getFirst();
          } else if (criteria.getValue() == MatchingCriterion.VERWENDUNGSZWECK) {
-            return FilterCriterion.byVerwendungszweck(categories.getValue(), pattern.getText()).get(0);
+            return FilterCriterion.byVerwendungszweck(categories.getValue(), pattern.getText()).getFirst();
          } else if (criteria.getValue() == MatchingCriterion.NOTIZ) {
-            return FilterCriterion.byNotiz(categories.getValue(), pattern.getText()).get(0);
+            return FilterCriterion.byNotiz(categories.getValue(), pattern.getText()).getFirst();
          } else if (criteria.getValue() == MatchingCriterion.IDENTITY) {
-            return FilterCriterion.byIdentity(categories.getValue(), pattern.getText()).get(0);
+            return FilterCriterion.byIdentity(categories.getValue(), pattern.getText()).getFirst();
          } else {
             throw new IllegalArgumentException("Unknown type: " + criteria.getValue());
          }
