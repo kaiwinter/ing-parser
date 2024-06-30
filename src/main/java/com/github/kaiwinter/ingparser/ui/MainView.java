@@ -251,6 +251,10 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             viewModel.applyFilterCriteriaOnBookings();
 
             categoryList.getSelectionModel().select(selected);
+            if (!viewModel.bookingsOfSelectedCategoryProperty().isEmpty()) {
+               bookingsTable.getSelectionModel().select(0);
+            }
+            bookingsTable.requestFocus();
 
             dirtyParserConfiguration();
          }
