@@ -3,11 +3,15 @@ package com.github.kaiwinter.ingparser.ui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -27,6 +31,11 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
 public class MainViewModel implements ViewModel {
 
@@ -194,5 +203,65 @@ public class MainViewModel implements ViewModel {
 
       // Count matches
       return copies.stream().map(Booking::getMatchedCriteria).flatMap(List::stream).collect(Collectors.counting());
+   }
+
+   public boolean askForSave(Alert alert) {
+      ButtonType overwrite = new ButtonType("Ja", ButtonBar.ButtonData.YES);
+      ButtonType saveAs = new ButtonType("Speichern unter ...");
+      ButtonType cancel = new ButtonType("Abbrechen", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+      alert.getButtonTypes().setAll(overwrite, saveAs, cancel);
+
+      Optional<ButtonType> result = alert.showAndWait();
+
+      if (result.isEmpty()) {
+         return false;
+      }
+      if (result.get() == overwrite) {
+         try (Writer writer = new FileWriter(currentParserFileProperty().getValue())) {
+            new ConfigurationService().saveFilterCriteriaToFile(getFilterCriteriaFromFile(), writer);
+            parserConfigurationChangedProperty().set(false);
+            return true;
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
+      } else if (result.get() == saveAs) {
+         FileChooser fileChooser = new FileChooser();
+         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Parser-Konfigurationen (*.json)",
+                 "*.json");
+         fileChooser.getExtensionFilters().add(extFilter);
+         fileChooser.setTitle("Wähle die Datei");
+         File selectedFile = fileChooser.showSaveDialog(Window.getWindows().getFirst());
+         if (selectedFile == null) {
+            return false;
+         }
+         try (Writer writer = new FileWriter(selectedFile)) {
+            new ConfigurationService().saveFilterCriteriaToFile(getFilterCriteriaFromFile(), writer);
+            parserConfigurationChangedProperty().set(false);
+            writer.flush(); // flush to make loading work
+            loadParserFile(selectedFile);
+            return true;
+         } catch (IOException e) {
+            throw new RuntimeException(e);
+         }
+      }
+      return false;
+   }
+
+   /**
+    * Checks for unsaved changes and asks the user to save them.
+    * @return true if there are no unsaved changes, false otherwise
+    */
+   public boolean handleExit() {
+      if (parserConfigurationChangedProperty().get()) {
+         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+         alert.setTitle("Ungesicherte Änderungen");
+         alert.setHeaderText("""
+               Es wurden Änderungen an der Parser-Datei vorgenommen die noch nicht gespeichert wurden.
+               $file speichern?""".replace("$file", currentParserFileProperty().getValue()));
+
+         return askForSave(alert);
+      }
+      return true;
    }
 }

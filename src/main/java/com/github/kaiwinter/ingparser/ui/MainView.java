@@ -348,42 +348,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
             $file
             überschrieben werden?""".replace("$file", viewModel.currentParserFileProperty().getValue()));
 
-      ButtonType overwrite = new ButtonType("Ja", ButtonData.YES);
-      ButtonType saveAs = new ButtonType("Speichern unter ...");
-      ButtonType cancel = new ButtonType("Abbrechen", ButtonData.CANCEL_CLOSE);
-
-      alert.getButtonTypes().setAll(overwrite, saveAs, cancel);
-
-      Optional<ButtonType> result = alert.showAndWait();
-      if (result.isEmpty()) {
-         return;
-      }
-      if (result.get() == overwrite) {
-         try (Writer writer = new FileWriter(viewModel.currentParserFileProperty().getValue())) {
-            new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile(), writer);
-            viewModel.parserConfigurationChangedProperty().set(false);
-         } catch (IOException e) {
-            throw new RuntimeException(e);
-         }
-      } else if (result.get() == saveAs) {
-         FileChooser fileChooser = new FileChooser();
-         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Parser-Konfigurationen (*.json)",
-               "*.json");
-         fileChooser.getExtensionFilters().add(extFilter);
-         fileChooser.setTitle("Wähle die Datei");
-         File selectedFile = fileChooser.showSaveDialog(Window.getWindows().iterator().next());
-         if (selectedFile == null) {
-            return;
-         }
-         try (Writer writer = new FileWriter(selectedFile)) {
-            new ConfigurationService().saveFilterCriteriaToFile(viewModel.getFilterCriteriaFromFile(), writer);
-            viewModel.parserConfigurationChangedProperty().set(false);
-            writer.flush(); // flush to make loading work
-            viewModel.loadParserFile(selectedFile);
-         } catch (IOException e) {
-            throw new RuntimeException(e);
-         }
-      }
+      viewModel.askForSave(alert);
    }
 
    public void printStatistics() {

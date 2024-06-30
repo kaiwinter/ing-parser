@@ -3,6 +3,8 @@ package com.github.kaiwinter.ingparser;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import javafx.event.EventHandler;
+import javafx.stage.WindowEvent;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.kaiwinter.ingparser.preferences.PreferenceStore;
@@ -32,10 +34,17 @@ public class App extends Application {
       ViewTuple<MainView, MainViewModel> viewTuple = FluentViewLoader.fxmlView(MainView.class).load();
 
       Parent root = viewTuple.getView();
-      stage.setScene(new Scene(root));
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
       stage.show();
 
       MainViewModel viewModel = viewTuple.getViewModel();
+      scene.getWindow().setOnCloseRequest(event -> {
+         if (!viewModel.handleExit()) {
+            event.consume();
+         }
+      });
+
       StringExpression titleExpression = StringExpression
             .stringExpression(new ReadOnlyStringWrapper("ING CSV Parser (DE) - "))
             .concat(viewModel.currentParserFileProperty())
