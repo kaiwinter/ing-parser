@@ -186,6 +186,10 @@ public class MainViewModel implements ViewModel {
       bookingsWithSelectedFilterCriterion.setAll(bookings);
    }
 
+   public Long calculateMatchesOfFilterCriterion(List<FilterCriterion> filterCriteria) {
+      return filterCriteria.stream().mapToLong(this::calculateMatchesOfFilterCriterion).sum();
+   }
+
    /**
     * Calculates the number of matched Bookings for a {@link FilterCriterion}.
     * 

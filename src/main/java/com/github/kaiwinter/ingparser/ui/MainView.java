@@ -227,11 +227,11 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       my.remove(FilterCriterion.UNMATCHED_CRITERION.getCategory());
       viewTuple.getViewModel().categoriesProperty().setValue(FXCollections.observableArrayList(my));
       viewTuple.getViewModel().bookingsProperty().setValue(bookingsTable.getSelectionModel().getSelectedItems());
-      Optional<FilterCriterion> newFilterCriterion = viewTuple.getCodeBehind().showAndWait();
-      if (newFilterCriterion.isEmpty()) {
+      Optional<List<FilterCriterion>> newFilterCriteria = viewTuple.getCodeBehind().showAndWait();
+      if (newFilterCriteria.isEmpty() || newFilterCriteria.get().isEmpty()) {
          return;
       }
-      Long matches = viewModel.calculateMatchesOfFilterCriterion(newFilterCriterion.get());
+      Long matches = viewModel.calculateMatchesOfFilterCriterion(newFilterCriteria.get());
       Alert alert = new Alert(AlertType.CONFIRMATION,
             "Dem neuen Filterkriterium entsprechen " + matches + " Buchungen.");
       alert.initModality(Modality.APPLICATION_MODAL);
@@ -239,7 +239,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
       alert.showAndWait().ifPresent(buttonType -> {
          if (buttonType == ButtonType.OK) {
             CategoryModel selected = categoryList.getSelectionModel().getSelectedItem();
-            viewModel.getFilterCriteriaFromFile().add(newFilterCriterion.get());
+            viewModel.getFilterCriteriaFromFile().addAll(newFilterCriteria.get());
             viewModel.applyFilterCriteriaOnBookings();
 
             categoryList.getSelectionModel().select(selected);

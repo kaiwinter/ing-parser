@@ -1,8 +1,10 @@
 package com.github.kaiwinter.ingparser.ui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import com.github.kaiwinter.ingparser.config.FilterCriterion;
 import com.github.kaiwinter.ingparser.config.FilterCriterion.MatchingCriterion;
@@ -26,7 +28,7 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
    @InjectViewModel
    private NewFilterCriterionViewModel viewModel;
 
-   private Dialog<FilterCriterion> dialog;
+   private Dialog<List<FilterCriterion>> dialog;
 
    @FXML
    private DialogPane dialogPane;
@@ -74,7 +76,8 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
                } else if (newValue == MatchingCriterion.NOTIZ) {
                   pattern.setText(firstBooking.getNotiz());
                } else if (newValue == MatchingCriterion.IDENTITY) {
-                  pattern.setText(firstBooking.calculateIdentity());
+                  String identities = viewModel.bookingsProperty().stream().map(Booking::calculateIdentity).collect(Collectors.joining(", "));
+                  pattern.setText(identities);
                } else {
                   throw new IllegalArgumentException("Unknown type: " + newValue);
                }
@@ -88,17 +91,19 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
          }
 
          if (criteria.getValue() == MatchingCriterion.AUFTRAGGEBER) {
-            return FilterCriterion.byAuftraggeber(categories.getValue(), pattern.getText()).getFirst();
+            return FilterCriterion.byAuftraggeber(categories.getValue(), pattern.getText());
          } else if (criteria.getValue() == MatchingCriterion.VERWENDUNGSZWECK) {
-            return FilterCriterion.byVerwendungszweck(categories.getValue(), pattern.getText()).getFirst();
+            return FilterCriterion.byVerwendungszweck(categories.getValue(), pattern.getText());
          } else if (criteria.getValue() == MatchingCriterion.NOTIZ) {
-            return FilterCriterion.byNotiz(categories.getValue(), pattern.getText()).getFirst();
+            return FilterCriterion.byNotiz(categories.getValue(), pattern.getText());
          } else if (criteria.getValue() == MatchingCriterion.IDENTITY) {
-            return FilterCriterion.byIdentity(categories.getValue(), pattern.getText()).getFirst();
+            return viewModel.bookingsProperty().stream().map(booking -> FilterCriterion.byIdentity(categories.getValue(), booking.calculateIdentity()).getFirst()).toList();
          } else {
             throw new IllegalArgumentException("Unknown type: " + criteria.getValue());
          }
       });
+
+      Platform.runLater(() -> criteria.getSelectionModel().select(MatchingCriterion.IDENTITY));
 
       Platform.runLater(() -> categories.requestFocus());
    }
@@ -108,7 +113,7 @@ public class NewFilterCriterionView implements FxmlView<NewFilterCriterionViewMo
     *
     * @return a valid {@link FilterCriterion} or an empty optional
     */
-   public Optional<FilterCriterion> showAndWait() {
+   public Optional<List<FilterCriterion>> showAndWait() {
       return dialog.showAndWait();
    }
 }
